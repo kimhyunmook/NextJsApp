@@ -24,13 +24,13 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={""}>
-        <Header />
         <StoreProvider>
+          <Header />
           {children}
+          <footer className="bg-gray-200 h-60 mt-20">
+            <Logo />
+          </footer>
         </StoreProvider>
-        <footer className="bg-gray-200 h-60 mt-20">
-          <Logo />
-        </footer>
       </body>
     </html>
   );

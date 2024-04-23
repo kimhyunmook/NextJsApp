@@ -17,33 +17,34 @@ export async function POST(request:Request){
         try {
           const db = client.db('dev');
           const users = db.collection('users');
-          query = {
-            userId:data.userId,
-          };
+          query = {userId:data.userId};
           const user:any = await users.findOne(query);
-          if(!!user.l_token) {
-            await users.updateOne(query,{$set:{l_token:""}});
-            const cookieValue = 'l_token=' + '' + '; Max-Age=0; Path=/';      
-            await headers.append('Set-Cookie', cookieValue);
-
-            result.ok=1;
-            result.msg = '이미 로그인 중입니다.';
-          } 
-          else {
-            const Hash = await HASH(data.userPw,user.userPw)
-            if (!!user && Hash) {
-              const token =await HASH(Math.floor(Math.random()*100000).toString());
-              const cookieValue = 'l_token=' + token + '; Max-Age=3600; Path=/';      
-              await users.updateOne(query,{$set:{l_token:token}})
+          if(!!!user) throw result.msg ='ID or Password가 틀립니다.';
+          
+          const Hash = await HASH(data.userPw,user.userPw)
+          if(Hash) {
+            if(!!user.l_token) {
+              await users.updateOne(query,{$set:{l_token:""}});
+              const cookieValue = 'l_token=' + '' + '; Max-Age=0; Path=/';      
               await headers.append('Set-Cookie', cookieValue);
   
-              delete user.userPw;
               result.ok=1;
-              result.msg=user;
-            } else {
-              result.msg ='ID or Password가 틀립니다.';
+              throw  result.msg = '이미 로그인 중입니다.';
             }
-          }
+
+            const token =await HASH(query.userId+Math.floor(Math.random()*100000).toString());
+            const cookieValue = 'l_token=' + token + '; Max-Age=3600; Path=/';      
+            await users.updateOne(query,{$set:{l_token:token}})
+            await headers.append('Set-Cookie', cookieValue);
+
+            delete user.userPw;
+            result.ok=1;
+            result.msg={
+              _Id:user.userId,
+              _Name:user.userName,
+              _PhoneNumber:user.userPhoneNumber,
+            };
+          } 
         } finally {
           await client.close();
         }

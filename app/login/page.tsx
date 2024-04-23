@@ -4,6 +4,9 @@ import { useCallback, useEffect, useState } from "react"
 import Btn from "../component/button";
 import { absolute_center, flex_center, mobile_box, title } from "../util/style";
 import axios from "axios";
+import { useDispatch,useSelector } from "react-redux";
+import { getInfo } from "@/lib/store/slice/userSlice";
+
 type liType = {
     name:string
     label:string
@@ -15,7 +18,7 @@ export function Li(props:liType):React.ReactElement{
     let round = `rounded-md`;
     if(!!props.children) round +=` rounded-r-none `
     const liStlye = ` w-full flex justify-between mb-2 mt-2 border overflow-hidden ${round} `;
-    
+
    return(
      <li className={liStlye}>
         <input className={`w-full h-10 p-3 ${round} `} 
@@ -28,10 +31,15 @@ export function Li(props:liType):React.ReactElement{
      </li>
    ) 
 }
+interface User  {
+    user:object
+}
 export default function login ():React.ReactElement {
     const [userId,setUserId] =useState("");
     const [userPw,setUserPw] =useState("");
     const [allChk,setAllChk]= useState(false);
+    const dispatch = useDispatch()
+    const user = useSelector((state:User)=>state.user)
 
     const onChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
         const t= e.target
@@ -50,12 +58,14 @@ export default function login ():React.ReactElement {
         }
         try {
             const res = await axios.post(`/api/users/login`,body)
-                .then(res=>res.data)
-                // console.log(res);
+            .then(res=>res.data)
+            // console.log(res);
+            const d= dispatch(getInfo(res))
+            console.log('ㅇㅇ?',d)
             if(typeof res.msg ==='string') {
                 alert(res.msg);
             } else if(!!res.ok) {
-                window.location.href ='/';
+                // window.location.href ='/';
             }
         } catch(error) {
             console.error(error);

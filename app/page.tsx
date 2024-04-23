@@ -19,9 +19,10 @@ function ListLink(props: listLink): React.ReactElement {
     </li>
   )
 }
+interface RootState {
+  counter:number
+}
 export default function Home() {
-  const store = useSelector(state=>state)
-  console.log(store);
   const fetchData = async () => {
     try {
       const res = await fetch("/api", {
