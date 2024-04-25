@@ -1,6 +1,10 @@
-import { takeLatest, takeEvery } from "redux-saga/effects";
-
+// 루트 사가 실행
+import { all } from 'redux-saga/effects';
+import { userSaga,logoutSaga, fixUserSaga } from './userSaga';
 export default function* rootSaga() {
-  yield [
-  ];
+    yield all([
+      userSaga(),
+      logoutSaga(),
+      fixUserSaga(),
+    ]);
 }

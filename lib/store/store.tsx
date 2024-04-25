@@ -1,27 +1,34 @@
-import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from './rootReducer'; 
-import { persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import createSagaMiddleware from "redux-saga";
-import rootSaga from "./sagas/rootSaga";
-import { applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers, Store } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import rootReducer from './reducers';
+import rootSaga from './sagas/rootSaga';
 
+// Redux Persist 설정
 const persistConfig = {
-  key: "root",
-  version: 1,
+  key: 'root',
   storage,
-  whitelist: ["user"],
-  // blacklist: ['calendar']
 };
 
+// Redux Persist로 감싼 루트 리듀서 생성
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-const sagaMiddleware = createSagaMiddleware();
-//여기 수정
-const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => [...getDefaultMiddleware(), sagaMiddleware],
-})
 
+// Saga 미들웨어 생성
+const sagaMiddleware = createSagaMiddleware();
+
+// 스토어 생성
+const store: Store = createStore(
+  persistedReducer,
+  applyMiddleware(sagaMiddleware)
+);
+
+
+
+// Saga 미들웨어 실행
 sagaMiddleware.run(rootSaga);
 
-export default store;
+// Persisted 스토어 생성
+const persistedStore = persistStore(store);
+
+export { store, persistedStore };

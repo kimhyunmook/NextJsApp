@@ -23,24 +23,7 @@ interface RootState {
   counter:number
 }
 export default function Home() {
-  const fetchData = async () => {
-    try {
-      const res = await fetch("/api", {
-        headers: {
-          Accept: "application/json",
-          method: "GET"
-        }
-      })
-
-      if (res) {
-        const data = await res.json();
-        console.log(data);
-      }
-    }
-    catch (error) {
-      console.error(error)
-    }
-  }
+  
   useEffect(()=>{
 
   },[])
@@ -56,7 +39,7 @@ export default function Home() {
       </div>
       <ul className="bottom-tool">
         <ListLink href="/form" className="mb-3 mt-3">
-          <Btn className="text-right" onClick={fetchData}>
+          <Btn className="text-right" onClick={()=>{}}>
             글쓰기
           </Btn>
         </ListLink>

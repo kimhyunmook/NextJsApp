@@ -1,4 +1,42 @@
 * {
-    letter-spacing: -.5px;
-    box-sizing: border-box;
+  letter-spacing: -0.5px;
+  box-sizing: border-box;
+}
+textarea {
+  resize: none !important;
+}
+
+.modal-bg {
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-bg .modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 300px;
+  min-height: 300px;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.modal .modalBtn {
+  z-index: 99;
+  position: absolute;
+  right: 3%;
+  bottom: 3%;
+  min-width: 1rem;
+  min-height: 1rem;
+  background-color: rgb(59, 130, 246);
+  color: white;
+  padding: 2%;
+  border-radius: 0.5rem;
+  cursor: pointer;
 }

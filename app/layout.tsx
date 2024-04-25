@@ -7,6 +7,7 @@ import Header from "./component/header";
 // import { Provider } from 'react-redux';
 // import store from "../lib/store/store";
 import StoreProvider from "./storeProvider";
+import Container from "./component/container";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +21,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="ko">
       <body className={""}>
         <StoreProvider>
           <Header />
-          {children}
+          <Container>
+            {children}
+          </Container>
           <footer className="bg-gray-200 h-60 mt-20">
             <Logo />
           </footer>

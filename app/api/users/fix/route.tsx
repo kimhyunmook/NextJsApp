@@ -1,41 +1,39 @@
 import { NextResponse } from "next/server";
 import {MongoClient} from 'mongodb';
-import { HASH, ResultMsg } from "../../route";
+import { ResultMsg } from "../../route";
  
 export async function POST(request:Request){
     const data = await request.json();
     const uri:any = process.env.NEXT_PUBLIC_MONGO;
     const client = new MongoClient(uri);
-    const headers = new Headers();
   
     let query:any = ''
     let result:ResultMsg ={
         ok:0,
-        type:'logout'
+        type:'user_fix'
     }
       async function run() {
           try {
             const db = client.db('dev');
             const users = db.collection('users');
+            console.log(data);
             query = {userId:data.userId}
-            console.log(query)
-            if(!!!users) throw result = {
-              ok: 0,
-              type:'logout/error',
-              msg :'logout error no exist userInfo '
-            } 
-            const cookieValue = `l_token="";Max-Age=0; Path=/`
-            await headers.append('Set-Cookie',cookieValue);
-            await users.updateOne(query,{$set:{l_token:""}});
+            users.updateOne(query,{$set:{
+                [data.key]:data.value
+            }})
+            const user:any = await users.findOne(query);
+
+            delete user.userPw;
+            delete user.l_token;
+            delete user._id;
+            
             result.ok=1;
+            result.msg=user
           } finally {
             await client.close();
           }
       }
       await run().catch(console.dir);
      
-      return NextResponse.json(result,{
-        status: 200,
-        headers: headers,
-      })
+      return NextResponse.json(result)
   }
