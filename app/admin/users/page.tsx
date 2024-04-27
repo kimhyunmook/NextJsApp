@@ -1,29 +1,34 @@
 "use client"
 import { title } from "@/app/util/style"
+import TYPE from "@/lib/type"
 import axios from "axios"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 type Props = {
 
 }
-type List = {
-    userName:string;
-    userId:string;
-    userPhoneNumber:string;
-}
+// type List = {
+//     userName:string;
+//     userId:string;
+//     userPhoneNumber:string;
+// }
 export default function adminUsers (props:Props) {
-    const [list,setList] = useState<List[]>([])
-    useEffect(()=>{
-        axios.post('/api',{ type:'users' })
-            .then(res=>{
-                const data = res.data;
-                setList(data.msg)
-            });
-    },[])
-    const {NoDiv,NameDiv,UserIdDiv,PNDiv,DateDiv,_li} = {
+    const [list,setList] = useState<any>([])
+    const dispatch =useDispatch();
+    const userList:any = useSelector<any>((state)=>state.admin.userList)
 
-        _li:"flex text-center p-2 pr-0 pl-0",
+    useEffect(()=>{
+        let body = {
+            bodyType:'users'
+        }
+        dispatch({type:TYPE('admin_user').REQUEST,...body})
+        if (userList) setList(userList);
+    },[userList])
+
+    const {NoDiv,NameDiv,UserIdDiv,PNDiv,DateDiv,_li} = {
+        _li:"flex text-center p-2 pr-0 pl-0 break-words ",
         NoDiv:"w-[10%]",
         NameDiv:'w-[10%]',
         UserIdDiv:'w-[15%]',
@@ -56,12 +61,19 @@ export default function adminUsers (props:Props) {
                 <div className={`w-[25%]`}>etc</div>
             </li>
             {
-                list.map((v,i)=>{
+                list.length ===0 ? 
+                <li className="border-b">
+                    <h2 className={`text-center p-3 text-2xl`}>
+                        비어있음
+                    </h2>
+                </li> :
+            
+                list.map((v:any,i:number)=>{
                     const url = `./${v.userId}`
                     return (
                         <li className={_li+" border-b"} key={`user_li_${i}`}>
                             <Link href={url} className={NoDiv}>
-                                {i+1}
+                                {v.userIndex}
                             </Link>
                             <Link href={url} className={NameDiv}>
                                 {v.userName}
@@ -73,7 +85,7 @@ export default function adminUsers (props:Props) {
                                 {v.userPhoneNumber}
                             </div>
                             <div className={DateDiv}>
-                                가입날짜
+                                {v.singUpDate}
                             </div>
                             <div className={`w-[25%]`}>etc</div>
                         </li>

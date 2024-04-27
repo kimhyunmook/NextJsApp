@@ -2,6 +2,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
 // slice
 import userReducer from './userReducer';
+import adminReducer from './adminReducer';
 
 export interface IState {
   users: typeof userReducer,
@@ -9,6 +10,7 @@ export interface IState {
 
 const rootReducer = combineReducers({
   user:  userReducer,
+  admin: adminReducer
 });
 
 

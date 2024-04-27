@@ -24,7 +24,6 @@ const store: Store = createStore(
 );
 
 
-
 // Saga 미들웨어 실행
 sagaMiddleware.run(rootSaga);
 

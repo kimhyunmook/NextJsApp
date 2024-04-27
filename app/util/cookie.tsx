@@ -8,7 +8,7 @@ export function deleteCookie(target:string) {
     return Cookies.set(target,'',{expires:new Date(0),path:"/"})
 }
 
-export function getDate (type:string) {
+export function getDate (type?:string) {
     const time = new Date();
     const year = time.getFullYear();
     let month:string|number = time.getMonth() + 1;

@@ -37,7 +37,6 @@ function* logoutUser(body:any):SagaIterator {
 function* fixUser(body:any):SagaIterator {
     try {
         const res = yield call(fixUserAPi,body);
-        console.log(res);
         yield put({type:FIX_USER_TYPE.SUCCESS,payload:res})
     } catch(error:any) {
         yield put({type:FIX_USER_TYPE.ERROR,payload:error.message});

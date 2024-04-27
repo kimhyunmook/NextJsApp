@@ -37,19 +37,23 @@ export async function POST(request:Request){
     async function run() {
         try {
           const db = client.db('dev');
-          const targetdb = await db.collection(data.type);
-          const target = await targetdb.find({}).toArray();
-          console.log(target)
+          const targetdb = await db.collection(data.bodyType);
+          const target = await targetdb.find({}).sort({userIndex:-1}).limit(50).toArray();
 
-          result.ok=1;
-          result.type=`setting/${data.type}`;
-          switch(data.type) {
+      
+          switch(data.bodyType) {
             case 'collection':
-              const colletionList =await db.listCollections().toArray()
+              const colletionList = await db.listCollections().toArray()
               result.msg = colletionList;
               break;
+            case 'users':
+              result.msg = target;
+              break;
             default: result.msg = target;
+              break;
           }
+          result.ok=1;
+          result.type=`setting/${data.bodyType}`;
         } finally {
           await client.close();
         }

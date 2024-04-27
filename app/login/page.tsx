@@ -48,14 +48,14 @@ export default function login ():React.ReactElement {
                 break;
         }
     },[])
-    async function LoginHandle (e:React.FormEvent<HTMLFormElement>) {
+    function LoginHandle (e:React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         let body ={
             type: TYPE('user').REQUEST,
             userId:userId,
             userPw:userPw
         }
-        await dispatch(body);
+        dispatch(body);
     }
     useEffect(()=>{
       if(!!userId && !!userPw) setAllChk(true)
@@ -69,7 +69,7 @@ export default function login ():React.ReactElement {
                 <Li name="userId" label="ID" onChange={onChange}></Li>
                 <Li name="userPw" label="PW" type="password" onChange={onChange}></Li>
                 <li className="w-full mt-4">
-                    <Btn className={!!allChk?"ml-auto" :"ml-auto bg-gray-300"} onClick={LoginHandle} >
+                    <Btn className={!!allChk?"ml-auto" :"ml-auto bg-gray-300"} onClick={allChk ? LoginHandle: (e:React.FormEvent<HTMLFormElement>)=>{e.preventDefault()}} >
                         Login
                     </Btn>
                 </li>

@@ -2,12 +2,12 @@
 import Modal from "@/app/component/modal";
 import { able_button, disable_button, flex_center, mobile_box, onepage, title } from "@/app/util/style";
 import TYPE from "@/lib/type";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 
 export default function userInfo ({params}:any) {
     const user = useSelector((state:any)=>state.user);
-    console.log(user)
+  
     let userValueArr:any[],userKeyArr :any[];
     if (user) {
         userValueArr = Object.values(user.user)
@@ -23,17 +23,27 @@ export default function userInfo ({params}:any) {
                             if(i !=0 ) {
                                 const keyName = userKeyArr[i]
                                 let label:string ="";
+                                let fix:boolean = true;
                                 switch(keyName) {
-                                    case 'userName' : label ="이름"
+                                    case 'userName' : 
+                                        label ="이름"
+                                        fix=false;
                                         break;
-                                    case 'userPhoneNumber': label="연락처"
+                                    case 'userPhoneNumber': 
+                                        label="연락처"
                                         break; 
+                                    case 'singUpDate' : 
+                                        label='가입날짜';
+                                        fix=false;
+                                        break;
+                                        
                                 }
-                                return <InputLi key={keyName} id={keyName} value={v} label={label} userId={params.id} />
+                                if(keyName !=='userPw' && keyName !== 'userIndex')
+                                return <InputLi key={keyName} id={keyName} value={v} label={label} userId={params.id} fix={fix} />
                             }
                         })
                     }
-                    <InputLi id={"techStack"} value={[{name:'git',color:'bg-black'}, {name:'html',color:''},{name:'javasciprt',color:'bg-yellow-500'}]} label={"기술 스택"} listbox={true} userId={params.id} />
+                    {/* <InputLi id={"techStack"} value={[{name:'git',color:'bg-black'}, {name:'html',color:''},{name:'javasciprt',color:'bg-yellow-500'}]} label={"기술 스택"} listbox={true} userId={params.id} /> */}
                 </ul>
             </form>
         )
@@ -47,20 +57,26 @@ interface InputProps {
     children?:React.ReactElement
     listbox?:boolean
     userId:string;
+    fix?:boolean;
 }
 function InputLi(props:InputProps) {
     // const user = useSelector((state:any)=>state.user);
     const [fix,setFix] = useState(false);
     const [modal,setModal] = useState(<></>)
     const dispatch = useDispatch();
+    const user = useSelector((state:any)=>state.user);
+
+
     function techStack(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         window.location.reload();
     }
-    function fixInput (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    async function fixInput (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         if(!fix){
             setFix(true)
+
+            // modal 인경우
             if (props.id ==='techStack') {
                 setModal(
                 <Modal display={true} closeBtn={<button className="modalBtn" onClick={techStack}>저장</button>}>
@@ -77,7 +93,6 @@ function InputLi(props:InputProps) {
                     key:inputEl.id,
                     value:inputEl.value
                 }   
-                console.log(body);
                 dispatch({type:TYPE('user_fix').REQUEST,...body})
             }
         }
@@ -113,9 +128,15 @@ function InputLi(props:InputProps) {
                             type="text" 
                             defaultValue={props.value}/>
             }
-            <button className={`${fix ? able_button : disable_button} p-1 w-[10%] rounded-md max-h-[36px] min-w-[40px] text-base font-bold`} onClick={fixInput}>
-                Fix
-            </button>
+            {
+                props.fix ? 
+                <button 
+                    className={`${fix ? able_button : disable_button} p-1 w-[10%] rounded-md max-h-[36px] min-w-[40px] text-base font-bold`} 
+                    onClick={fixInput}>
+                    Fix
+                </button>:
+                <div className="w-[10%]"></div>
+            }
             {modal}
         </li>
     )

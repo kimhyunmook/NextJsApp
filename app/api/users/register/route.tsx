@@ -16,15 +16,18 @@ export async function POST(request:Request){
         try {
             const db = client.db('dev');
             const users = db.collection('users');
+            console.log(data);
 
-            const overlap = await users.findOne({
-                userName:data.userName,
+            const overlapId = await users.findOne({
                 userId:data.userId,
-                userPhoneNumber:data.userPhoneNumber
             })
-            if(!!!overlap) {
+            const userIndex = await (await users.find({}).toArray()).length+1;
+            // const overlapPN = await users.findOne({
+            //     userPhoneNumber:data.userPhoneNumber
+            // })
+            if(!!!overlapId) {
                 data.userPw = await HASH(data.userPw);
-                query = data;
+                query = {...data,userIndex,l_token:""};
                 await users.insertOne(query)
                 result.ok=1;
             } else {

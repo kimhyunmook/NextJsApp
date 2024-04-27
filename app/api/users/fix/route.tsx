@@ -18,15 +18,14 @@ export async function POST(request:Request){
             const users = db.collection('users');
             console.log(data);
             query = {userId:data.userId}
-            users.updateOne(query,{$set:{
+            await users.updateOne(query,{$set:{
                 [data.key]:data.value
             }})
             const user:any = await users.findOne(query);
 
-            delete user.userPw;
             delete user.l_token;
             delete user._id;
-            
+
             result.ok=1;
             result.msg=user
           } finally {
