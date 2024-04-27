@@ -5,6 +5,17 @@
 textarea {
   resize: none !important;
 }
+body {
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+.contentView{
+  overflow-y:scroll;
+  width:100%;
+  max-height:calc(100vh - 60px);
+}
 
 .modal-bg {
   z-index: 999;

@@ -1,10 +1,11 @@
 "use client"
 
-import { flex_center, mobile_box, title } from "../util/style"
+import { flex_center, mobile_box, onepage, title } from "../util/style"
 import { Li } from "../login/page"
 import Btn from "../component/button"
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
+import { getDate } from "../util/cookie"
 
 export type userSchema = {
     userId:string;
@@ -45,6 +46,9 @@ export default function register () {
                 break;
         }
     },[])
+
+    console.log(getDate(''))
+
     async function checkID(e: React.MouseEvent<HTMLButtonElement, MouseEvent>){
         e.preventDefault();
         const uri = `/api/users/register/${userId}`
@@ -104,7 +108,7 @@ export default function register () {
     },[userId,userPw,userName,userPhoneNumber,idChk])
     const idchkBtnStyle:string = `font-medium text-white p-1 w-20 ${!idChk.ok? "bg-red-400":"bg-blue-400"}`
     return(
-        <form className={`register ${mobile_box}`} onSubmit={submitHandle}>
+        <form className={`register ${mobile_box} ${onepage}`} onSubmit={submitHandle}>
             <h2 className={title}>회원가입</h2>
             <ul className={flex_center+"flex-wrap"}>
                 <Li name="userId" label="Email" onChange={onChange}>

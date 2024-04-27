@@ -8,6 +8,7 @@ import Header from "./component/header";
 // import store from "../lib/store/store";
 import StoreProvider from "./storeProvider";
 import Container from "./component/container";
+import Nav from "./component/nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,11 +28,11 @@ export default function RootLayout({
         <StoreProvider>
           <Header />
           <Container>
-            {children}
+            <Nav />
+            <div className={`contentView`}>
+              {children}
+            </div>
           </Container>
-          <footer className="bg-gray-200 h-60 mt-20">
-            <Logo />
-          </footer>
         </StoreProvider>
       </body>
     </html>

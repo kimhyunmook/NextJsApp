@@ -1,6 +1,6 @@
 "use client"
 import Modal from "@/app/component/modal";
-import { able_button, disable_button, flex_center, mobile_box, title } from "@/app/util/style";
+import { able_button, disable_button, flex_center, mobile_box, onepage, title } from "@/app/util/style";
 import TYPE from "@/lib/type";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
@@ -13,7 +13,7 @@ export default function userInfo ({params}:any) {
         userValueArr = Object.values(user.user)
         userKeyArr = Object.keys(user.user)
         return(
-            <form className={`${mobile_box}`}>
+            <form className={`${mobile_box} pt-10 pb-40`}>
                 <h2 className={`${title}`}>
                     {user.user.userId} 님의 정보
                 </h2>
@@ -86,9 +86,9 @@ function InputLi(props:InputProps) {
     const maxH = "max-h-[40px]";
     
     return (
-        <li className={`flex relative justify-between mb-4 mt-4 text-xl`}>
+        <li className={`flex relative justify-between mb-4 mt-4 text-xl border-b pt-2 pb-2`}>
             <div className={`input-cover absolute left-0 h-full z-10 ease-in duration-500  ${fix ? "w-0": "bg-[rgba(132, 0, 0, 0.3)] w-[90%]" }`}></div>
-            <label className={` pl-2 font-bold w-[16%] break-keep`} htmlFor={props.id}>
+            <label className={`pl-2 font-bold w-[20%] break-keep text-base`} htmlFor={props.id}>
                 <b className={`flex items-center block h-full ${maxH}`}>
                     {props.label}
                 </b>
@@ -113,7 +113,7 @@ function InputLi(props:InputProps) {
                             type="text" 
                             defaultValue={props.value}/>
             }
-            <button className={`${fix ? able_button : disable_button} p-1 w-[10%] rounded-md max-h-[36px] min-w-[40px]`} onClick={fixInput}>
+            <button className={`${fix ? able_button : disable_button} p-1 w-[10%] rounded-md max-h-[36px] min-w-[40px] text-base font-bold`} onClick={fixInput}>
                 Fix
             </button>
             {modal}

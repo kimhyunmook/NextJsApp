@@ -17,7 +17,7 @@ export default function Container (props:Props) {
     return(
         <div 
         ref={containerRef} 
-        className="_container ">
+        className="_container flex">
             {props.children}
         </div>
     )

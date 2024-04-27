@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import Btn from "../component/button";
-import { absolute_center, flex_center, mobile_box, title } from "../util/style";
+import { absolute_center, flex_center, mobile_box, onepage, title } from "../util/style";
 import { useDispatch,useSelector } from "react-redux";
 import TYPE from "@/lib/type";
 
@@ -63,7 +63,7 @@ export default function login ():React.ReactElement {
     },[userId,userPw])
   
     return (
-        <form className={`login ${mobile_box}`} style={{}}>
+        <form className={`login onepage relative w-full max-w-[500px] p-5 rounded-md m-auto top-36 border border-gray-500`} style={{}}>
             <h2 className={title}>로그인</h2>
             <ul className={`flex flex-wrap items-center justify-center w-full`}>
                 <Li name="userId" label="ID" onChange={onChange}></Li>
@@ -73,7 +73,6 @@ export default function login ():React.ReactElement {
                         Login
                     </Btn>
                 </li>
-         
             </ul>
         </form>
     )

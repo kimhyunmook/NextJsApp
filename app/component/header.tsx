@@ -17,7 +17,7 @@ interface LoginBar {
     onClick?:(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }
 export default function Header () {
-    const rightBarStyle =`text-center font-normal text-sm mr-1 ml-1 tracking-tighter `;
+    const rightBarStyle =`font-base text-white text-base m-1 tracking-tighter w-full max-w-[60px] break-keep `;
     const dispatch =useDispatch();
     const loginToken:any = getCookie('l_token');
     let logininit:LoginBar = {
@@ -27,7 +27,6 @@ export default function Header () {
     }
     const [Login,setLogin] = useState([logininit])
     const user = useSelector((state:any) => state.user);
-    console.log(user)
 
     function logout(e:React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
         e.preventDefault();
@@ -71,16 +70,17 @@ export default function Header () {
     useEffect(()=>{
     },[user])
     return(
-        <header className="w-full p-4 border-b mb-16">
-            <div className="flex flex-wrap items-center justify-center">
-                <div className="right-bar w-full flex justify-end">
+        <header className="z-30 w-full top-0 relative">
+            <div className="top-content flex justify-between w-screen z-20 bg-gray-950 min-h-[60px] pt-2 pb-2 pl-6 pr-6">
+                <div className="logo">
+                    <Logo className={"text-white"} />
+                </div>
+                <div className="search"></div>
+                <div className="user flex justify-end items-center min-w-[225px]">
                     { Login.map((v,i)=>{
                         return <Link key={`login_bar_${i}`} className={rightBarStyle + v.className} href={v.href} onClick={v.onClick} >{v.children}</Link>
                         }) 
                     }
-                </div>
-                <div className="logobox">
-                    <Logo />
                 </div>
             </div>
         </header>
