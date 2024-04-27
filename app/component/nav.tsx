@@ -18,7 +18,7 @@ export default function Nav() {
         if(adminNav) setList(adminNav)
     },[])
     return(
-        <nav className="left-content bg-gray-950 min-h-screen flex flex-wrap p-2 w-[225px]">
+        <nav className="left-conten min-h-screen flex flex-wrap p-2 w-[225px]">
             <div className="box w-full">
                 <h2 className={`font-black text-white`}>Collection</h2>
                 <ul>

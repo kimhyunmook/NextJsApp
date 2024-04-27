@@ -2,6 +2,12 @@
   letter-spacing: -0.5px;
   box-sizing: border-box;
 }
+body {
+  background-color:#0f0f0f;
+}
+input{
+  background-color:hsl(0,0%,7%);
+}
 textarea {
   resize: none !important;
 }

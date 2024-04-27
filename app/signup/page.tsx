@@ -15,7 +15,7 @@ export type userSchema = {
     singUpDate:string;
 }
 
-export default function register () {
+function register () {
     const [userId,setUserId] =useState("")
     const [userPw,setUserPW] =useState("")
     const [userName,setUserName] =useState("")
@@ -46,8 +46,6 @@ export default function register () {
                 break;
         }
     },[])
-
-    console.log(getDate(''))
 
     async function checkID(e: React.MouseEvent<HTMLButtonElement, MouseEvent>){
         e.preventDefault();
@@ -101,7 +99,7 @@ export default function register () {
     },[userId,userPw,userName,userPhoneNumber,idChk])
     const idchkBtnStyle:string = `font-medium text-white p-1 w-20 ${!idChk.ok? "bg-red-400":"bg-blue-400"}`
     return(
-        <form className={`register ${mobile_box} ${onepage}`} onSubmit={allChk? submitHandle:(e)=>(e.preventDefault())}>
+        <form className={`register ${mobile_box} pt-16`} onSubmit={allChk? submitHandle:(e)=>(e.preventDefault())}>
             <h2 className={title}>회원가입</h2>
             <ul className={flex_center+"flex-wrap"}>
                 <Li name="userId" label="Email" onChange={onChange}>
@@ -125,3 +123,5 @@ export default function register () {
         </form>
     )
 }
+register.noLayout =true;
+export default register

@@ -4,11 +4,10 @@ import "../output.css";
 import "../css/main.css"
 import Logo from "./component/logo";
 import Header from "./component/header";
-// import { Provider } from 'react-redux';
-// import store from "../lib/store/store";
 import StoreProvider from "./storeProvider";
 import Container from "./component/container";
 import Nav from "./component/nav";
+import Loading from "./loadingg";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,15 +23,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={""}>
+      <body className={"text-white"}>
         <StoreProvider>
-          <Header />
-          <Container>
-            <Nav />
-            <div className={`contentView`}>
-              {children}
-            </div>
-          </Container>
+          <Header /> 
+          <Loading>
+            <Container>
+              <Nav />
+              <div className={`contentView`}>
+                {children}
+              </div>
+            </Container>
+          </Loading>
         </StoreProvider>
       </body>
     </html>

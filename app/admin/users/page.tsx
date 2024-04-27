@@ -17,23 +17,34 @@ type Props = {
 export default function adminUsers (props:Props) {
     const [list,setList] = useState<any>([])
     const dispatch =useDispatch();
-    const userList:any = useSelector<any>((state)=>state.admin.userList)
+    const userList = useSelector<any>((state)=>state.admin.userList)
+    const loading = useSelector<any>((state)=>state.admin.loading)
 
     useEffect(()=>{
         let body = {
             bodyType:'users'
         }
-        dispatch({type:TYPE('admin_user').REQUEST,...body})
-        if (userList) setList(userList);
+        setTimeout(()=>{
+            dispatch({type:TYPE('admin_user').REQUEST,...body})
+            if (userList) 
+                setList(userList);
+        },1000)
     },[userList])
 
-    const {NoDiv,NameDiv,UserIdDiv,PNDiv,DateDiv,_li} = {
+    useEffect(()=>{
+        console.log(loading)
+        console.log(list)
+    },[loading])
+
+    const {NoDiv,Grade,NameDiv,UserIdDiv,PNDiv,DateDiv,_li,Etc} = {
         _li:"flex text-center p-2 pr-0 pl-0 break-words ",
-        NoDiv:"w-[10%]",
-        NameDiv:'w-[10%]',
+        NoDiv:"w-[8%]",
+        Grade:'w-[12%]',
+        NameDiv:'w-[12%]',
         UserIdDiv:'w-[15%]',
-        PNDiv:'w-[20%]',
-        DateDiv:'w-[20%]',
+        PNDiv:'w-[18%]',
+        DateDiv:'w-[15%]',
+        Etc:"w-[10%]"
     }
     return(
         <ul className={`m-auto w-[90%] h-[120vh] mt-4 rounded-lg overflow-hidden`}>
@@ -46,11 +57,14 @@ export default function adminUsers (props:Props) {
                 <div className={NoDiv}>
                     No.
                 </div>
-                <div className={NameDiv}>
-                    이름
+                <div className={Grade}>
+                    등급
                 </div>
                 <div className={UserIdDiv}>
                     ID
+                </div>
+                <div className={NameDiv}>
+                    이름
                 </div>
                 <div className={PNDiv}>
                     핸드폰번호
@@ -58,7 +72,7 @@ export default function adminUsers (props:Props) {
                 <div className={DateDiv}>
                     가입날짜
                 </div>
-                <div className={`w-[25%]`}>etc</div>
+                <div className={Etc}>etc</div>
             </li>
             {
                 list.length ===0 ? 
@@ -75,11 +89,14 @@ export default function adminUsers (props:Props) {
                             <Link href={url} className={NoDiv}>
                                 {v.userIndex}
                             </Link>
-                            <Link href={url} className={NameDiv}>
-                                {v.userName}
-                            </Link>
+                            <div className={Grade}>
+                                일반회원
+                            </div>
                             <Link href={url} className={UserIdDiv}>
                                 {v.userId}
+                            </Link>
+                            <Link href={url} className={NameDiv}>
+                                {v.userName}
                             </Link>
                             <div className={PNDiv}>
                                 {v.userPhoneNumber}
@@ -87,7 +104,7 @@ export default function adminUsers (props:Props) {
                             <div className={DateDiv}>
                                 {v.singUpDate}
                             </div>
-                            <div className={`w-[25%]`}>etc</div>
+                            <div className={Etc}>etc</div>
                         </li>
                     )
                 })

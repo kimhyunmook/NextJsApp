@@ -61,7 +61,7 @@ export default function Header () {
             },
             {
                 className:"",
-                href:"/register",
+                href:"/signup",
                 children:"회원가입"
             }
         ])
@@ -71,7 +71,7 @@ export default function Header () {
     },[user])
     return(
         <header className="z-30 w-full top-0 relative">
-            <div className="top-content flex justify-between w-screen z-20 bg-gray-950 min-h-[60px] pt-2 pb-2 pl-6 pr-6">
+            <div className="top-content flex justify-between w-screen z-20 min-h-[60px] pt-2 pb-2 pl-6 pr-6">
                 <div className="logo">
                     <Logo className={"text-white"} />
                 </div>

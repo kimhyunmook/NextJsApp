@@ -14,9 +14,9 @@ type liType = {
     onChange?:React.ChangeEventHandler<HTMLInputElement>
 }
 export function Li(props:liType):React.ReactElement{
-    let round = `rounded-md`;
+    let round = `rounded-sm`;
     if(!!props.children) round +=` rounded-r-none `
-    const liStlye = ` w-full flex justify-between mb-2 mt-2 border overflow-hidden ${round} `;
+    const liStlye = ` w-full flex justify-between mb-2 mt-2 border border-blue-300 overflow-hidden ${round} `;
 
    return(
      <li className={liStlye}>
