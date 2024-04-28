@@ -41,9 +41,9 @@ export default function Home() {
         <div className="box sample h-[300px] border rounded-md"></div>
         <div className="box sample h-[300px] border rounded-md"></div>
       </div>
-      <ul className="bottom-tool">
+      <ul className="bottom-tool max-w-[300px] max-h-[50px] fixed bottom-0 right-0">
         <ListLink href="/form" className="mb-3 mt-3">
-          <Btn className="text-right absolute bottom-3 right-5" onClick={test}>
+          <Btn className="text-right bottom-3 right-5" onClick={test}>
             테스트
           </Btn>
         </ListLink>

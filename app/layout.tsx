@@ -26,14 +26,12 @@ export default function RootLayout({
       <body className={"text-white"}>
         <StoreProvider>
           <Header /> 
-          <Loading>
-            <Container>
-              <Nav />
-              <div className={`contentView`}>
-                {children}
-              </div>
-            </Container>
-          </Loading>
+          <Container>
+            <Nav />
+            <div className={`contentView`}>
+              {children}
+            </div>
+          </Container>
         </StoreProvider>
       </body>
     </html>

@@ -1,13 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 interface Props {
-    children:any
+    children:any;
+    loading:boolean | null| undefined | unknown;
 }
 export default function Loading(props:Props) {
-    const [loading,setLoading] = useState(false)
-
+    const [loading,setLoading] = useState<any>(true);
+    useEffect(()=>{
+        console.log(props.loading)
+        setLoading(props.loading); 
+    },[])
     return(
         <div className="loading">
             {loading ?
