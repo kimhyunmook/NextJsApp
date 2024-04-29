@@ -9,14 +9,18 @@ interface Props {
 export default function Loading(props:Props) {
     const [loading,setLoading] = useState<any>(true);
     useEffect(()=>{
-        console.log(props.loading)
         setLoading(props.loading); 
-    },[])
+    },[props])
     return(
-        <div className="loading">
+        <div className="loading h-full">
             {loading ?
-                "로딩중" : props.children
+                <div className="loading-page">
+                    <div className="spinner"></div>
+                    <div className="loading-text">Loading...</div>
+                </div>
+                : props.children
             }
+            {/* {props.children} */}
         </div>
     )
 }

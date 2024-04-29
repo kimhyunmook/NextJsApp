@@ -69,18 +69,25 @@ export default function Header () {
 
     useEffect(()=>{
     },[user])
+    function navEvent(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        e.preventDefault();
+        const nav = document.querySelector('.navLeftContent')
+        const active = nav?.className.includes('active');
+        if(active) nav?.classList.remove('active')
+        else  nav?.classList.add('active');
+        
+        console.log(nav?.classList)
+    }
     return(
         <header className="z-30 w-full top-0 relative">
-            <div className="top-content flex justify-between w-screen z-20 min-h-[60px] pt-2 pb-2 pl-6 pr-6">
-                <div className="logo">
+            <div className="topContent flex justify-between w-screen z-20 min-h-[60px] pt-2 pb-2 pl-4 pr-4">
+                <div className="leftContent flex">
+                    <button className="navBtn w-[30px] mr-2" onClick={navEvent}> 버튼</button>
                     <Logo className={"text-white"} />
                 </div>
                 <div className="search"></div>
                 <div className="user flex justify-end items-center min-w-[225px]">
-                    { Login.map((v,i)=>{
-                        return <Link key={`login_bar_${i}`} className={rightBarStyle + v.className} href={v.href} onClick={v.onClick} >{v.children}</Link>
-                        }) 
-                    }
+                    { Login.map((v,i)=> <Link key={`login_bar_${i}`} className={rightBarStyle + v.className} href={v.href} onClick={v.onClick} >{v.children}</Link>) }
                 </div>
             </div>
         </header>

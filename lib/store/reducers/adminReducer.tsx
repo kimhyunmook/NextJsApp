@@ -1,7 +1,7 @@
 import TYPE from "@/lib/type";
 interface State {
   nav?: Data | null;
-  userList?:Data | null;
+  datas?:Data | null;
   loading: boolean;
   error: string | null;
 }
@@ -12,14 +12,14 @@ export interface Data {
 
 const initialState:State = {
   nav: null,
-  userList:null,
+  datas:null,
   loading: false,
   error: null,
 };
 
 const adminReducer = (state = initialState, action: any): State => {
   const nav = TYPE('admin_nav')
-  const userList = TYPE('admin_user');
+  const userList = TYPE('admin_users');
 
   switch (action.type) {
     case nav.REQUEST:
@@ -41,21 +41,21 @@ const adminReducer = (state = initialState, action: any): State => {
       };
     case userList.REQUEST:
         return {
-            ...state,
-            loading:true,
+          ...state,
+          loading:true,
         }   
     case userList.SUCCESS:
-        return {
-            ...state,
-            loading:false,
-            userList:action.payload.msg
-        }
+      return {
+        ...state,
+        loading:false,
+        datas:action.payload.msg
+      }
     case userList.ERROR :
-        return {
-            ...state,
-            loading:false,
-            error:action.payload
-        }
+      return {
+        ...state,
+        loading:false,
+        error:action.payload
+      }
     default:
       return state;
   }

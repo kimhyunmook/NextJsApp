@@ -5,7 +5,7 @@ import { adminApi } from '@/lib/api/adminNavAPi';
 import TYPE from '@/lib/type';
 
 const ADMIN_NAV = TYPE('admin_nav');
-const ADMIN_USER = TYPE('admin_user')
+const ADMIN_USER = TYPE('admin_users')
 function* fetchNav(body:any):SagaIterator {
   try {
     const res = yield call(adminApi,body);

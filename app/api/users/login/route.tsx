@@ -35,7 +35,6 @@ export async function POST(request:Request){
             await users.updateOne(query,{$set:{l_token:""}});
             const cookieValue = 'l_token=' + '' + '; Max-Age=0; Path=/';      
             await headers.append('Set-Cookie', cookieValue);
-            console.log(user.l_token)
             return result ={
               ok:0,
               type:'login/logining',
