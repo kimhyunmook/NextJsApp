@@ -75,8 +75,6 @@ export default function Header () {
         const active = nav?.className.includes('active');
         if(active) nav?.classList.remove('active')
         else  nav?.classList.add('active');
-        
-        console.log(nav?.classList)
     }
     return(
         <header className="z-30 w-full top-0 relative">

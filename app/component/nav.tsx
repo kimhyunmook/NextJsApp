@@ -13,17 +13,20 @@ export default function Nav() {
             bodyType:"collection"
         }
         dispatch({type:TYPE('admin_nav').REQUEST,...body})
+    },[])
+    
+    useEffect(()=>{
         if(adminNav) setList(adminNav)
-        },[])
+    },[adminNav])
 
     const liStyle = `pl-3 w-full text-lg`;
     const dbList:dbListItem[] = [{
             name:'create',
-            href:''
+            href:'/admin/db/create'
         },
         {
             name:'delete',
-            href:'',
+            href:'/admin/db/delete',
         }
     ]       
     return(

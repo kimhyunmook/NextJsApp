@@ -3,7 +3,8 @@ import Modal from "@/app/component/modal";
 import { able_button, disable_button, flex_center, mobile_box, onepage, title } from "@/app/util/style";
 import TYPE from "@/lib/type";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
+import Logo from "@/app/component/logo";
 
 export default function userInfo ({params}:any) {
     const user = useSelector((state:any)=>state.user);
@@ -13,7 +14,8 @@ export default function userInfo ({params}:any) {
         userValueArr = Object.values(user.user)
         userKeyArr = Object.keys(user.user)
         return(
-            <form className={`${mobile_box} pt-10 pb-40`}>
+            <form className={`${mobile_box} pt-8 pb-40 h-screen`}>
+                <Logo className={`text-center text-5xl mb-10`}></Logo>
                 <h2 className={`${title}`}>
                     {user.user.userId} 님의 정보
                 </h2>

@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react"
 import Btn from "../component/button";
-import { absolute_center, flex_center, mobile_box, onepage, title } from "../util/style";
+import { absolute_center, absolute_y_center, flex_center, mobile_box, onepage, title } from "../util/style";
 import { useDispatch,useSelector } from "react-redux";
 import TYPE from "@/lib/type";
+import Logo from "../component/logo";
 
 type liType = {
     name:string
@@ -16,7 +17,7 @@ type liType = {
 export function Li(props:liType):React.ReactElement{
     let round = `rounded-sm`;
     if(!!props.children) round +=` rounded-r-none `
-    const liStlye = ` w-full flex justify-between mb-2 mt-2 border border-blue-300 overflow-hidden ${round} `;
+    const liStlye = ` w-full flex justify-between mb-3 mt-3 border border-blue-300 overflow-hidden ${round} `;
 
    return(
      <li className={liStlye}>
@@ -63,17 +64,20 @@ export default function login ():React.ReactElement {
     },[userId,userPw])
   
     return (
-        <form className={`login onepage relative w-full max-w-[500px] p-5 rounded-md m-auto top-36 border border-gray-500`} style={{}}>
-            <h2 className={title}>로그인</h2>
-            <ul className={`flex flex-wrap items-center justify-center w-full`}>
-                <Li name="userId" label="ID" onChange={onChange}></Li>
-                <Li name="userPw" label="PW" type="password" onChange={onChange}></Li>
-                <li className="w-full mt-4">
-                    <Btn className={!!allChk?"ml-auto" :"ml-auto bg-gray-300"} onClick={allChk ? LoginHandle: (e:React.FormEvent<HTMLFormElement>)=>{e.preventDefault()}} >
-                        Login
-                    </Btn>
-                </li>
-            </ul>
+        <form className={`login relative flex justify-center w-full max-w-[400px] p-5 h-full bg-white border-gray-500`} style={{}}>
+            <div className={`${absolute_center} w-full max-w-[300px]`}>
+                <Logo className={"w-full mb-4 text-center text-black text-5xl"} />
+                {/* <h2 className={title}>로그인</h2> */}
+                <ul className={`flex flex-wrap items-center justify-center w-full`}>
+                    <Li name="userId" label="ID" onChange={onChange}></Li>
+                    <Li name="userPw" label="PW" type="password" onChange={onChange}></Li>
+                    <li className="w-full mt-4">
+                        <Btn className={!!allChk?"ml-auto" :"ml-auto bg-gray-300 border border-gray-400 text-gray-600"} onClick={allChk ? LoginHandle: (e:React.FormEvent<HTMLFormElement>)=>{e.preventDefault()}} >
+                            Login
+                        </Btn>
+                    </li>
+                </ul>
+            </div>
         </form>
     )
 }

@@ -25,13 +25,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={"text-white"}>
         <StoreProvider>
-          <Header /> 
-          <Container>
-            <Nav />
-            <div className={`contentView`}>
-              {children}
-            </div>
-          </Container>
+          {children}
         </StoreProvider>
       </body>
     </html>

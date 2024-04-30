@@ -5,6 +5,9 @@
 body {
   background-color: #0f0f0f;
 }
+img {
+  width: 100%;
+}
 input {
   background-color: hsl(0, 0%, 7%);
 }

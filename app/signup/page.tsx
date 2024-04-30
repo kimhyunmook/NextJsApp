@@ -115,7 +115,7 @@ function register () {
                         allChk ?
                        
                     } */}
-                        <Btn className={allChk ? "ml-auto" :"ml-auto bg-gray-300"}>
+                        <Btn className={allChk ? "ml-auto" :"ml-auto bg-gray-300 border border-gray-400 text-gray-600"}>
                             가입
                         </Btn> 
                 </li>
@@ -123,5 +123,4 @@ function register () {
         </form>
     )
 }
-register.noLayout =true;
 export default register

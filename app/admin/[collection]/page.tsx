@@ -1,4 +1,5 @@
 "use client"
+import Layout from "@/app/component/layoutControl"
 import Loading from "@/app/loadingg"
 import { title } from "@/app/util/style"
 import TYPE from "@/lib/type"
@@ -110,61 +111,63 @@ export default function AdminDataTable (props:Props) {
         }
     }
     return(
-        <Loading loading={storeLoading}>
-            <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden`}>
-                <li>
-                    <h2 className={`${title}`}>
-                        { target ? target.charAt(0).toUpperCase()+target.slice(1): null}
-                    </h2>
-                </li>
-                <li className={_li+' bg-gray-500 text-white tagName'}>
+        <Layout all={true}>
+            <Loading loading={storeLoading}>
+                <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden`}>
+                    <li>
+                        <h2 className={`${title}`}>
+                            { target ? target.charAt(0).toUpperCase()+target.slice(1): null}
+                        </h2>
+                    </li>
+                    <li className={_li+' bg-gray-500 text-white tagName'}>
+                        {
+                            key.map((v:any,i:number)=>{
+                                return(
+                                    <div key={`keys_${v}`} className={`${convert(v).className}`}>
+                                        {convert(v).tag}
+                                    </div>
+                                )
+                            })
+                        }
+                        <div className={etc}>
+                            etc
+                        </div>
+                    </li>
                     {
-                        key.map((v:any,i:number)=>{
-                            return(
-                                <div key={`keys_${v}`} className={`${convert(v).className}`}>
-                                    {convert(v).tag}
-                                </div>
-                            )
+                        list.length === 0 ? 
+                        <li className="border-b">
+                            <h2 className={`text-center p-3 text-2xl`}>
+                                없음
+                            </h2>
+                        </li> :
+                        list.map((v:Record<string,string>,i:number)=>{
+                            delete v._id;
+                            delete v.userPw;
+                            const val = Object.values(v)
+                            const firstEl = document.querySelector('.dataTable .tagName')?.children;
+                            if( firstEl && firstEl?.length > 1 )
+                                return  (
+                                    <li className={_li} key={`${v}_${i}`}>
+                                        {
+                                            Object.keys(v).map((v2:any,i2:number)=>{
+                                                // 로그인 일 경우
+                                                let text:any = val[i2];
+                                                if(v2 === 'l_token' && val[i2]) text = convert(v2).text;
+                                                return (
+                                                    <div key={`${v2}_${i2}`} className={`${convert(v2).className+' flex items-center justify-center'}`}>
+                                                        {text}
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                        <div className={etc}>etc</div>
+                                    </li>
+                                )
                         })
                     }
-                    <div className={etc}>
-                        etc
-                    </div>
-                </li>
-                {
-                    list.length === 0 ? 
-                    <li className="border-b">
-                        <h2 className={`text-center p-3 text-2xl`}>
-                            없음
-                        </h2>
-                    </li> :
-                    list.map((v:Record<string,string>,i:number)=>{
-                        delete v._id;
-                        delete v.userPw;
-                        const val = Object.values(v)
-                        const firstEl = document.querySelector('.dataTable .tagName')?.children;
-                        if( firstEl && firstEl?.length > 1 )
-                            return  (
-                                <li className={_li} key={`${v}_${i}`}>
-                                    {
-                                        Object.keys(v).map((v2:any,i2:number)=>{
-                                            // 로그인 일 경우
-                                            let text:any = val[i2];
-                                            if(v2 === 'l_token' && val[i2]) text = convert(v2).text;
-                                            return (
-                                                <div key={`${v2}_${i2}`} className={`${convert(v2).className+' flex items-center justify-center'}`}>
-                                                    {text}
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                    <div className={etc}>etc</div>
-                                </li>
-                            )
-                    })
-                }
-            </ul>
-        </Loading>
+                </ul>
+            </Loading>
+        </Layout>
     )
 }
 
