@@ -19,9 +19,10 @@ const initialState:State = {
 
 const adminReducer = (state = initialState, action: any): State => {
   const nav = TYPE('admin_nav')
-  const userList = TYPE('admin_users');
+  const data = TYPE('admin_collection_target');
 
   switch (action.type) {
+    // navi
     case nav.REQUEST:
       return {
         ...state,
@@ -39,18 +40,19 @@ const adminReducer = (state = initialState, action: any): State => {
         loading: false,
         error: action.payload,
       };
-    case userList.REQUEST:
+    // data
+    case data.REQUEST:
         return {
           ...state,
           loading:true,
         }   
-    case userList.SUCCESS:
+    case data.SUCCESS:
       return {
         ...state,
         loading:false,
         datas:action.payload.msg
       }
-    case userList.ERROR :
+    case data.ERROR :
       return {
         ...state,
         loading:false,

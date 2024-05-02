@@ -13,9 +13,10 @@ export async function HASH (pw:string,compare?:string|undefined|null) {
 
 
 export type ResultMsg = {
-  ok:number;
+  ok:number|boolean;
   type:string|object|any[];
   msg?:string|object|any[];
+  data?:any;
 }
 
 export async function GET() {
@@ -37,20 +38,22 @@ export async function POST(request:Request){
     async function run() {
         try {
           const db = client.db('dev');
-          const targetdb = await db.collection(data.bodyType);
-          const target = await targetdb.find({}).sort({userIndex:-1}).limit(50).toArray();
-
-      
+         
+        
           switch(data.bodyType) {
             case 'collection':
               const colletionList = await db.listCollections().toArray()
               result.msg = colletionList;
               break;
-            case 'users':
-              result.msg = target;
+            case 'collection_target':
+              const targetdb = await db.collection(data.target);
+              const target = await targetdb.find({}).sort({userIndex:-1}).limit(50).toArray();
+              // const filter = target.filter((x,i)=> i!==0);
+              // console.log(filter)
+              // target.pop();
+              result.msg = target
               break;
-            default: result.msg = target;
-              break;
+    
           }
           result.ok=1;
           result.type=`setting/${data.bodyType}`;

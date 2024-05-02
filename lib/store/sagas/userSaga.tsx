@@ -1,24 +1,25 @@
 
+"use client"
 import { takeLatest, call, put,all } from 'redux-saga/effects';
 import { fetchUserApi, fixUserAPi, logoutAPi } from '../../api/userApi';
 import { SagaIterator } from 'redux-saga';
+import { useRouter } from 'next/router'
 import TYPE from '@/lib/type';
 
 const USER_TYPE = TYPE('user');
 const LOGOUT_TYPE = TYPE('logout');
 const FIX_USER_TYPE = TYPE('user_fix');
 function* fetchUser(body:any):SagaIterator {
-  try {
-    const user = yield call(fetchUserApi,body);
-    if (typeof user.msg === 'string') 
-        alert(user.msg);
-    else  {
-        window.location.href ='/';
+    // const router = useRouter();
+    try {
+        const user = yield call(fetchUserApi,body);
+        if (typeof user.msg === 'string') 
+            alert(user.msg);
+       
+        yield put({ type: USER_TYPE.SUCCESS, payload: user });
+    } catch (error:any) {
+        yield put({ type: USER_TYPE.ERROR, payload: error.message });
     }
-    yield put({ type: USER_TYPE.SUCCESS, payload: user });
-  } catch (error:any) {
-    yield put({ type: USER_TYPE.ERROR, payload: error.message });
-  }
 }
 
 function* logoutUser(body:any):SagaIterator {
@@ -26,7 +27,6 @@ function* logoutUser(body:any):SagaIterator {
         const res = yield call(logoutAPi,body);
         if(!!res.ok) {
             alert('로그아웃 되었습니다.');
-            window.location.href='/'
         }
         yield put({type:LOGOUT_TYPE.SUCCESS,payload:res})
     } catch(error:any) {

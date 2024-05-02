@@ -6,27 +6,39 @@ import { absolute_center, absolute_y_center, flex_center, mobile_box, onepage, t
 import { useDispatch,useSelector } from "react-redux";
 import TYPE from "@/lib/type";
 import Logo from "../component/logo";
+import { useRouter } from "next/navigation";
 
 type liType = {
     name:string
     label:string
     children?:React.ReactElement
-    type?:string
+    type?:string;
+    value?:string;
     onChange?:React.ChangeEventHandler<HTMLInputElement>
+    maxLength?:number;
+    autoComplete?:string
 }
 export function Li(props:liType):React.ReactElement{
     let round = `rounded-sm`;
     if(!!props.children) round +=` rounded-r-none `
     const liStlye = ` w-full flex justify-between mb-3 mt-3 border border-blue-300 overflow-hidden ${round} `;
+    let att = {
+        type:!!props.type ? props.type :"text",
+        id:props.name, 
+        name:props.name, 
+        placeholder:props.label, 
+        onChange:props.onChange, 
+        autoComplete:props.autoComplete,
+        value:props.value,
+        maxLength:props.maxLength
+    }
 
    return(
      <li className={liStlye}>
         <input className={`w-full h-10 p-3 ${round} `} 
-        type={!!props.type ? props.type :"text"} 
-        id={props.name} 
-        name={props.name} 
-        placeholder={props.label} 
-        onChange={props.onChange} />
+        {...att}
+        
+        />
         {props.children}
      </li>
    ) 
@@ -38,7 +50,11 @@ export default function login ():React.ReactElement {
     const [allChk,setAllChk]= useState(false);
     const dispatch = useDispatch()
     const { user, login ,loading, error } = useSelector((state:any) => state.user);
-
+    const router = useRouter()
+    useEffect(()=>{
+        if(login)
+            router.push('/')
+    },[login])
 
     const onChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
         const t= e.target
@@ -57,10 +73,13 @@ export default function login ():React.ReactElement {
             userPw:userPw
         }
         dispatch(body);
+        if (login)
+            router.push('/')
     }
+
     useEffect(()=>{
-      if(!!userId && !!userPw) setAllChk(true)
-      else setAllChk(false)
+        if(!!userId && !!userPw) setAllChk(true)
+        else setAllChk(false)
     },[userId,userPw])
   
     return (
@@ -69,8 +88,8 @@ export default function login ():React.ReactElement {
                 <Logo className={"w-full mb-4 text-center text-black text-5xl"} />
                 {/* <h2 className={title}>로그인</h2> */}
                 <ul className={`flex flex-wrap items-center justify-center w-full`}>
-                    <Li name="userId" label="ID" onChange={onChange}></Li>
-                    <Li name="userPw" label="PW" type="password" onChange={onChange}></Li>
+                    <Li name="userId" label="ID" onChange={onChange} autoComplete="username"></Li>
+                    <Li name="userPw" label="PW" type="password"  onChange={onChange} autoComplete="current-password"></Li>
                     <li className="w-full mt-4">
                         <Btn className={!!allChk?"ml-auto" :"ml-auto bg-gray-300 border border-gray-400 text-gray-600"} onClick={allChk ? LoginHandle: (e:React.FormEvent<HTMLFormElement>)=>{e.preventDefault()}} >
                             Login

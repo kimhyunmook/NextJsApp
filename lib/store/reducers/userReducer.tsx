@@ -1,4 +1,6 @@
+"use client"
 import TYPE from "@/lib/type";
+import { useRouter } from "next/navigation";
 interface UserState {
   login:boolean|null,
   user: User | null;
@@ -69,9 +71,15 @@ const userReducer = (state = initialState, action: any): UserState => {
         error:null,
       }
     case fix.SUCCESS:
+      if (action.payload.type=== 'user_fix_samePw') {
+        alert('이전 비밀번호와 같습니다.')
+        window.location.reload();
+        return {...state}  ;
+      }
       return {
         ...state,
         loading:false,
+        login:action.payload.type==='user_fix_pw' ? false : true,
         user: action.payload.msg
       }
     case fix.ERROR:

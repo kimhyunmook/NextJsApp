@@ -7,7 +7,7 @@ type children = {
 export default function dbLayout(props:children) {
     return(
         <Layout all={true}>
-            {props.children}
+            { props.children }
         </Layout>
     )
 }

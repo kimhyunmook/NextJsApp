@@ -10,6 +10,7 @@
     "tailwind": "npx tailwindcss -i ./input.css -o ./output.css --watch"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.23.1",
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
@@ -18,7 +19,7 @@
     "js-cookie": "^3.0.5",
     "mongodb": "6.5",
     "mongoose": "^8.3.2",
-    "next": "14.2.1",
+    "next": "^14.2.1",
     "next-redux-wrapper": "^8.1.0",
     "nodemon": "^3.1.0",
     "react": "^18",

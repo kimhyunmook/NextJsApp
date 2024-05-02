@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { getCookie } from "../util/cookie";
 import Logo from "./logo";
 import Link from "next/link";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import TYPE from "@/lib/type";
 
@@ -80,7 +79,7 @@ export default function Header () {
         <header className="z-30 w-full top-0 relative">
             <div className="topContent flex justify-between w-screen z-20 min-h-[60px] pt-2 pb-2 pl-4 pr-4">
                 <div className="leftContent flex">
-                    <button className="navBtn w-[30px] mr-2 text-3xl" onClick={navEvent}> ☰ </button>
+                    <button className="navBtn flex w-[30px] mr-2 text-3xl" onClick={navEvent}> ☰ </button>
                     <Logo className={"text-white"} />
                 </div>
                 <div className="search"></div>

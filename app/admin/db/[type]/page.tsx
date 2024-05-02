@@ -5,6 +5,7 @@ import { title } from "@/app/util/style";
 import util from "@/app/util/utils";
 import { useEffect, useState } from "react";
 import CreateLayout from "./create";
+import DeleteLayout from "./delete";
 
 type Props = {
     params:{
@@ -13,9 +14,10 @@ type Props = {
 }
 export default function DB (props:Props) {
     const type = props.params?.type;
-    const utils = util({})
+    const utils = util()
     const btnStyle = `max-w-[50px] mr-2 text- p-0`;
     const[html,setHtml] = useState<any>([]);
+
     useEffect(()=>{
         switch(type) {
             case 'create':
@@ -23,6 +25,10 @@ export default function DB (props:Props) {
                     <CreateLayout btnStyle={btnStyle}></CreateLayout>
                 )
                 break;
+            case 'delete':
+                setHtml(
+                    <DeleteLayout />
+                )
         }
     },[])
 

@@ -1,4 +1,4 @@
-
+"use client"
 import { combineReducers } from '@reduxjs/toolkit';
 // slice
 import userReducer from './userReducer';

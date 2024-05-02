@@ -9,7 +9,7 @@ export async function POST(request:Request){
   
     let query:any = ''
     let result:ResultMsg ={
-        ok:0,
+        ok:false,
         type:'createCollection'
     }
       async function run() {
@@ -17,23 +17,29 @@ export async function POST(request:Request){
             const db = client.db('dev');
             const collections = await db.listCollections().toArray();
             console.log(data.schema);
-            const overlap = (await collections).forEach((v:any)=>{
+            await collections.forEach((v:any)=>{
               if(v.name === data.collectionName) {
                 result.msg = 'overlap'
                 throw false
               }
             })
-
-            let schema:any = {}
+            ///내일은 여기 fiter로 변경해서 하기
+            type Schema = {
+              key_index:number;
+              [key:string]:any
+            }
+            let schema:Schema = {
+              key_index:0
+            }
             await db.createCollection(data.collectionName)
             data.schema.forEach((item:any)=>{
-              schema[item.keyName] = '';
+              schema[item.keyName] = item.keyType ;
             });
             console.log(schema)
             const collection = await db.collection(data.collectionName);
             await collection.insertOne(schema);
             
-            result.ok=1;
+            result.ok=true;
           } finally {
             await client.close();
           }

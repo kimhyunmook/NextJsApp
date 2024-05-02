@@ -46,7 +46,7 @@ export async function POST(request:Request){
             await users.updateOne(query,{$set:{l_token:token}})
             await headers.append('Set-Cookie', cookieValue);
   
-            delete user.userPw;
+            // delete user.userPw;
             delete user.l_token;
             delete user._id;
             result.ok=1;

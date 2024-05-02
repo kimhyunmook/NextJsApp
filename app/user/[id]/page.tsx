@@ -5,10 +5,16 @@ import TYPE from "@/lib/type";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "@/app/component/logo";
+import { useRouter } from "next/navigation";
 
 export default function userInfo ({params}:any) {
     const user = useSelector((state:any)=>state.user);
-  
+    const login = useSelector((state:any)=>state.user.login);
+    const router = useRouter()
+    console.log(user)
+    useEffect(()=>{
+        if (!login) router.push('/login')
+    },[login])
     let userValueArr:any[],userKeyArr :any[];
     if (user) {
         userValueArr = Object.values(user.user)
@@ -19,33 +25,46 @@ export default function userInfo ({params}:any) {
                 <h2 className={`${title}`}>
                     {user.user.userId} 님의 정보
                 </h2>
-                <ul>
+                <ul className="flex flex-wrap">
                     {
                         userValueArr.map((v,i)=>{
                             if(i !=0 ) {
                                 const keyName = userKeyArr[i]
-                                let label:string ="";
-                                let fix:boolean = true;
+                                const att:InputProps = {
+                                    label:"",
+                                    fix:true,
+                                    value:v,
+                                    order:0,
+                                    id:keyName,
+                                    userId:params.id,
+                                    placeholder:''
+                                }
                                 switch(keyName) {
                                     case 'userName' : 
-                                        label ="이름"
-                                        fix=false;
+                                        att.label ="이름"
+                                        att.fix=false;
                                         break;
                                     case 'userPhoneNumber': 
-                                        label="연락처"
+                                        att.label="연락처"
                                         break; 
                                     case 'singUpDate' : 
-                                        label='가입날짜';
-                                        fix=false;
+                                        att.label='가입날짜';
+                                        att.fix=false;
                                         break;
-                                        
+                                    case 'userPw':
+                                        att.label = '비밀번호';
+                                        att.value = "";
+                                        att.placeholder = 'new Password'
                                 }
-                                if(keyName !=='userPw' && keyName !== 'userIndex')
-                                return <InputLi key={keyName} id={keyName} value={v} label={label} userId={params.id} fix={fix} />
+                                if(keyName !== 'userIndex')
+                                return <InputLi 
+                                    key={keyName} 
+                                    {...att}
+                                   
+                                    />
                             }
                         })
                     }
-                    {/* <InputLi id={"techStack"} value={[{name:'git',color:'bg-black'}, {name:'html',color:''},{name:'javasciprt',color:'bg-yellow-500'}]} label={"기술 스택"} listbox={true} userId={params.id} /> */}
                 </ul>
             </form>
         )
@@ -60,50 +79,45 @@ interface InputProps {
     listbox?:boolean
     userId:string;
     fix?:boolean;
+    order?:number;
+    placeholder?:string;
 }
 function InputLi(props:InputProps) {
-    // const user = useSelector((state:any)=>state.user);
     const [fix,setFix] = useState(false);
-    const [modal,setModal] = useState(<></>)
+    const [add,setAdd] = useState(<></>)
     const dispatch = useDispatch();
-    const user = useSelector((state:any)=>state.user);
+    const [value,setValue] =useState(props.value);
+    const router = useRouter();
 
-
-    function techStack(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        e.preventDefault();
-        window.location.reload();
-    }
     async function fixInput (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         if(!fix){
             setFix(true)
-
-            // modal 인경우
-            if (props.id ==='techStack') {
-                setModal(
-                <Modal display={true} closeBtn={<button className="modalBtn" onClick={techStack}>저장</button>}>
-                    <div></div>
-                </Modal>)
-            }
         }
         else {
             setFix(false)
-            const inputEl = e.currentTarget.previousSibling
-            if(inputEl instanceof HTMLInputElement) {
-                let body = {
-                    userId:props.userId,
-                    key:inputEl.id,
-                    value:inputEl.value
-                }   
-                dispatch({type:TYPE('user_fix').REQUEST,...body})
+            if (window.confirm('변경하시겠습니까?')) {
+                const inputEl = e.currentTarget.previousSibling
+                if (inputEl instanceof HTMLInputElement) {
+                    let body = {
+                        userId:props.userId,
+                        key:inputEl.id,
+                        value:inputEl.value
+                    }   
+                    dispatch({type:TYPE('user_fix').REQUEST,...body})
+                    alert('변경되었습니다.')
+                }
+            } else {
+                router.refresh();
             }
         }
     }
-    const inputStyle = `w-[65%] p-1  ease-in duration-100 rounded-md ${fix ? `border-2 border-blue-500 text-blue-500` : ``} `;
-    const maxH = "max-h-[40px]";
+    const inputStyle = `w-[65%] p-1  ease-in duration-100 rounded-md ${fix ? `border-2 border-blue-500 text-blue-500 bg-gray-200` : ``} `;
+    const maxH = "max-h-[40px]";   
+    const order = !!props.order ? `order-${props.order}`: null;
     
     return (
-        <li className={`flex relative justify-between mb-4 mt-4 text-xl border-b pt-2 pb-2`}>
+        <li className={`w-full flex ${order} relative justify-between mb-4 mt-4 text-xl border-b pt-2 pb-2`}>
             <div className={`input-cover absolute left-0 h-full z-10 ease-in duration-500  ${fix ? "w-0": "bg-[rgba(132, 0, 0, 0.3)] w-[90%]" }`}></div>
             <label className={`pl-2 font-bold w-[20%] break-keep text-base`} htmlFor={props.id}>
                 <b className={`flex items-center block h-full ${maxH}`}>
@@ -128,7 +142,9 @@ function InputLi(props:InputProps) {
                             id={props.id}
                             name={props.id}
                             type="text" 
-                            defaultValue={props.value}/>
+                            defaultValue={value}
+                            placeholder={props.placeholder}
+                            />
             }
             {
                 props.fix ? 
@@ -139,7 +155,7 @@ function InputLi(props:InputProps) {
                 </button>:
                 <div className="w-[10%]"></div>
             }
-            {modal}
+            { add }
         </li>
     )
 }
