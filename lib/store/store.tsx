@@ -12,6 +12,7 @@ const persistConfig = {
   storage:AsyncStorage,
   whitelist: [
     "user",
+    "admin"
   ],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);

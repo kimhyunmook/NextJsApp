@@ -5,8 +5,9 @@ import { flex_center, title } from "@/app/util/style"
 import TYPE from "@/lib/type"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import Btn from "@/app/component/button"
-import { adminListDeleteApi } from "@/lib/api/adminNavAPi"
+import { adminDataDeleteApi } from "@/lib/api/adminNavAPi"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 type Props = {
     params:{
@@ -21,7 +22,8 @@ export default function AdminDataTable (props:Props) {
     const datas = useSelector<any>((state)=>state.admin.datas)
     const storeLoading = useSelector<any>((state)=>state.admin.loading) && list.length > 0
     const [key,setKey] =  useState<any>([]);
-    // console.log(store);
+    const [label,setLabel] =  useState<any>([]);
+    const router =useRouter()
 
     useEffect(()=>{
         let body = {
@@ -33,12 +35,15 @@ export default function AdminDataTable (props:Props) {
         if (datas) {
             setList(datas);
         }
-    },[datas])
+    },[datas,storeLoading])
 
     useEffect(()=>{
         if(list.length > 0) {
-            const keys =list[0]
+            const keys =list[list.length-1]
+            const createDate =keys.createDate;
+            delete keys.create_date;
             setKey(Object.keys(keys));
+            setLabel(Object.values(keys));
         }
     },[list])
 
@@ -47,7 +52,7 @@ export default function AdminDataTable (props:Props) {
         long:"w-full max-w-[18%]",
         midle:"w-full max-w-[12%]",
         small:"w-full max-w-[7%]",
-        _default:"w-full max-w-[9%]",
+        _default:"w-full",
         etc: "etc w-full max-w-[5%]"
     }
     function convert (target:string,text?:string|undefined) {
@@ -73,7 +78,7 @@ export default function AdminDataTable (props:Props) {
             case inc('_id') :
                 return {
                     ...init,
-                    tag:'m_Id',
+                    tag:'key',
                     className:small,
                     text:
                     <div className={'tooltip'}>
@@ -83,7 +88,7 @@ export default function AdminDataTable (props:Props) {
                         </div>
                     </div>
                 }
-            case inc('username'):
+            case inc('username') :
                 return{
                     ...init,
                     tag:'이름',
@@ -116,9 +121,11 @@ export default function AdminDataTable (props:Props) {
                     className:small+" order-first"
                 }
             default: 
+
                 return {
                     ...init,
-                    className:_default
+                    className:_default,
+                    tag:text
                 };
         }
     }
@@ -140,20 +147,24 @@ export default function AdminDataTable (props:Props) {
 
                 break;
             case 'delete' :
-                const index = Array.from(t.parentElement?.parentElement?.parentNode?.children || []).filter((x,i)=>{
-                    const values = x.getAttribute('data-values')?.toLowerCase();
-                    if (values?.includes('index'))
-                        return x
-                })[0]
-                const mongoid = t.parentElement?.parentElement?.parentElement?.dataset.mongoid;
-                console.log()
-                body = {
-                    collectionName:target,
-                    mongoid,
-                }
-                adminListDeleteApi(body).then(res=>{
-                    console.log(res.data);
-                })
+                if (window.confirm('삭제하시겠습니까?')) {
+                    const mongoid = t.parentElement?.parentElement?.parentElement?.dataset.mongoid;
+                    body = {
+                        collectionName:target,
+                        mongoid,
+                    }
+                    adminDataDeleteApi(body)
+                        .then(res=>{
+                            console.log(res.data);
+                            if (res.data.ok) {
+                                let body = {
+                                    bodyType:'collection_target',
+                                    target,
+                                }   
+                                dispatch({type:TYPE(`admin_collection_target`).REQUEST,...body})      
+                            }
+                        })
+                } else alert('취소되었습니다.')
                 break;
             case 'close' :
                 t.parentElement?.parentElement?.classList.remove('on')
@@ -174,7 +185,7 @@ export default function AdminDataTable (props:Props) {
                             key.map((v:any,i:number)=>{
                                 return(
                                     <div key={`keys_${v}`} className={`${convert(v).className}`}>
-                                        {convert(v).tag}
+                                        {convert(v,label[i]).tag}
                                     </div>
                                 )
                             })
@@ -237,9 +248,12 @@ export default function AdminDataTable (props:Props) {
                     }
                 </ul>
                 <div className="fixed bottom-4 right-8">
-                    <Btn>
-                        입력
-                    </Btn>
+                    {
+                        target !== 'users' ?
+                        <Link href={`/admin/${target}/insert`} className="bg-blue-500 p-2 pr-3 pl-3 rounded-md text-xl">
+                            입력
+                        </Link> : null
+                    }
                 </div>
             </Loading>
         </Layout>

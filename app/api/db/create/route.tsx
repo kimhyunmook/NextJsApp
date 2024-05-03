@@ -16,7 +16,7 @@ export async function POST(request:Request){
           try {
             const db = client.db('dev');
             const collections = await db.listCollections().toArray();
-            console.log(data.schema);
+            const date = new Date();
             await collections.forEach((v:any)=>{
               if(v.name === data.collectionName) {
                 result.msg = 'overlap'
@@ -29,13 +29,13 @@ export async function POST(request:Request){
               [key:string]:any
             }
             let schema:Schema = {
-              key_index:0
+              key_index:0,
+              create_date:date
             }
             await db.createCollection(data.collectionName)
             data.schema.forEach((item:any)=>{
-              schema[item.keyName] = item.keyType ;
+              schema[item.keyName] = item.keyLabel ;
             });
-            console.log(schema)
             const collection = await db.collection(data.collectionName);
             await collection.insertOne(schema);
             

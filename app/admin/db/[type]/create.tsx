@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import TYPE from "@/lib/type";
 import { useRouter } from "next/navigation";
+
 type Props = {
     btnStyle:string;
 }
@@ -14,7 +15,6 @@ export default function CreateLayout(props:Props) {
     const[html,setHtml] = useState<any>([]);
     const dispatch = useDispatch();
     const router = useRouter();
-
 
     function add(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
@@ -25,15 +25,15 @@ export default function CreateLayout(props:Props) {
             <li key={`inputs_${html.length}`} className={`schema flex pt-2 pb-2 mb-2 justify-between`}>
                 <div className={`${boxStyle}`}>
                     <label className={labelStyle} htmlFor="key">
-                        key
+                        Key
                     </label>
                     <input className={`${inputStyle} key`} type="text" name="key" id="key" placeholder="Key"/>
                 </div>
                 <div className={`${boxStyle}`}>
-                    <label className={labelStyle} htmlFor="type">
-                        type
+                    <label className={labelStyle} htmlFor="labelName">
+                        Label name
                     </label>
-                    <input className={`${inputStyle} type`} type="text" name="type" id="type" placeholder="type"/>
+                    <input className={`${inputStyle} labelName`} type="text" name="labelName" id="labelName" placeholder="Label Name"/>
                 </div>
             </li>
         )
@@ -47,21 +47,22 @@ export default function CreateLayout(props:Props) {
         const collectionName = document.querySelector('#collectionName') as HTMLInputElement;
         const arr = (target:string) => Array.from(document.querySelectorAll(target));
         const keys = arr('.schema .key');
-        const types = arr('.schema .type');
+        const labelNames = arr('.schema .labelName');
      
         const schema= keys.reduce((a:any,c:any,i:number)=>{
-            const type = types[i] as HTMLInputElement;
+            const labelName = labelNames[i] as HTMLInputElement;
+            console.log(labelName)
             if (!!!c.value) {
                 alert('key를 입력해주세요');
                 c.focus();
                 return
             }
-            if (!!!type.value) {
-                alert('type을 정의해주세요');
-                type.focus();
+            if (!!!labelName.value) {
+                alert('Label Name을 정해주세요');
+                labelName.focus();
                 return;
             }
-            a.push({keyName:c.value, keyType:type.value})
+            a.push({keyName:c.value, keyLabel:labelName.value})
             return a;
         },[]);
 
@@ -77,7 +78,9 @@ export default function CreateLayout(props:Props) {
                         bodyType:"collection"
                     }
                     dispatch({type:TYPE('admin_nav').REQUEST,...body})
-                    router.refresh()
+                    setTimeout(()=>{
+                        router.push(`/admin/${collectionName.value}`)
+                    },500)
                 } else {
                     alert(res.data.msg);
                 }

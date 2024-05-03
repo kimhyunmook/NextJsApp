@@ -1,7 +1,7 @@
 "use server";
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
-import { ResultMsg } from "../../route";
+import { ResultMsg } from "../../../route";
 
 export async function POST(request:Request){
     const data = await request.json();
@@ -10,18 +10,21 @@ export async function POST(request:Request){
   
     let query:any = ''
     let result:ResultMsg ={
-        ok:0,
-        type:''
+        ok:false,
+        type:'list/insert'
     }
       async function run() {
           try {
             const db = client.db('dev');
-            const targetdb = await db.collection(data.target);
-            const target = await targetdb.find({}).sort({key_index:-1}).limit(50).toArray();
-            result.ok=1;
-            result.type=`setting/list`;
-            result.msg= target;
-            result.data = target;
+            const collection = await db.collection(data.collection);
+            const insertData = data.insertData;
+            let index = await collection.find().toArray();
+            await insertData.map(async (v:any,i:number)=>{
+                v.key_index = index[index.length-1].key_index+(i+1); 
+            })
+            await collection.insertMany(insertData)
+            result.ok = true;
+            result.msg = 'insert Data'            
           } finally {
             await client.close();
           }

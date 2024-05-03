@@ -5,13 +5,12 @@ import TYPE from "@/lib/type";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "@/app/component/logo";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function userInfo ({params}:any) {
     const user = useSelector((state:any)=>state.user);
     const login = useSelector((state:any)=>state.user.login);
     const router = useRouter()
-    console.log(user)
     useEffect(()=>{
         if (!login) router.push('/login')
     },[login])
@@ -56,7 +55,7 @@ export default function userInfo ({params}:any) {
                                         att.value = "";
                                         att.placeholder = 'new Password'
                                 }
-                                if(keyName !== 'userIndex')
+                                if(keyName !== 'key_index')
                                 return <InputLi 
                                     key={keyName} 
                                     {...att}
@@ -88,6 +87,7 @@ function InputLi(props:InputProps) {
     const dispatch = useDispatch();
     const [value,setValue] =useState(props.value);
     const router = useRouter();
+    const params = useParams();
 
     async function fixInput (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
@@ -99,6 +99,10 @@ function InputLi(props:InputProps) {
             if (window.confirm('변경하시겠습니까?')) {
                 const inputEl = e.currentTarget.previousSibling
                 if (inputEl instanceof HTMLInputElement) {
+                    if (!!!inputEl.value) {
+                        alert('빈칸을 채워주세요');
+                        return
+                    }
                     let body = {
                         userId:props.userId,
                         key:inputEl.id,
@@ -106,18 +110,21 @@ function InputLi(props:InputProps) {
                     }   
                     dispatch({type:TYPE('user_fix').REQUEST,...body})
                     alert('변경되었습니다.')
+                    router.push(`/user/${params.id}`)
                 }
             } else {
-                router.refresh();
+                setTimeout(()=>{
+                    router.push(`/user/${params.id}`)
+                },100)
             }
         }
     }
-    const inputStyle = `w-[65%] p-1  ease-in duration-100 rounded-md ${fix ? `border-2 border-blue-500 text-blue-500 bg-gray-200` : ``} `;
+    const inputStyle = `w-[65%] p-1 pl-3  ease-in duration-100 rounded-md ${fix ? `border-2 border-blue-500 text-blue-500 bg-gray-200` : ``} `;
     const maxH = "max-h-[40px]";   
     const order = !!props.order ? `order-${props.order}`: null;
     
     return (
-        <li className={`w-full flex ${order} relative justify-between mb-4 mt-4 text-xl border-b pt-2 pb-2`}>
+        <li className={`w-full flex ${order} relative justify-between mb-2 mt-2 text-xl pt-2 pb-2`}>
             <div className={`input-cover absolute left-0 h-full z-10 ease-in duration-500  ${fix ? "w-0": "bg-[rgba(132, 0, 0, 0.3)] w-[90%]" }`}></div>
             <label className={`pl-2 font-bold w-[20%] break-keep text-base`} htmlFor={props.id}>
                 <b className={`flex items-center block h-full ${maxH}`}>

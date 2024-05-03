@@ -9,11 +9,7 @@ export default function util() {
         phoneNumber: (e:ChangeEvent<HTMLInputElement>) => {
             const value = e.currentTarget.value;
             const phoneNumber = value.replace(/[^0-9]/g, ''); 
-        
-            // if (phoneNumber !== value) {
-            //     alert('숫자만 입력해주세요');
-            // }
-            console.log()
+
             let formattedPhoneNumber = phoneNumber;
             if (phoneNumber.length >= 3) {
                 formattedPhoneNumber = `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
@@ -25,5 +21,6 @@ export default function util() {
             e.currentTarget.value = formattedPhoneNumber;
             return formattedPhoneNumber;
           },
+      
     }
 }

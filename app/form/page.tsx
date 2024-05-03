@@ -1,6 +1,9 @@
 "use client";
+import { useState } from "react";
 import Btn from "../component/button";
 import { title } from "../util/style";
+import { useRouter } from "next/navigation";
+
 type inputDefault= {
     type?:string;
     id:string;
@@ -11,8 +14,7 @@ type inputDefault= {
     onChange?:any;
     required?:boolean;
 }
-
-const inputStyle:string = 'border border-[rgba(0,0,0,0.5)] rounded-lg p-2 text-xl'
+const inputStyle = 'rounded-lg p-2 pl-4 text-xl'
 function Input (props:inputDefault):React.ReactElement {
     const listClassName = !!props.listClassName ? props.listClassName :'';
     const inputClassName = !!props.className ? props.className:"";
@@ -22,6 +24,7 @@ function Input (props:inputDefault):React.ReactElement {
     return(
         <li className={`w-full mt-2 mb-2 ${listClassName}`}>
             <input 
+            id={props.id}
             name={props.id} 
             className={`w-full ${inputStyle} ${inputClassName}`} 
             type={type}
@@ -32,38 +35,96 @@ function Input (props:inputDefault):React.ReactElement {
         </li>
     )
 }
+type FormSubmitFunction = (data: any) => Promise<any>;
+type Props = {
+    title:string|any;
+    data:any | {
+        keys:any[];
+        types:any[];
+    };
+    submit: FormSubmitFunction;
+}
+export default function FormDefault(props:Props) {
+    const data = props.data
+    const router =useRouter();
 
-export default function formDefault() {
-    const submitHandle = async (e:Event) =>{
+    const submitHandle = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
         e.preventDefault();
         const form = document.forms[0];
-        let body = {
-            subject:form.subject.value,
-            content:form.content.value,
-            categori:form.categori.value,
+        let body:any = {
+            collection:data.collection,
+            insertData:[]
         }
-        console.log(body)
-        try {
-        }
-        catch (error) {
-            console.error(error)
-        }
+        const kit = Array.from(document.querySelectorAll('form .datakit'));
+
+        kit.map((v:Element,i:number)=>{
+            const data:Record<string,string>= {}
+            Array.from(v.children).map((v2,i2)=>{
+                const input = v2.children[0] as HTMLInputElement
+                data[input.id] =input.value;
+            })
+            body.insertData.push(data)
+        })
+    
+        props.submit(body).then(res=>{
+            console.log(res);
+            if (res.ok) router.back();
+            else alert('입력이 불가능합니다.')
+        })
+        
     }
+
+   
+    const [html,setHtml]= useState<any>([])
+    const kitStyle = `p-2 rounded-md bg-green-400 mt-2 mb-2`;
+    
+
+    function add (e:React.MouseEvent<HTMLButtonElement,MouseEvent>) {
+        e.preventDefault();
+        const kit = (
+            <ul key={`kit_${html.length}`} className={`datakit ${kitStyle}`}>
+                {
+                    data.keys.map((v:any,i:number)=>{
+                        return(
+                            <Input key={`${v}_${i}`} id={v} placeholder={data.labels[i]}  />
+                        )
+                    })
+                }
+            </ul>
+        )
+        setHtml((p:any)=>[...p, kit])
+    }
+    function remove(index:number) {
+        setHtml((p:any)=> p.filter((_:any, i:number) => i !== index));
+    }
+
+    const btnStyle = `max-w-[50px] mr-2`;
+
     return(
         <form className={`mr-auto ml-auto mt-16 mb-20 w-full max-w-[400px]`} >
-            <h2 className={title}># 글쓰기</h2>
-            <ul className="">
-                <Input id="categori" placeholder="#카테고리 (#으로 구분 ex #맛집#인스타)" />
-                <Input id="subject" placeholder="* 제목" required={true}/>
-                <textarea 
-                    className={`w-full resize-none ${inputStyle} h-[250px]`} 
-                    name="content" 
-                    id="content" 
-                    cols={30} 
-                    rows={10} 
-                    placeholder="* 내용"
-                ></textarea>
+            <h2 className={title}>{props.title}</h2>
+            <div className="button flex">
+                    <Btn className={btnStyle} onClick={add}>
+                        +
+                    </Btn>
+                    <Btn className={btnStyle} 
+                        onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+                        e.preventDefault();
+                            remove(html.length - 1)
+                        }}>
+                        -
+                    </Btn>
+            </div>
+            <ul className={`datakit ${kitStyle}`}>
+                {
+                    data.keys.map((v:any,i:number)=>{
+                        return(
+                            <Input key={`${v}_${i}`} id={v} placeholder={data.labels[i]}  />
+                        )
+                    })
+                }
             </ul>
+            { html }
             <Btn onClick={submitHandle} className="block ml-auto">입력</Btn>
         </form>
     )

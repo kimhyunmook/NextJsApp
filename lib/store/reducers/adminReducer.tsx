@@ -41,12 +41,12 @@ const adminReducer = (state = initialState, action: any): State => {
         error: action.payload,
       };
     // data
-    case data.REQUEST:
+    case data.REQUEST :
         return {
           ...state,
           loading:true,
         }   
-    case data.SUCCESS:
+    case data.SUCCESS :
       return {
         ...state,
         loading:false,

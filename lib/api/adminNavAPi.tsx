@@ -10,7 +10,12 @@ export async function adminListApi(body:any) {
     return res;
 }
 
-export async function adminListDeleteApi(body:any) {
+export async function adminDataDeleteApi(body:any) {
     const res = await axios.post('/api/db/list/delete',body);
+    return res;
+}
+
+export async  function adminDatainertApi(body:any) {
+    const res = await axios.post('/api/db/list/insert',body).then(res=>res.data);
     return res;
 }
