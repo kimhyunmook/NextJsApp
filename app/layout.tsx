@@ -12,7 +12,7 @@ import Loading from "./loadingg";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "기억 저장소",
+  title: "MongoAdmin",
   description: "기억하고 싶은거 저장하기",
 };
 

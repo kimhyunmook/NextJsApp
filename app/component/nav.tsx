@@ -5,42 +5,69 @@ import { useDispatch, useSelector } from "react-redux";
 import TYPE from "@/lib/type";
 
 export default function Nav() {
-    const [list,setList] = useState<any>([]);
+    const [collectionList,setCollectionList] = useState<any>([]);
+    const [dbList,setDbList] = useState<any>([]);
     const dispatch = useDispatch();
-    const adminNav = useSelector<any>((state)=>state.admin.nav)
+    const db = useSelector<any>((state)=>state.admin.navDB)
+    const collection = useSelector<any>((state)=>state.admin)
     useEffect(()=>{
         let body = {
-            bodyType:"collection"
+            bodyType:"db"
         }
         dispatch({type:TYPE('admin_nav').REQUEST,...body})
     },[])
     
     useEffect(()=>{
-        if(adminNav) setList(adminNav)
-    },[adminNav])
+        if(db) setDbList(db)
+    },[db])
 
     const liStyle = `pl-3 w-full text-lg`;
-    const dbList:dbListItem[] = [{
+    const oldList:dbListItem[] = [{
             name:'create',
-            href:'/admin/db/create'
+            href:'/admin/db/collection/create'
         },
         {
             name:'delete',
-            href:'/admin/db/delete',
+            href:'/admin/db/collection/delete',
         }
-    ]       
+    ]
+    function dbListHandle (e:React.MouseEvent<HTMLAnchorElement>) {
+        e.preventDefault();
+        let body ={
+            bodyType:'collection',
+            dbName: e.currentTarget.textContent
+        }
+        console.log(body);
+    }
     return(
         <nav className="navLeftContent overflow p-2 w-[225px]">
-               <NavBox title={'DB'} list={dbList}>
-                {/* <li className={liStyle}>
-                    <Link href={``}>
-                        create
-                    </Link>
-                </li> */}
-            </NavBox>
-            <NavBox title={'Collection'}>
+            <h2 className="font-black pt-2 pb-2 border-b mb-2">
+                <Link href={`/admin/`}>
+                    DATABASE 만들기
+                </Link>
+            </h2>
+            <NavBox title={ 'DB' } list={ oldList }></NavBox>
+            <NavBox title={ 'DB' } >
                 {
-                    list.map((v:any,i:number)=>{
+                    dbList.map((v:any,i:number)=>{
+                        let name = ""
+                        switch(v.name) {
+                        }
+                        
+                        return (
+                            <li key={`li_${i}`} className={liStyle}>
+                                <Link href={`/admin/${v.name}`} className={`text-lg`} onClick={dbListHandle}>
+                                    {v.name}
+                                </Link>
+                            </li>
+                        )
+                    })
+                }
+            </NavBox>
+            <NavBox title={ 'Collection' }>
+                {
+                    !! collectionList.length ?
+                    collectionList.map((v:any,i:number)=>{
                         let name = ""
                         switch(v.name) {
                         }
@@ -52,7 +79,12 @@ export default function Nav() {
                                 </Link>
                             </li>
                         )
-                    })
+                    }) : 
+                    <li className={liStyle}>
+                        <Link href={"#"} className="text-base">
+                            DB를 선택해주세요
+                        </Link>
+                    </li>
                 }
             </NavBox>
          
@@ -70,18 +102,18 @@ type navBox = {
 }
 function NavBox(props:navBox) {
     return(
-        <div className="navBox w-full mb-4">
+        <div className="navBox w-full mb-2 border-b pb-2">
             <h2 className={'font-black text-white'}>
                 {props.title}
             </h2>
             <ul>
                 {
                    !! props.list ?
-                    props.list.map((v,i)=>{
+                    props.list.map((v,i) => {
                         return(
-                            <li key={v.name} className={`pl-3 w-full text-lg`}>
-                                <Link href={v.href}>
-                                    {v.name}
+                            <li key={ v.name+`_`+i } className={ `pl-3 w-full text-lg` }>
+                                <Link href={ v.href }>
+                                    { v.name }
                                 </Link>
                             </li>
                         )

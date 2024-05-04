@@ -37,23 +37,24 @@ export async function POST(request:Request){
   }
     async function run() {
         try {
-          const db = client.db('dev');
-         
-        
+          const devdb = client.db('dev');
+          const db = client.db(data.dbName)
           switch(data.bodyType) {
+            case 'db':
+              const adminDb = client.db('admin');
+              const dbList = await adminDb.admin().listDatabases();
+              result.msg = dbList.databases;
+              break;
             case 'collection':
               const colletionList = await db.listCollections().toArray()
               result.msg = colletionList;
               break;
             case 'collection_target':
-              const targetdb = await db.collection(data.target);
+              const targetdb = await devdb.collection(data.target);
               const target = await targetdb.find({}).sort({userIndex:-1}).limit(50).toArray();
-              // const filter = target.filter((x,i)=> i!==0);
-              // console.log(filter)
-              // target.pop();
+
               result.msg = target
               break;
-    
           }
           result.ok=1;
           result.type=`setting/${data.bodyType}`;

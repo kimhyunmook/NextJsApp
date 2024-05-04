@@ -6,16 +6,16 @@ export async function adminNavApi (body:any) {
 }
 
 export async function adminListApi(body:any) {
-    const res = await axios.post('/api/db/list',body).then(res=>res.data);
+    const res = await axios.post('/api/db/collection/list',body).then(res=>res.data);
     return res;
 }
 
 export async function adminDataDeleteApi(body:any) {
-    const res = await axios.post('/api/db/list/delete',body);
+    const res = await axios.post('/api/db/collection/list/delete',body);
     return res;
 }
 
 export async  function adminDatainertApi(body:any) {
-    const res = await axios.post('/api/db/list/insert',body).then(res=>res.data);
+    const res = await axios.post('/api/db/collection/list/insert',body).then(res=>res.data);
     return res;
 }

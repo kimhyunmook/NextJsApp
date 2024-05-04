@@ -99,17 +99,30 @@ body {
 .navLeftContent {
   transition: 0.5s;
 }
+.navLeftContent.active {
+  transition: 0.5s;
+  position:absolute; 
+  left:-200%;
+}
+.navLeftContent h2 {
+  transition: 0.5s;
+}
+.navLeftContent.active h2 {
+  /* display:none;
+  opacity: 0;
+  font-size:0 */
+}
 .navLeftContent .navBox {
   transition: 0.5s;
 }
 .navLeftContent.active .navBox {
-  /* display: none; */
-  opacity: 0;
+  /* display: none;
+  opacity: 0; */
 }
-.navLeftContent.active {
-  padding: 0;
-  width: 0;
-}
+
+
+
+
 
 /* buttonDom */
 .etc.on .buttonDom {
@@ -177,9 +190,9 @@ body {
   border-radius: 5px;
   position: absolute;
   top: 50%;
-  left: 105%;
+  left: 150%;
   transform: translateY(-50%);
-  box-shadow: 1px -1px 5px rgb(185, 185, 185);
+  /* box-shadow: 1px -1px 5px rgb(185, 185, 185); */
   background-color: white;
   color: black;
   padding: 7px 8px;

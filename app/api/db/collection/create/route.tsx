@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from 'mongodb';
-import { ResultMsg } from "../../route";
+import { ResultMsg } from "@/app/api/route";
  
 export async function POST(request:Request){
     const data = await request.json();
@@ -19,11 +19,11 @@ export async function POST(request:Request){
             const date = new Date();
             await collections.forEach((v:any)=>{
               if(v.name === data.collectionName) {
-                result.msg = 'overlap'
+                result.msg = 'DB 중복'
                 throw false
               }
             })
-            ///내일은 여기 fiter로 변경해서 하기
+
             type Schema = {
               key_index:number;
               [key:string]:any

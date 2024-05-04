@@ -70,7 +70,7 @@ export default function CreateLayout(props:Props) {
             collectionName:collectionName.value,
             schema,
         }
-        await axios.post('/api/db/create',body)
+        await axios.post('/api/db/collection/create',body)
             .then(res=>{
                 if(res.data.ok) {
                     alert('Collection이 생성 되었습니다.')
