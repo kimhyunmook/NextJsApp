@@ -1,7 +1,7 @@
 "use server";
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
-import { ResultMsg } from "../../../route";
+import { ResultMsg } from "@/app/api/route";
 
 export async function POST(request:Request){
     const data = await request.json();

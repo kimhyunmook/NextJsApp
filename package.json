@@ -16,6 +16,7 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "express": "^4.19.2",
+    "fs": "^0.0.1-security",
     "js-cookie": "^3.0.5",
     "mongodb": "6.5",
     "mongoose": "^8.3.2",

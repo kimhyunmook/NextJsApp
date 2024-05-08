@@ -3,7 +3,7 @@ import Layout from "@/app/component/layoutControl";
 import FormDefault from "@/app/form/page";
 import util from "@/app/util/utils";
 import { useEffect, useState } from "react";
-import { adminDatainertApi, adminListApi } from "@/lib/api/adminNavAPi";
+import { adminDatainertApi, adminListApi } from "@/lib/api/adminApi";
 import Loading from "@/app/loadingg";
 type Props = {
     params:{
@@ -14,7 +14,6 @@ export default function Insert (props:Props) {
     const target = props.params.collection;
     const [keys,setKeys] = useState<any>([])
     const [labels,setLabels] = useState<any>([])
-    const [loading,setLoading] = useState(true)
     const uitls = util();
 
     useEffect(()=>{
@@ -36,19 +35,14 @@ export default function Insert (props:Props) {
                 });
                 setKeys(_keys);
                 setLabels(_values);
-            })    
+            });
     },[])
-    // useEffect(()=>{
-    //     setLoading(false);
-    // },[])
 
     return(
-        <Layout all={true}>
-            <Loading loading={null} default={500}>
-                <FormDefault title={uitls.firstUppercase(target)} data={{collection:target,keys,labels}} submit={adminDatainertApi}>
+        <Loading loading={null} default={500}>
+            <FormDefault title={uitls.firstUppercase(target)} data={{collection:target,keys,labels}} submit={adminDatainertApi}>
 
-                </FormDefault>
-            </Loading>
-        </Layout>
+            </FormDefault>
+        </Loading>
     )
 }

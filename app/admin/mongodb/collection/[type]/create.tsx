@@ -44,14 +44,26 @@ export default function CreateLayout(props:Props) {
     }
     async function submit(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
-        const collectionName = document.querySelector('#collectionName') as HTMLInputElement;
         const arr = (target:string) => Array.from(document.querySelectorAll(target));
         const keys = arr('.schema .key');
         const labelNames = arr('.schema .labelName');
-     
+        type values= {
+            collectionName:string;
+            dbName:string;
+        }
+        const values:values = arr('.bodyInfo input').reduce((a,c:any,i)=>{
+            a = {
+                ...a,
+                [c.id]:c.value
+            }
+            return a;
+        },{
+            dbName:'',
+            collectionName:''
+        });
+        
         const schema= keys.reduce((a:any,c:any,i:number)=>{
             const labelName = labelNames[i] as HTMLInputElement;
-            console.log(labelName)
             if (!!!c.value) {
                 alert('key를 입력해주세요');
                 c.focus();
@@ -67,7 +79,7 @@ export default function CreateLayout(props:Props) {
         },[]);
 
         let body = {
-            collectionName:collectionName.value,
+            ...values,
             schema,
         }
         await axios.post('/api/db/collection/create',body)
@@ -75,11 +87,12 @@ export default function CreateLayout(props:Props) {
                 if(res.data.ok) {
                     alert('Collection이 생성 되었습니다.')
                     let body = {
-                        bodyType:"collection"
+                        bodyType:"collection",
+                        dbName:values.dbName
                     }
-                    dispatch({type:TYPE('admin_nav').REQUEST,...body})
+                    dispatch({type:TYPE('admin_nav_collection').REQUEST,...body})
                     setTimeout(()=>{
-                        router.push(`/admin/${collectionName.value}`)
+                        router.push(`/admin/${values.collectionName}`)
                     },500)
                 } else {
                     alert(res.data.msg);

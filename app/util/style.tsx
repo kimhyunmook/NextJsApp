@@ -7,3 +7,8 @@ export const mobile_box:string = ` max-w-[400px] m-auto`;
 export const disable_button:string= `bg-zinc-200 text-black`;
 export const able_button:string = `bg-blue-500 text-white`;
 export const onepage:string = `pt-40 pb-40`
+
+const style = {
+    formDefault: `pt-4 m-auto max-w-[600px]`
+}
+export default style

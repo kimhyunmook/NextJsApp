@@ -9,19 +9,22 @@ import Logo from "../component/logo";
 import { useRouter } from "next/navigation";
 
 type liType = {
-    name:string
-    label:string
-    children?:React.ReactElement
+    name:string;
+    className?:string;
+    label:string;
+    children?:any;
     type?:string;
     value?:string;
     onChange?:React.ChangeEventHandler<HTMLInputElement>
     maxLength?:number;
     autoComplete?:string
+    overflow?:boolean;
 }
 export function Li(props:liType):React.ReactElement{
     let round = `rounded-sm`;
+    let overflow = !! props.overflow ? '' : 'overflow-hidden';
     if(!!props.children) round +=` rounded-r-none `
-    const liStlye = ` w-full flex justify-between mb-3 mt-3 border border-blue-300 overflow-hidden ${round} `;
+    const liStlye = ` w-full flex justify-between mb-3 mt-3 border border-blue-300 ${overflow} ${round} ${props.className} `;
     let att = {
         type:!!props.type ? props.type :"text",
         id:props.name, 
@@ -37,7 +40,6 @@ export function Li(props:liType):React.ReactElement{
      <li className={liStlye}>
         <input className={`w-full h-10 p-3 ${round} `} 
         {...att}
-        
         />
         {props.children}
      </li>

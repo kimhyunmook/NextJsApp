@@ -97,12 +97,22 @@ body {
 
 /* navLeft */
 .navLeftContent {
+  max-height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px);
   transition: 0.5s;
+  -ms-overflow-style: none;
+}
+.navLeftContent:hover::-webkit-scrollbar {
+  display: block;
+  background-color: white;
+}
+.navLeftContent::-webkit-scrollbar {
+  display: none;
 }
 .navLeftContent.active {
   transition: 0.5s;
-  position:absolute; 
-  left:-200%;
+  position: absolute;
+  left: -200%;
 }
 .navLeftContent h2 {
   transition: 0.5s;
@@ -119,10 +129,6 @@ body {
   /* display: none;
   opacity: 0; */
 }
-
-
-
-
 
 /* buttonDom */
 .etc.on .buttonDom {
@@ -211,4 +217,13 @@ body {
     opacity: 1;
     top: 50%;
   }
+}
+
+.selectBox {
+}
+.selectBox input:focus .selectBoxUnder {
+  display: block;
+}
+.selectBox .selectBoxUnder {
+  display: none;
 }

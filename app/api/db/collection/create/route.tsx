@@ -14,9 +14,20 @@ export async function POST(request:Request){
     }
       async function run() {
           try {
-            const db = client.db('dev');
+            await client.connect();
+            // db exists 확인
+            const dbList = await client.db().admin().listDatabases();
+            const dbExists = dbList.databases.some(db=>db.name === data.dbName)
+            if (!dbExists) {
+              result.msg = 'DATABASE가 없습니다.';
+              throw result;
+            }
+
+            const db = client.db(data.dbName);
             const collections = await db.listCollections().toArray();
             const date = new Date();
+
+            //collection 중복 확인
             await collections.forEach((v:any)=>{
               if(v.name === data.collectionName) {
                 result.msg = 'DB 중복'

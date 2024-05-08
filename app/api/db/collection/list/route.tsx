@@ -1,7 +1,7 @@
 "use server";
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
-import { ResultMsg } from "../../route";
+import { ResultMsg, dbExists } from "@/app/api/route";
 
 export async function POST(request:Request){
     const data = await request.json();
@@ -15,13 +15,20 @@ export async function POST(request:Request){
     }
       async function run() {
           try {
-            const db = client.db('dev');
-            const targetdb = await db.collection(data.target);
-            const target = await targetdb.find({}).sort({key_index:-1}).limit(50).toArray();
+            const exists = await dbExists(client,data.dbName)
+            if (!exists) {
+              result.type = 'error';
+              result.msg = 'db 오류';
+              throw result;
+            }
+            const db = client.db(data.dbName);
+            const collection = await db.collection(data.collectionName);
+            const label =  await collection.findOne({key_index:0});
+            console.log(label);
+            const list = await collection.find({}).sort({key_index:-1}).limit(50).toArray();
             result.ok=1;
             result.type=`setting/list`;
-            result.msg= target;
-            result.data = target;
+            result.msg= {label, list};
           } finally {
             await client.close();
           }
