@@ -1,5 +1,4 @@
 "use client"
-import Layout from "@/app/component/layoutControl"
 import Loading from "@/app/loadingg"
 import { flex_center, title } from "@/app/util/style"
 import TYPE from "@/lib/type"

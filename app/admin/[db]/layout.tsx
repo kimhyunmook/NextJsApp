@@ -8,9 +8,7 @@ type Props = {
 }
 export default function DBtableLayout (props:Props) {
     const loading = useSelector((state:any)=>state.admin.loading);
-    useEffect(()=>{
-        console.log(loading);
-    },[loading])
+ 
     return (
         <Loading loading={loading} default={500}>
             {props.children}

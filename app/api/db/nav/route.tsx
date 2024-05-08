@@ -30,7 +30,8 @@ export async function POST(request:Request){
               );
               break;
             case 'collection':
-              const colletionList = await db.listCollections().toArray()
+              const colletionList = await (await db.listCollections().toArray())
+                .filter((x,i)=> !x.name.includes('DB_Info'))
               result.msg = colletionList;
               break;
             case 'collection_target':

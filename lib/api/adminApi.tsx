@@ -24,3 +24,9 @@ export async  function adminDatainertApi(body:any) {
     const res = await axios.post('/api/db/collection/list/insert',body).then(res=>res.data);
     return res;
 }
+
+export async function adminDBInfoApi(body:any) {
+    const res = await axios.post('/api/db/info',body)
+    .then(res=>res.data);
+    return res;
+}

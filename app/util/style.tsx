@@ -9,6 +9,7 @@ export const able_button:string = `bg-blue-500 text-white`;
 export const onepage:string = `pt-40 pb-40`
 
 const style = {
-    formDefault: `pt-4 m-auto max-w-[600px]`
+    title_sm:'text-3xl font-bold mb-5 w-full',
+    formDefault: `pt-4 m-auto max-w-[600px]`,
 }
 export default style
