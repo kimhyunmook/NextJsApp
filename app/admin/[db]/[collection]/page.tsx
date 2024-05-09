@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { adminDataDeleteApi } from "@/lib/api/adminApi"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import util from "@/app/util/utils"
 
 type Props = {
     params:{
@@ -16,53 +17,42 @@ type Props = {
     data:any
 }
 export default function AdminDataTable (props:Props) {
-    const target = props.params.collection
+    // const target = props.params.collection
     const params = props.params;
     const [list,setList] = useState<any>([])
     const dispatch =useDispatch();
     const datas: any = useSelector<any>((state)=>state.admin.datas);
-    // const _label = useSelector<any>((state)=>state.admin.datas.label);
     const storeLoading = useSelector<any>((state)=>state.admin.loading) && list.length > 0
     const [key,setKey] =  useState<any>([]);
     const [label,setLabel] =  useState<any>([]);
     const router = useRouter();
+    const utils = util();
     
 
     useEffect(()=>{
-        if (!!!list.length) {
-            let body = {
-                bodyType:'collection_target',
-                dbName:params.db,
-                collectionName:params.collection,
-            }   
-            dispatch({type:TYPE(`admin_collection_target`).REQUEST,...body})     
-        }
-        if (datas) { 
-            setList(datas.list);
+        let body = {
+            bodyType:'collection_target',
+            dbName:params.db,
+            collectionName:params.collection,
+        }   
+        dispatch({type:TYPE(`admin_collection_target`).REQUEST,...body})     
+    },[])
+    useEffect(()=>{
+        if (!!datas) {
+            const keys = datas.label;
+            setKey(Object.keys(keys));
+            setLabel(Object.values(keys));
+            setList(datas.list)
         }
     },[datas])
-
-    useEffect(()=>{
-        if(list.length > 0) {
-            // if(_label) {
-                const keys = list[list.length-1]
-                // const keys = _label;
-                console.log(list);
-                // const createDate = keys.createDate; // 일단 삭제
-                // delete keys.create_date;
-                setKey(Object.keys(keys));
-                setLabel(Object.values(keys));
-            // }
-        }
-    },[list])
-
+    
     const {_li,long,midle,small,_default,etc} = {
         _li:"flex text-center p-2 pr-0 pl-0 break-words justify-between",
         long:"w-full max-w-[18%]",
         midle:"w-full max-w-[12%]",
         small:"w-full max-w-[7%]",
         _default:"w-full",
-        etc: "etc w-full max-w-[5%]"
+        etc: "etc w-full max-w-[5%] order-9"
     }
     function convert (target:string,text?:string|undefined) {
         target = target.toLowerCase();
@@ -103,6 +93,7 @@ export default function AdminDataTable (props:Props) {
                     tag:'이름',
                     className:small,
                 }
+        
             case inc('phonenumber'):
                 return {
                     ...init,
@@ -129,8 +120,13 @@ export default function AdminDataTable (props:Props) {
                     tag: 'no.',
                     className:small+" order-first"
                 }
+            case inc ('create_date') :
+                return {
+                    ...init,
+                    tag:'생성 날짜',
+                    className: midle+" order-5",
+                }
             default: 
-
                 return {
                     ...init,
                     className:_default,
@@ -159,18 +155,15 @@ export default function AdminDataTable (props:Props) {
                 if (window.confirm('삭제하시겠습니까?')) {
                     const mongoid = t.parentElement?.parentElement?.parentElement?.dataset.mongoid;
                     body = {
-                        collectionName:target,
+                        collectionName:params.collection,
+                        dbName:params.db,
                         mongoid,
                     }
                     adminDataDeleteApi(body)
                         .then(res=>{
-                            console.log(res.data);
                             if (res.data.ok) {
-                                let body = {
-                                    bodyType:'collection_target',
-                                    target,
-                                }   
-                                dispatch({type:TYPE(`admin_collection_target`).REQUEST,...body})      
+                                alert(res.data.msg);
+                                router.refresh();
                             }
                         })
                 } else alert('취소되었습니다.')
@@ -181,11 +174,11 @@ export default function AdminDataTable (props:Props) {
         }
     }
     return(
-        <Loading loading={storeLoading} default={500}>
+        <Loading loading={storeLoading} >
             <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden`}>
                 <li>
                     <h2 className={`${title}`}>
-                        { target ? target.charAt(0).toUpperCase()+target.slice(1): null}
+                        { params.collection ? utils.firstUppercase(params.collection) : null}
                     </h2>
                 </li>
                 <li className={_li+' bg-gray-500 text-white tagName'}>
@@ -203,7 +196,7 @@ export default function AdminDataTable (props:Props) {
                     </div>
                 </li>
                 {
-                    list.length <= 1 ? 
+                    list.length <= 0 ? 
                     <li className="border-b border-gray-500">
                         <h2 className={`text-center p-3 text-2xl`}>
                             없음
@@ -211,11 +204,11 @@ export default function AdminDataTable (props:Props) {
                     </li> :
                     list.map((v:Record<string,string>,i:number)=>{
                         delete v.userPw;
+                        v.create_date = utils.getDate(v.create_date,'mm-dd');
                         const val = Object.values(v)
                         const firstEl = document.querySelector('.dataTable .tagName')?.children;
                         // if( firstEl && firstEl?.length > 1 )
                             // type data remove1
-                            if (i !== list.length-1)
                             return  (
                                 <li className={`${_li} border-b border-gray-500`} data-mongoid={v._id}  key={`${v}_${i}`}>
                                     {
@@ -228,7 +221,7 @@ export default function AdminDataTable (props:Props) {
                                             return (
                                                 <div 
                                                     key={`${v2}_${i2}_`} className={`${convert(v2).className+' flex items-center justify-center'}`}>
-                                                    {text}
+                                                    { text }
                                                 </div>
                                             )
                                         })
@@ -257,8 +250,8 @@ export default function AdminDataTable (props:Props) {
             </ul>
             <div className="fixed bottom-4 right-8">
                 {
-                    target !== 'users' ?
-                    <Link href={`/admin/${target}/insert`} className="bg-blue-500 p-2 pr-3 pl-3 rounded-md text-xl">
+                    params.collection !== 'users' ?
+                    <Link href={`/admin/${params.db}/${params.collection}/insert`} className="bg-blue-500 p-2 pr-3 pl-3 rounded-md text-xl">
                         입력
                     </Link> : null
                 }

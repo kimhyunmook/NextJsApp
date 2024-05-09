@@ -66,8 +66,6 @@ export default function Header () {
         ])
     },[user.login])
 
-    useEffect(()=>{
-    },[user])
     function navEvent(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         const nav = document.querySelector('.navLeftContent')

@@ -11,8 +11,8 @@ export interface navData {
   data:[]
 }
 export interface adminListDatas {
-  list:[]
-  label:{}
+  list: []
+  label: {}
 }
 
 const initialState:State = {
@@ -33,7 +33,8 @@ const adminReducer = (state = initialState, action: any): State => {
       return {
         ...state,
         datas:{
-          list:[]
+          list:[],
+          label:{}
         },
         loading: true,
       };

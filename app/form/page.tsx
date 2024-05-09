@@ -52,9 +52,11 @@ export default function FormDefault(props:Props) {
         e.preventDefault();
         const form = document.forms[0];
         let body:any = {
-            collection:data.collection,
+            collectionName:data.collectionName,
+            dbName:data.dbName,
             insertData:[]
         }
+
         const kit = Array.from(document.querySelectorAll('form .datakit'));
 
         kit.map((v:Element,i:number)=>{
@@ -65,10 +67,14 @@ export default function FormDefault(props:Props) {
             })
             body.insertData.push(data)
         })
+        console.log(body);
     
+        
         props.submit(body).then(res=>{
-            console.log(res);
-            if (res.ok) router.back();
+            if (res.ok) {
+                alert(res.msg);
+                router.back();
+            } 
             else alert('입력이 불가능합니다.')
         })
         

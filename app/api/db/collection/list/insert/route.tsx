@@ -15,12 +15,13 @@ export async function POST(request:Request){
     }
       async function run() {
           try {
-            const db = client.db('dev');
-            const collection = await db.collection(data.collection);
+            const db = client.db(data.dbName);
+            const collection = await db.collection(data.collectionName);
             const insertData = data.insertData;
             let index = await collection.find().toArray();
             await insertData.map(async (v:any,i:number)=>{
                 v.key_index = index[index.length-1].key_index+(i+1); 
+                v.create_date = new Date();
             })
             await collection.insertMany(insertData)
             result.ok = true;

@@ -13,8 +13,10 @@ export default function Loading(props:Props) {
         if (!!props.default) setTimeout(()=>{
             setLoading(false); 
         }, props.default)
-        else setLoading(props.loading); 
-    },[props.loading])
+        else setTimeout(()=>{
+            setLoading(props.loading); 
+        },300) 
+    },[])
     return(
         <div className="loading h-full">
             {
@@ -23,7 +25,7 @@ export default function Loading(props:Props) {
                         <div className="spinner"></div>
                         <div className="loading-text">Loading...</div>
                     </div>
-                    : props.children
+                    :  props.children
             }
             {/* {props.children} */}
         </div>
