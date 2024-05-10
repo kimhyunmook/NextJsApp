@@ -19,8 +19,8 @@ const liStyle = `flex border-b border-r-0 border-l-0`;
 export default function DBPage (props:Props) {
     const params = props.params;
     const collection = useSelector((state:any)=>state.admin.navCollection);
-    const loading = useSelector((state:any)=>state.admin.loading)
-    const [load,setLoad] = useState(true);
+    const loading = useSelector((state:any)=>state.admin.loading) 
+    const [load,setLoad] = useState(false);
     const dispatch = useDispatch();
     const [collList,setCollList] = useState([])
     const utils = util();
@@ -37,10 +37,14 @@ export default function DBPage (props:Props) {
 
     useEffect(()=>{
         if (!!collection) {
-            setLoad(loading);
             setCollList(collection);
         } 
     },[collection])
+
+    useEffect(()=>{
+        setLoad(loading && collList.length > 0);
+        console.log(load)
+    },[loading])
     
     const controlBtn = ['edit','delete']
     function controlBtnHandle (e:React.MouseEvent<HTMLAnchorElement>) {
@@ -73,7 +77,7 @@ export default function DBPage (props:Props) {
     }
     let condi = params.db !=='dev' && params.db !=='admin' && params.db !=='users';
     return (
-        <Loading loading={loading}>
+        <Loading loading={ load }>
             <ul className={`${mobile_box} pt-4`}>
                 <li>
                     <h2 className={title}>

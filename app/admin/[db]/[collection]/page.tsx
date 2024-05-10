@@ -16,6 +16,14 @@ type Props = {
     }
     data:any
 }
+const {_li,long,midle,small,_default,etc} = {
+    _li:"flex text-center p-2 pr-0 pl-0 break-words justify-between",
+    long:"w-full max-w-[18%]",
+    midle:"w-full max-w-[12%]",
+    small:"w-full max-w-[7%]",
+    _default:"w-full",
+    etc: "etc w-full max-w-[5%] order-9"
+}
 export default function AdminDataTable (props:Props) {
     // const target = props.params.collection
     const params = props.params;
@@ -46,94 +54,7 @@ export default function AdminDataTable (props:Props) {
         }
     },[datas])
     
-    const {_li,long,midle,small,_default,etc} = {
-        _li:"flex text-center p-2 pr-0 pl-0 break-words justify-between",
-        long:"w-full max-w-[18%]",
-        midle:"w-full max-w-[12%]",
-        small:"w-full max-w-[7%]",
-        _default:"w-full",
-        etc: "etc w-full max-w-[5%] order-9"
-    }
-    function convert (target:string,text?:string|undefined) {
-        target = target.toLowerCase();
-        const inc = (t:string) => target.includes(t.toLowerCase());
-        type convert ={
-            tag:string,
-            className:string,
-            text:any,
-        }
-        const init:convert = {
-            tag:target,
-            className:_default,
-            text:""
-        }
-        switch(true) {
-            case inc('userid') :
-                return {
-                    ...init,
-                    tag:'id',
-                    className:midle
-                };
-            case inc('_id') :
-                return {
-                    ...init,
-                    tag:'key',
-                    className:small,
-                    text:
-                    <div className={'tooltip'}>
-                        확인
-                        <div className="tooltip-content">
-                            {text}
-                        </div>
-                    </div>
-                }
-            case inc('username') :
-                return{
-                    ...init,
-                    tag:'이름',
-                    className:small,
-                }
-        
-            case inc('phonenumber'):
-                return {
-                    ...init,
-                    tag:'연락처',
-                    className:long
-                };
-            case inc('l_token'):
-                return {
-                    ...init,
-                    tag:'로그인',
-                    text: <div className="rounded-full bg-green-400 w-4 h-4 m-auto"></div> ,
-                    className:"w-full max-w-[5%]"
-                }
-            case inc('singupdate') :
-                return{
-                    ...init,
-                    tag:'가입날짜',
-                    className:long,
-                }
-          
-            case inc('index') :
-                return {
-                    ...init,
-                    tag: 'no.',
-                    className:small+" order-first"
-                }
-            case inc ('create_date') :
-                return {
-                    ...init,
-                    tag:'생성 날짜',
-                    className: midle+" order-5",
-                }
-            default: 
-                return {
-                    ...init,
-                    className:_default,
-                    tag:text
-                };
-        }
-    }
+   
     function etcHandle (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         const t = e.currentTarget.parentElement;
@@ -146,14 +67,16 @@ export default function AdminDataTable (props:Props) {
     function btnHandle (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         const t = e.currentTarget
+        const li = t.parentElement?.parentElement?.parentElement
         let body;
         switch(t.className) {
             case 'edit' :
-
+                console.log();
                 break;
             case 'delete' :
                 if (window.confirm('삭제하시겠습니까?')) {
-                    const mongoid = t.parentElement?.parentElement?.parentElement?.dataset.mongoid;
+                    let mongoid;
+                    if (li) mongoid = li.dataset.mongoid;
                     body = {
                         collectionName:params.collection,
                         dbName:params.db,
@@ -166,7 +89,7 @@ export default function AdminDataTable (props:Props) {
                                 router.refresh();
                             }
                         })
-                } else alert('취소되었습니다.')
+                } 
                 break;
             case 'close' :
                 t.parentElement?.parentElement?.classList.remove('on')
@@ -206,10 +129,7 @@ export default function AdminDataTable (props:Props) {
                         delete v.userPw;
                         v.create_date = utils.getDate(v.create_date,'mm-dd');
                         const val = Object.values(v)
-                        const firstEl = document.querySelector('.dataTable .tagName')?.children;
-                        // if( firstEl && firstEl?.length > 1 )
-                            // type data remove1
-                            return  (
+                           return  (
                                 <li className={`${_li} border-b border-gray-500`} data-mongoid={v._id}  key={`${v}_${i}`}>
                                     {
                                         Object.keys(v).map((v2:any,i2:number)=>{
@@ -217,7 +137,7 @@ export default function AdminDataTable (props:Props) {
                                             let text:any = val[i2];
                                             if(v2 === 'l_token' && val[i2]) text = convert(v2).text;
                                             if(v2 ==='_id' && val[i2]) text =convert(v2,text).text;
-
+ 
                                             return (
                                                 <div 
                                                     key={`${v2}_${i2}_`} className={`${convert(v2).className+' flex items-center justify-center'}`}>
@@ -260,3 +180,84 @@ export default function AdminDataTable (props:Props) {
     )
 }
 
+
+function convert (target:string,text?:string|undefined) {
+    target = target.toLowerCase();
+    const inc = (t:string) => target.includes(t.toLowerCase());
+    type convert ={
+        tag:string,
+        className:string,
+        text:any,
+    }
+    const init:convert = {
+        tag:target,
+        className:_default,
+        text:""
+    }
+    switch(true) {
+        case inc('userid') :
+            return {
+                ...init,
+                tag:'id',
+                className:midle
+            };
+        case inc('_id') :
+            return {
+                ...init,
+                tag:'key',
+                className:small,
+                text:
+                <div className={'tooltip'}>
+                    확인
+                    <div className="tooltip-content">
+                        {text}
+                    </div>
+                </div>
+            }
+        case inc('username') :
+            return{
+                ...init,
+                tag:'이름',
+                className:small,
+            }
+    
+        case inc('phonenumber'):
+            return {
+                ...init,
+                tag:'연락처',
+                className:long
+            };
+        case inc('l_token'):
+            return {
+                ...init,
+                tag:'로그인',
+                text: <div className="rounded-full bg-green-400 w-4 h-4 m-auto"></div> ,
+                className:"w-full max-w-[5%]"
+            }
+        case inc('singupdate') :
+            return{
+                ...init,
+                tag:'가입날짜',
+                className:long,
+            }
+      
+        case inc('index') :
+            return {
+                ...init,
+                tag: 'no.',
+                className:small+" order-first"
+            }
+        case inc ('create_date') :
+            return {
+                ...init,
+                tag:'생성 날짜',
+                className: midle+" order-5",
+            }
+        default: 
+            return {
+                ...init,
+                className:_default,
+                tag:text
+            };
+    }
+}
