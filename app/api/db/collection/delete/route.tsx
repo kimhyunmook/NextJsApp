@@ -23,7 +23,6 @@ export async function POST(request:Request){
               result.msg = '삭제 할 수 없는 collection입니다.';
               throw result; 
             } 
-            console.log(data);
             await db.collection(data.collectionName).drop();
             result.ok = true;
           } finally {

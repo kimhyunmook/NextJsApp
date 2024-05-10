@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import TYPE from "@/lib/type";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+// import {useRouter} from 'next/router';
 
 type Props = {
     btnStyle:string;
@@ -92,7 +93,7 @@ export default function CreateLayout(props:Props) {
                     }
                     dispatch({type:TYPE('admin_nav_collection').REQUEST,...body})
                     setTimeout(()=>{
-                        router.push(`/admin/${values.collectionName}`)
+                        router.push(`/admin/${values.dbName}/${values.collectionName}`)
                     },500)
                 } else {
                     alert(res.data.msg);

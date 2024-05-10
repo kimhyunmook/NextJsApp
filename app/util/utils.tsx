@@ -48,6 +48,10 @@ export default function util() {
             }
 
             return display;
+        },
+        arr: (t:string) => {
+            const result = Array.from(document.querySelectorAll(t));
+            return result;
         }
       
     }

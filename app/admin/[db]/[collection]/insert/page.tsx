@@ -10,7 +10,8 @@ type Props = {
     params:{
         db:string;
         collection: string | any;
-    }
+    },
+    context:string;
 }
 export default function Insert (props:Props) {
     const params = props.params;
