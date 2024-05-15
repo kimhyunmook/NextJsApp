@@ -48,7 +48,9 @@ export async function POST(request:Request){
                 const find = await db3.collection(name).findOne({key_index:0});
                 await client3.close();
                 return {
-                    name,
+                    type:'collection',
+                    parent:c.name,
+                    collection_name:name,
                     create_date:find?.create_date
                 }
             })

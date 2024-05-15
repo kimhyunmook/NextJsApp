@@ -24,7 +24,7 @@ export default function util() {
         getDate: (t:string, type?:string) => {
             type = type?.toUpperCase();
             const time = new Date(t);
-            const year = time.getFullYear();
+            let year:string|number = time.getFullYear();
             let month:string|number = time.getMonth() + 1;
             let day:string|number = time.getDate();
             let hour:string|number = time.getHours();
@@ -42,6 +42,10 @@ export default function util() {
                 case 'display': display = `${month}.${day} ${hour}:${minutes}`
                     break;
                 case 'MM-DD' : display =`${month}.${day} ${hour}:${minutes}`;
+                    break;
+                case 'YY-MM-DD' : 
+                    year = year.toString().slice(2,4);
+                    display =`${year}/${month}/${day} ${hour}:${minutes}`;
                     break;
                 default : display = `${ year }.${ month }.${ day } ${ hour }:${ minutes }:${ seconds }`;
                     break;

@@ -1,7 +1,7 @@
 'use client'
 import Loading from "../loadingg"
 import style, { flex_center, title } from "../util/style"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { adminHomeApi } from "@/lib/api/adminApi";
 import util from "../util/utils";
 import Link from "next/link";
@@ -15,7 +15,8 @@ const [dblabel,colllabel] = [
         create_date:'생성날짜',
     },
     {
-        collection_name:'collection 이름',
+        parent_db:'in DB',
+        collection_name:'Collection 이름',
         create_date:'생성날짜'
     }
 ]
@@ -34,7 +35,6 @@ export default function homeAdmin(props:Props) {
                     delete v.db_description;
                     return {
                         ...v,
-                        create_date: utils.getDate(v.create_date),
                     };
                 }),
                 newCollection:res.msg.newCollection,
@@ -51,7 +51,7 @@ export default function homeAdmin(props:Props) {
                 <h2 className={title}>
                     ADMIN Page
                 </h2>
-                <div className="contentbox flex flex-warp">
+                <div className="contentbox flex flex-warp justify-around">
                     <Box title={'최근 생성된 DB'} label={dblabel} list={newdb}></Box>
                     <Box title={'최근 생성된 Collection'} label={colllabel} list={newcollection}></Box>
                 </div>
@@ -61,22 +61,24 @@ export default function homeAdmin(props:Props) {
 }
 
 
-function Box ({children,title,className,label,list}:{children?:any,title:string,className?:string,label?:{},list:any[]}) {
+function Box ({children,title,className,label,list,full}:{children?:any,title:string,className?:string,label?:{},list:any[],full?:boolean}) {
     label = !!label ? label : {}; 
+    full = !!full ? full : false;
     const labelValues = Object.values(label);
     const utils = util();
+    console.log(list)
     return (
-        <ul className={`box min-w-[49%] ml-0 m-[2%] ${className}`}>
+        <ul className={`box max-w-full md:max-w-[700px] ${full ? `w-full`:`w-[49%]`} ml-0 m-[2%] ${className}`}>
             <li>
-                <h2 className={`text-xl font-bold mb-2`}>
+                <h2 className={`text-xl font-black mb-2`}>
                     { title }
                 </h2>
             </li>
-            <li className={`${flex_center} w-full bg-zinc-700`}>
+            <li className={`${flex_center} w-full text-center bg-zinc-700`}>
                 {
                     labelValues.map((v:any,i)=>{
                         return(
-                            <div className="p-2 pt-1 pb-1 w-full" key={`${v}`}>
+                            <div className="font-black p-2 pt-1 pb-1 w-full" key={`${v}`}>
                                 { v }
                             </div>
                         )
@@ -86,23 +88,47 @@ function Box ({children,title,className,label,list}:{children?:any,title:string,
             {
                 list && list.length > 0 ?
                     list.map((v,i)=>{
+                        console.log(v);
+                        const name = v.database_name ? v.database_name : v.collection_name;
+                        const href = `/admin${!!v.parent? "/"+v.parent:''}${'/'+name}`
+                        delete v.type;
                         let value = Object.values(v);
                         let key = Object.keys(v);
                         return (
                             <li  className="flex" key={`${v}_${i}`}>
                                 {
                                     value.map((v2:any,i2)=> {
-                                        if (key[i2]=== 'create_date') 
-                                            v2= utils.getDate(v2,'MM-DD')
-                                        return(
-                                            <Link
-                                                href={`/admin/${ v2 }`}
-                                                className="pt-1 pb-1 p-2 border-b" 
-                                                style={{width:`${100/value.length}%`}} 
-                                                key={`${v2}_${i2}`}>
-                                                { v2 }
-                                            </Link>
-                                        )
+                                        let style = {
+                                            width:`${100/value.length}%`,
+                                        }
+                                        let att = {
+                                            className:"text-center pt-1 pb-1 p-2 border-b" ,
+                                        }
+                                     
+                                        if (key[i2]=== 'create_date')  {
+                                            v2= utils.getDate(v2,'YY-MM-DD')
+                                            return (
+                                                <div
+                                                    {...att}
+                                                    style={style}
+                                                    key={`${v2}_${i2}`}
+                                                >
+                                                    { v2 }
+                                                </div>
+                                            )
+                                        }
+                                        else {
+                                            return(
+                                                <Link
+                                                    href={href}
+                                                    key={`${v2}_${i2}`}
+                                                    style={style}
+                                                    {...att}
+                                                >
+                                                    { v2 }
+                                                </Link>
+                                            )
+                                        }
                                     })
                                 }
                             </li>

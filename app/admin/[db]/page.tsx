@@ -42,8 +42,7 @@ export default function DBPage (props:Props) {
     },[collection])
 
     useEffect(()=>{
-        setLoad(loading && collList.length > 0);
-        console.log(load)
+        setLoad(loading);
     },[loading])
     
     const controlBtn = ['edit','delete']
@@ -77,7 +76,7 @@ export default function DBPage (props:Props) {
     }
     let condi = params.db !=='dev' && params.db !=='admin' && params.db !=='users';
     return (
-        <Loading loading={ load }>
+        <Loading loading={ loading }>
             <ul className={`${mobile_box} pt-4`}>
                 <li>
                     <h2 className={title}>
