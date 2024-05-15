@@ -32,7 +32,7 @@ export function Li(props:liType):React.ReactElement{
         placeholder:props.label, 
         onChange:props.onChange, 
         autoComplete:props.autoComplete,
-        value:props.value,
+        defaultValue:props.value,
         maxLength:props.maxLength
     }
 

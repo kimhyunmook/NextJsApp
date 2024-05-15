@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 
 interface Props {
-    children:any;
+    children?:any;
     loading:boolean | null| undefined | unknown;
     default?:number
 }
@@ -13,14 +13,13 @@ export default function Loading(props:Props) {
         if (!!props.default) setTimeout(()=>{
             setLoading(false); 
         }, props.default)
-        else setTimeout(()=>{
-            setLoading(props.loading); 
-        },300) 
-    },[])
+        else setLoading(props.loading); 
+    },[props.loading])
+    console.log('loading',props.loading)
     return(
         <div className="loading h-full">
             {
-                loading ?
+                !!loading ?
                     <div className="loading-page">
                         <div className="spinner"></div>
                         <div className="loading-text">Loading...</div>

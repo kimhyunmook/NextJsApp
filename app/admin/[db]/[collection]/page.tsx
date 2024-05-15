@@ -54,7 +54,7 @@ export default function AdminDataTable (props:Props) {
         }
     },[datas])
     
-   
+
     function etcHandle (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         const t = e.currentTarget.parentElement;
@@ -96,6 +96,8 @@ export default function AdminDataTable (props:Props) {
                 break;
         }
     }
+
+    console.log(list);
     return(
         <Loading loading={storeLoading} >
             <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden`}>
@@ -127,7 +129,8 @@ export default function AdminDataTable (props:Props) {
                     </li> :
                     list.map((v:Record<string,string>,i:number)=>{
                         delete v.userPw;
-                        v.create_date = utils.getDate(v.create_date,'mm-dd');
+                        if(!!v.create_date)
+                            v.create_date = utils.getDate(v.create_date,'mm-dd');
                         const val = Object.values(v)
                            return  (
                                 <li className={`${_li} border-b border-gray-500`} data-mongoid={v._id}  key={`${v}_${i}`}>

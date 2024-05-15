@@ -4,7 +4,7 @@ type logo ={
 }
 export default function Logo(props:logo) {
     return(
-        <Link href="/" className={"text-4xl font-base block "+props.className}>
+        <Link href="/admin" className={"text-4xl font-base block "+props.className}>
             ADMIN
         </Link>
     )

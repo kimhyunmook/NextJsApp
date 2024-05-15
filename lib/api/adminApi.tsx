@@ -36,3 +36,9 @@ export async function adminDBInfoEditApi(body:any) {
      .then(res=>res.data);
      return res;
 }
+
+export async function adminHomeApi (body?:any) {
+    const res = await axios.post('/api/db/home',body)
+        .then(res=>res.data);
+    return res;
+}
