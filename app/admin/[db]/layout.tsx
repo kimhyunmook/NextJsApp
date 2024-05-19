@@ -16,13 +16,15 @@ export default function DBtableLayout (props:Props) {
             bodyType:'collection',
             dbName: params.db
         }
-        dispatch({...body})
-        body = {
-            bodyType:'collection_target',
-            dbName:params.db,
-            collectionName:params.collection,
-        }   
-        dispatch({type:TYPE(`admin_collection_target`).REQUEST,...body})     
+        dispatch({...body});
+        if (!!params.collection) {
+            body = {
+                bodyType:'collection_target',
+                dbName:params.db,
+                collectionName:params.collection,
+            }   
+            dispatch({type:TYPE(`admin_collection_target`).REQUEST,...body})     
+        }
     },[params])
     return (
         <>

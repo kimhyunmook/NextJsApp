@@ -5,11 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import { adminHomeApi } from "@/lib/api/adminApi";
 import util from "../util/utils";
 import Link from "next/link";
+import { homeUser } from "../api/db/home/route";
 
 type Props = {
 
 }
-const [dblabel,colllabel] = [
+const [dblabel,colllabel,userlabel]:[any,any,homeUser] = [
     {
         database_name:'DB 이름',
         create_date:'생성날짜',
@@ -18,12 +19,20 @@ const [dblabel,colllabel] = [
         parent_db:'in DB',
         collection_name:'Collection 이름',
         create_date:'생성날짜'
+    },
+    {
+        userId:'ID',
+        userName:'이름',
+        userPhoneNumber:'연락처',
+        singUpDate:'가입날짜'
     }
 ]
 export default function homeAdmin(props:Props) {
     // const store = useSelector((state)=>state);
     const [newdb,setNewdb] = useState([]);
     const [newcollection,setNewcollection] = useState([]);
+    const [newuser,setNewuser] = useState([]);
+
     const utils = util();
 
     useEffect(()=>{
@@ -43,17 +52,19 @@ export default function homeAdmin(props:Props) {
        
             setNewdb(newDB)
             setNewcollection(newCollection)
+            setNewuser(newUser)
         });
     },[])
     return(
         <Loading loading={null}>
-            <div className="p-4">
+            <div className="p-4 m-auto md:max-w-[1200px]">
                 <h2 className={title}>
                     ADMIN Page
                 </h2>
-                <div className="contentbox flex flex-warp justify-around">
+                <div className="contentbox flex flex-wrap justify-between">
                     <Box title={'최근 생성된 DB'} label={dblabel} list={newdb}></Box>
                     <Box title={'최근 생성된 Collection'} label={colllabel} list={newcollection}></Box>
+                    <Box title={'최근 가입한 USER'} label={userlabel} list={newuser} full={true}></Box>
                 </div>
             </div>
         </Loading>
@@ -66,9 +77,8 @@ function Box ({children,title,className,label,list,full}:{children?:any,title:st
     full = !!full ? full : false;
     const labelValues = Object.values(label);
     const utils = util();
-    console.log(list)
     return (
-        <ul className={`box max-w-full md:max-w-[700px] ${full ? `w-full`:`w-[49%]`} ml-0 m-[2%] ${className}`}>
+        <ul className={`box max-w-full  ${full ? `w-full`:`w-[46%]`} m-[2%] ${className}`}>
             <li>
                 <h2 className={`text-xl font-black mb-2`}>
                     { title }
@@ -88,7 +98,6 @@ function Box ({children,title,className,label,list,full}:{children?:any,title:st
             {
                 list && list.length > 0 ?
                     list.map((v,i)=>{
-                        console.log(v);
                         const name = v.database_name ? v.database_name : v.collection_name;
                         const href = `/admin${!!v.parent? "/"+v.parent:''}${'/'+name}`
                         delete v.type;
@@ -103,6 +112,7 @@ function Box ({children,title,className,label,list,full}:{children?:any,title:st
                                         }
                                         let att = {
                                             className:"text-center pt-1 pb-1 p-2 border-b" ,
+                                            style:style
                                         }
                                      
                                         if (key[i2]=== 'create_date')  {
@@ -110,7 +120,6 @@ function Box ({children,title,className,label,list,full}:{children?:any,title:st
                                             return (
                                                 <div
                                                     {...att}
-                                                    style={style}
                                                     key={`${v2}_${i2}`}
                                                 >
                                                     { v2 }
@@ -122,7 +131,6 @@ function Box ({children,title,className,label,list,full}:{children?:any,title:st
                                                 <Link
                                                     href={href}
                                                     key={`${v2}_${i2}`}
-                                                    style={style}
                                                     {...att}
                                                 >
                                                     { v2 }
@@ -133,7 +141,12 @@ function Box ({children,title,className,label,list,full}:{children?:any,title:st
                                 }
                             </li>
                         )
-                    }) : <Loading loading={list.length > 0} />
+                    }) 
+                    : <Loading loading={ !!list } >
+                        <ul className={flex_center}>
+                            <li className="h-full text-xl">없음</li>
+                        </ul>
+                    </Loading>
             }
             { children }
         </ul>

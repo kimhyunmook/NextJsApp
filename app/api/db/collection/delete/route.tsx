@@ -25,6 +25,7 @@ export async function POST(request:Request){
             } 
             await db.collection(data.collectionName).drop();
             result.ok = true;
+            console.log(db.collection(data.dbName));
           } finally {
             await client.close();
           }

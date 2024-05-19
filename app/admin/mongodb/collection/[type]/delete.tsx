@@ -1,8 +1,23 @@
+"use client"
 import axios from "axios";
-import { UseDispatch, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import TYPE from "@/lib/type";
 import Btn from "@/app/component/button";
 import { useRouter } from "next/navigation";
+import { adminCollectionDelete, collectionDelete } from "@/lib/api/adminApi";
+
+export function CollectionDelete (data:collectionDelete, callback?:()=>void) {
+    if (window.confirm('삭제하시겠습니까?')) {
+        adminCollectionDelete(data)
+            .then(res => {
+                if (res.ok) {
+                    alert('삭제되었습니다.');
+                    if (callback) callback()
+                  
+                } else return alert(res.msg)
+            })
+    }
+}
 
 export default function DeleteLayout() {
     const dispatch = useDispatch();
@@ -11,11 +26,8 @@ export default function DeleteLayout() {
     async function submit(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         const arr = (target:string) => Array.from(document.querySelectorAll(target));
-        type values= {
-            collectionName:string;
-            dbName:string;
-        }
-        const values:values = arr('.bodyInfo input').reduce((a,c:any,i)=>{
+  
+        const values:collectionDelete = arr('.bodyInfo input').reduce((a,c:any,i)=>{
             a = {
                 ...a,
                 [c.id]:c.value
@@ -28,20 +40,14 @@ export default function DeleteLayout() {
         let body = {
             ...values
         }
-        if(window.confirm('삭제하시겠습니까?')) {
-            await axios.post(`/api/db/collection/delete`,body)
-                .then(res=>{
-                    if (res.data.ok) {
-                        alert('삭제되었습니다.');
-                        let body = {
-                            bodyType:"collection",
-                            dbName:values.dbName
-                        }
-                        dispatch({type:TYPE('admin_nav').REQUEST,...body});
-                        router.push('/admin');
-                    } else alert(res.data.msg)
-                })
-        }
+        CollectionDelete(body,()=>{
+            let body2 = {
+                bodyType:"collection",
+                dbName:values.dbName
+            }
+            dispatch({type:TYPE('admin_nav').REQUEST,...body2});
+            router.push('/admin');
+        });
     }
     return(
         <>
@@ -49,3 +55,5 @@ export default function DeleteLayout() {
         </>
     )
 }
+
+

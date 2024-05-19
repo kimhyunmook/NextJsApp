@@ -96,7 +96,7 @@ export default function Nav() {
                     })
                 }
             </NavBox>
-            <NavBox title={ 'CollectionList' }>
+            <NavBox title={ 'Collection List' }>
                 {
                     !! collectionList.length ?
                     collectionList.map((v:any,i:number)=>{

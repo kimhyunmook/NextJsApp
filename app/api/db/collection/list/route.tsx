@@ -23,8 +23,11 @@ export async function POST(request:Request){
             }
             await client.connect();
             const db = client.db(data.dbName);
+            console.log(data);
             const collection = await db.collection(data.collectionName);
-            const label:any =  await collection.findOne({key_index:0});
+            console.log(data)
+            query = { key_index: 0 };
+            const label:any =  await collection.findOne(query);
             let list: any = await collection.find().sort({key_index: -1}).limit(50).toArray();
             list = list.filter((x:any)=> x.key_index !== 0);
             if (data.collectionName.includes('user')) {
@@ -33,11 +36,11 @@ export async function POST(request:Request){
                 delete v.userPw;
               })
             }
+            result.msg = {label, list};
             result.ok = 1;
             result.type = `setting/list`;
-            result.msg = {label, list};
-            await client.close();
           } finally {
+            await client.close();
           }
       }
       await run().catch(console.dir);

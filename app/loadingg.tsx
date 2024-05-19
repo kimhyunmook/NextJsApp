@@ -8,14 +8,19 @@ interface Props {
     default?:number
 }
 export default function Loading(props:Props) {
-    const [loading,setLoading] = useState<any>(true);
+    const [loading,setLoading] = useState<boolean|unknown>(null);
     useEffect(()=>{
         if (!!props.default) setTimeout(()=>{
             setLoading(false); 
         }, props.default)
-        else setLoading(props.loading); 
-    },[props.loading])
-    console.log('loading',props.loading)
+        else {
+            setLoading(props.loading); 
+        }
+        // 최대 로딩 4초;
+        setTimeout(()=>{
+            setLoading(false);
+        },4000)
+    },[props.loading]);
     return(
         <div className="loading h-full">
             {

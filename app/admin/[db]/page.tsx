@@ -1,6 +1,6 @@
 "use client"
-import style, { mobile_box } from "@/app/util/style";
-import { adminDBInfoApi, mongoConnect } from "@/lib/api/adminApi";
+import style, { flex_center, mobile_box } from "@/app/util/style";
+import { adminDBInfoApi, collectionDelete, mongoConnect } from "@/lib/api/adminApi";
 import { useEffect, useState } from "react";
 import { title } from "@/app/util/style";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import Link from "next/link";
 import util from "@/app/util/utils";
 import Loading from "@/app/loadingg";
 import { useRouter } from "next/navigation";
+import { CollectionDelete } from "../mongodb/collection/[type]/delete";
 
 type Props = {
     params:{
@@ -27,6 +28,7 @@ export default function DBPage (props:Props) {
     const router = useRouter();
     let body ={};
 
+    // collection list
     useEffect(()=>{
         body ={
             bodyType:'collection',
@@ -41,6 +43,7 @@ export default function DBPage (props:Props) {
         } 
     },[collection])
 
+    // loading
     useEffect(()=>{
         setLoad(loading);
     },[loading])
@@ -74,9 +77,31 @@ export default function DBPage (props:Props) {
                 break;
         }
     }
+    const [deltriger,setDeltriger] = useState(false);
+    function collectionDelete (e:React.MouseEvent) {
+        e.preventDefault();
+        if (deltriger) return setDeltriger(false)
+        setDeltriger(true)
+    }
+    function collectionDleteTarget (cn:any) {
+        let body:collectionDelete ={
+            dbName:params.db,
+            collectionName: cn
+        }
+        console.log(body);
+        CollectionDelete(body,()=>{
+            let body2 = {
+                bodyType:"collection",
+                dbName:params.db
+            }
+            dispatch({type:TYPE('admin_nav').REQUEST,...body2});
+            // router.refresh();
+        })
+    }
     let condi = params.db !=='dev' && params.db !=='admin' && params.db !=='users';
+    let link_collection = 'mr-2'
     return (
-        <Loading loading={ loading }>
+        <Loading loading={ load }>
             <ul className={`${mobile_box} pt-4`}>
                 <li>
                     <h2 className={title}>
@@ -88,7 +113,7 @@ export default function DBPage (props:Props) {
                         condi ?
                         controlBtn.map((v,i)=>{
                             return(
-                                <Link key={v} href={v} className={`m-2`} onClick={controlBtnHandle}>
+                                <Link key={`${v}_${i}`} href={v} className={`m-2`} onClick={controlBtnHandle}>
                                     { utils.firstUppercase(v) }
                                 </Link>
                             )
@@ -102,24 +127,47 @@ export default function DBPage (props:Props) {
                     </h3>
                     <ul className={'flex flex-wrap pb-2 pt-2 w-full'}>
                         <li className="w-full flex justify-end mb-4">
-                            <Link href={`/admin/mongodb/collection/create?target=${params.db}`}>
+                            <Link className={link_collection} href={`/admin/mongodb/collection/create?target=${params.db}`}>
                                 Create
+                            </Link>
+                            <Link className={link_collection} href={'#'} onClick={collectionDelete}>
+                                {
+                                    deltriger ? 'Close' : 'Delete'
+                                }
                             </Link>
                         </li>
                         {
                             collList.length > 0?
-                            collList.map((v:any,i)=>{
-                                return (
-                                    <li key={v.name} className=" min-w-[20%] text-center p-2 pr-4 pl-4 rounded-2xl m-2 mt-1 mb-1 text-lg bg-green-500">
-                                        <Link className="block" href={`/admin/${params.db}/${v.name}`}>
-                                            { utils.firstUppercase(v.name) }
-                                        </Link>
-                                    </li>
-                                )
-                            }) :
-                            <li>
-                                <h3 className="text-xl pl-2">없음</h3>
-                            </li>
+                                collList.map((v:any,i)=>{
+                                    return (
+                                        <li key={v.name} className="min-w-[20%] text-center p-2 pr-4 pl-4 rounded-2xl m-2 mt-1 mb-1 text-lg bg-green-500">
+                                            {
+                                                deltriger ?
+                                                <div className={flex_center}>
+                                                    <Link className="block" href={`/admin/${params.db}/${v.name}`}>
+                                                        { utils.firstUppercase(v.name) }
+                                                    </Link> 
+                                                    <button 
+                                                        onClick={(e)=>{
+                                                            e.preventDefault();
+                                                            const t = e.currentTarget.previousSibling?.textContent?.toLocaleLowerCase()
+                                                            collectionDleteTarget(t)
+                                                        }}
+                                                        className="text-base font-black ml-3 pr-1 pl-1 bg-black text-red-500 hover:bg-white hover:text-blue-700"
+                                                    >
+                                                        X
+                                                    </button>
+                                                </div>
+                                                :<Link className="block" href={`/admin/${params.db}/${v.name}`}>
+                                                    { utils.firstUppercase(v.name) }
+                                                </Link>
+                                            }
+                                        </li>
+                                    )
+                                }) :
+                                <li>
+                                    <h3 className="text-xl pl-2">없음</h3>
+                                </li>
                         }
                     </ul>
                 </li>
@@ -172,13 +220,13 @@ export function DBInfoList ({dbName,type}:
                                     </p>
                                 </>:    
                                 <>
-                                    <p className={`bg-green-500 w-[30%] break-keep p-4`}>
+                                    <p className={`bg-blue-400 font-black w-[30%] break-keep p-4`}>
                                         { convert(v) }
                                     </p>
                                     <div className="w-[70%]">
                                         <input 
                                         name={v} 
-                                        className={` ${v==='database_name' ? 'bg-transparent': 'bg-white text-black'} w-full p-4`} 
+                                        className={`${v==='database_name' ? style.disable_color : 'bg-white text-black'} w-full p-4`} 
                                         type={
                                             condi ?
                                             'hidden' : 'text' 

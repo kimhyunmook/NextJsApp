@@ -21,13 +21,13 @@ export async function POST(request:Request){
             const overlapId = await users.findOne({
                 userId:data.userId,
             })
-            const key_Index = await (await users.find({}).toArray()).length+1;
+            const key_index = await (await users.find({}).toArray()).length+1;
             // const overlapPN = await users.findOne({
             //     userPhoneNumber:data.userPhoneNumber
             // })
             if(!!!overlapId) {
                 data.userPw = await HASH(data.userPw);
-                query = {...data,key_Index,l_token:""};
+                query = {...data,key_index,l_token:""};
                 await users.insertOne(query)
                 result.ok=1;
             } else {

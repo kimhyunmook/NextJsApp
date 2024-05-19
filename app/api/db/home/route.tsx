@@ -3,6 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import { ResultMsg } from "../../route";
 
+export type homeUser = {
+  userId:string;
+  userName:string;
+  userPhoneNumber:string;
+  singUpDate:string;
+}
 
 export async function POST(request:Request){
 //   const data = await request.json();
@@ -20,13 +26,17 @@ export async function POST(request:Request){
           const adminDb = client.db('admin');
           const dbList = await adminDb.admin().listDatabases();
           const noList = ['local','sample_mflix','admin']
-          let { newDB, newCollection,newUser}:any = {
+          let { newDB, newCollection,newUser}:{
+            newDB:any;
+            newCollection:any;
+            newUser:homeUser[];
+          } = {
             newDB :[],
             newCollection:[],
             newUser:[]
           }
           
-        //   database
+          // database
           const dbList2 = await dbList.databases.sort().filter((db,i)=> 
             !noList.some(noDb => noDb === db.name)
           );
@@ -61,17 +71,37 @@ export async function POST(request:Request){
             if (!!data) return {
                 data,
                 collection:collPromise,
-            };
-        })
+             };
+          })
 
+          // users 
+          const usersDB = await client.db('dev');
+          const userColl = await usersDB.collection('users');
+          let userArr = await userColl.find().sort({key_index:-1}).limit(5).toArray();
+          console.log(userArr)
+          newUser = userArr.map((v:any,i)=>{
+            delete v.key_index;
+            delete v._id;
+            delete v.userPw;
+            delete v.l_token;
+            
+            return {
+              userId:v.userId,
+              userName: v.userName,
+              userPhoneNumber: v.userPhoneNumber,
+              singUpDate: v.singUpDate
+            }
+          })
+
+          // arr push
           let Info = await Promise.all(InfoPromises);
           Info.map((v:any,i)=>{
             newDB.push(v.data);
             newCollection.push(v.collection);
           })
 
-        newDB = newDB.sort((a:any , b:any) => b.create_date - a.create_date);
-        newCollection = newCollection[0].sort((a:any , b:any) => b.create_date - a.create_date);
+          newDB = newDB.sort((a:any , b:any) => b.create_date - a.create_date);
+          newCollection = newCollection[0].sort((a:any , b:any) => b.create_date - a.create_date);
 
           result.ok = true;
           result.msg = {
