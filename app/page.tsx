@@ -33,11 +33,11 @@ export default function Home() {
       const res = axios.post('/api').then(res=>res.data);
   }
   useEffect(()=>{
-    router.push('/admin');
+    // router.push('/admin');
   },[])
 
   return (
-    <Layout header={true} nav={true} footer={true}>
+    <Layout all={true}>
       <div className="" >
         <div className="box-container pr-10 pl-10 pb-4 pt-4 grid grid-cols-1 gap-4" >
           <div className="box sample h-[300px] border rounded-md">1234554654654654654645654654645654</div>

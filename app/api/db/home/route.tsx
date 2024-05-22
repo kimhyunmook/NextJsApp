@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import { ResultMsg } from "../../route";
+import { usercollection, userdb } from "../../env";
 
 export type homeUser = {
   userId:string;
@@ -75,15 +76,15 @@ export async function POST(request:Request){
           })
 
           // users 
-          const usersDB = await client.db('dev');
-          const userColl = await usersDB.collection('users');
+          const usersDB = await client.db(userdb);
+          const userColl = await usersDB.collection(usercollection);
           let userArr = await userColl.find().sort({key_index:-1}).limit(5).toArray();
-          newUser = userArr.map((v:any,i)=>{
+          newUser = userArr.map((v:any,i)=> {
             delete v.key_index;
             delete v._id;
             delete v.userPw;
             delete v.l_token;
-            
+
             return {
               userId:v.userId,
               userName: v.userName,
@@ -103,6 +104,7 @@ export async function POST(request:Request){
 
           newDB = newDB.sort((a:any , b:any) => b.create_date - a.create_date);
           newCollection = newCollection.flat().sort((a:any , b:any) => b.create_date - a.create_date);
+          newUser = newUser.filter(x=>x.userId !== 'admin');
 
           result.ok = true;
           result.msg = {

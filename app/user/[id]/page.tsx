@@ -6,14 +6,17 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "@/app/component/logo";
 import { useParams, useRouter } from "next/navigation";
+import util from "@/app/util/utils";
 
 export default function userInfo ({params}:any) {
     const user = useSelector((state:any)=>state.user);
     const login = useSelector((state:any)=>state.user.login);
     const router = useRouter()
+    const utils = util();
     useEffect(()=>{
         if (!login) router.push('/login')
     },[login])
+
     let userValueArr:any[],userKeyArr :any[];
     if (user) {
         userValueArr = Object.values(user.user)
@@ -27,7 +30,7 @@ export default function userInfo ({params}:any) {
                 <ul className="flex flex-wrap">
                     {
                         userValueArr.map((v,i)=>{
-                            if(i !=0 ) {
+                            if(i !== 0) {
                                 const keyName = userKeyArr[i]
                                 const att:InputProps = {
                                     label:"",
@@ -48,12 +51,18 @@ export default function userInfo ({params}:any) {
                                         break; 
                                     case 'singUpDate' : 
                                         att.label='가입날짜';
+                                        att.value = utils.getDate(v);
                                         att.fix=false;
                                         break;
                                     case 'userPw':
                                         att.label = '비밀번호';
                                         att.value = "";
-                                        att.placeholder = 'new Password'
+                                        att.placeholder = 'new Password';
+                                        break;
+                                    case 'role' :
+                                        att.label = '권한';
+                                        att.value = !!v ? '일반회원' :'관리자'
+                                        att.fix = false;
                                 }
                                 if(keyName !== 'key_index')
                                 return <InputLi 

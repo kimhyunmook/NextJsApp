@@ -60,12 +60,12 @@ export default function homeAdmin(props:Props) {
         <Loading loading={null}>
             <div className="p-4 m-auto md:max-w-[1200px]">
                 <h2 className={title}>
-                    ADMIN Page
+                    ADMIN PAGE
                 </h2>
                 <div className="contentbox flex flex-wrap justify-between">
-                    <Box title={'최근 생성된 DB'} label={dblabel} list={newdb}></Box>
-                    <Box title={'최근 생성된 Collection'} label={colllabel} list={newcollection}></Box>
-                    <Box title={'최근 가입한 USER'} label={userlabel} list={newuser} full={true} link={false}></Box>
+                    <Box title={'New Database'} label={dblabel} list={newdb}></Box>
+                    <Box title={'New Collection'} label={colllabel} list={newcollection}></Box>
+                    <Box title={'New USER'} label={userlabel} list={newuser} full={true} link={false}></Box>
                 </div>
             </div>
         </Loading>
@@ -129,13 +129,14 @@ function Box ({children,title,className,label,list,full,link=true}:{children?:an
                                         }
                                         else {
                                             return(
-                                                <Link
-                                                    href={href}
-                                                    key={`${v2}_${i2}`}
-                                                    {...att}
-                                                >
-                                                    { v2 }
-                                                </Link>
+                                                <div {...att}>
+                                                    <Link
+                                                        href={href}
+                                                        key={`${v2}_${i2}`}
+                                                    >
+                                                        { v2 }
+                                                    </Link>
+                                                </div>
                                             )
                                         }
                                     })

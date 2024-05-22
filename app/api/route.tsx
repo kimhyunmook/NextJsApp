@@ -102,7 +102,7 @@ export async function POST(request:Request){
     case 'delete' :
       client = new MongoClient(uri);
       try {
-        const noRemove = ['dev,local','admin'];
+        const noRemove = ['dev, local','admin, users','config'];
         await noRemove.map((v,i)=>{
           if (data.dbName === v ) {
             result.msg ='제거할 수 없습니다.';

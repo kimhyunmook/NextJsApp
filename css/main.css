@@ -33,7 +33,7 @@ body {
 *::-webkit-scrollbar {
   background-color:#717171;
   padding:1px;
-  width:12px;
+  width:5px;
   /* border-radius: 10px; */
 }
 *:hover::-webkit-scrollbar {
@@ -49,6 +49,13 @@ body {
   background-color: grey;
   /* border-radius: 10px; */
   box-shadow: inset 0px 0px 5px white;
+}
+*:has(.noscroll)::-webkit-scrollbar {
+  display:none;
+}
+.contentView:has(.noscroll) {
+  overflow-y:none;
+  max-height:100vh;
 }
 .contentView {
   overflow-y: scroll;

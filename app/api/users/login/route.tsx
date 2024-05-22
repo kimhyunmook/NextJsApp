@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {MongoClient} from 'mongodb';
 import { HASH, ResultMsg } from "../../route";
+import { usercollection, userdb } from "../../env";
 
 export async function POST(request:Request){
   const data = await request.json();
@@ -15,8 +16,8 @@ export async function POST(request:Request){
   }
   async function run() {
       try {
-        const db = client.db('dev');
-        const users = db.collection('users');
+        const db = client.db(userdb);
+        const users = db.collection(usercollection);
         console.log(data);
         query = {userId:data.userId};
         const user:any = await users.findOne(query);

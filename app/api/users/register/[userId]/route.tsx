@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import {MongoClient} from 'mongodb';
-import { uri } from "../../../env";
+import { uri, usercollection, userdb } from "../../../env";
 import { ResultMsg } from "../../../route";
 
 export async function POST(request:Request,context:any){
@@ -12,11 +12,10 @@ export async function POST(request:Request,context:any){
         ok:0,
         type:'register/chkId'
     };
-    // console.log(params)
     async function run () {
         try {
-            const db = client.db('dev');
-            const users = db.collection('users');
+            const db = client.db(userdb);
+            const users = db.collection(usercollection);
             query = params;
             const userId = await users.findOne(query);
             if(!!userId) {
