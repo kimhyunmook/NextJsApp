@@ -33,7 +33,7 @@ export default function Home() {
       const res = axios.post('/api').then(res=>res.data);
   }
   useEffect(()=>{
-    // router.push('/admin');
+    router.push('/admin');
   },[])
 
   return (

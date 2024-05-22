@@ -25,7 +25,7 @@ export async function POST(request:Request){
         //   const db = client.db(data.dbName)
           const adminDb = client.db('admin');
           const dbList = await adminDb.admin().listDatabases();
-          const noList = ['local','sample_mflix','admin']
+          const noList = ['local','sample_mflix','admin','users']
           let { newDB, newCollection,newUser}:{
             newDB:any;
             newCollection:any;
@@ -78,7 +78,6 @@ export async function POST(request:Request){
           const usersDB = await client.db('dev');
           const userColl = await usersDB.collection('users');
           let userArr = await userColl.find().sort({key_index:-1}).limit(5).toArray();
-          console.log(userArr)
           newUser = userArr.map((v:any,i)=>{
             delete v.key_index;
             delete v._id;
@@ -96,12 +95,14 @@ export async function POST(request:Request){
           // arr push
           let Info = await Promise.all(InfoPromises);
           Info.map((v:any,i)=>{
-            newDB.push(v.data);
-            newCollection.push(v.collection);
+            if (!!v) {
+              newDB.push(v.data);
+              newCollection.push(v.collection);
+            }
           })
 
           newDB = newDB.sort((a:any , b:any) => b.create_date - a.create_date);
-          newCollection = newCollection[0].sort((a:any , b:any) => b.create_date - a.create_date);
+          newCollection = newCollection.flat().sort((a:any , b:any) => b.create_date - a.create_date);
 
           result.ok = true;
           result.msg = {

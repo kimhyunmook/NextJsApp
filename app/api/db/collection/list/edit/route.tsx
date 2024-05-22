@@ -11,21 +11,23 @@ export async function POST(request:Request){
     let query:any = ''
     let result:ResultMsg ={
         ok:false,
-        type:'list/insert'
+        type:'list/edit'
     }
       async function run() {
           try {
             const db = client.db(data.dbName);
             const collection = await db.collection(data.collectionName);
-            const insertData = data.data;
+            const updateData = data.data;
             let index = await collection.find().toArray();
-            await insertData.map(async (v:any,i:number)=>{
-                v.key_index = index[index.length-1].key_index+(i+1); 
+            await updateData.map(async (v:any,i:number)=>{
+                v.key_index = data.key_index; 
                 v.create_date = new Date();
             })
-            await collection.insertMany(insertData)
+            console.log(updateData[0]);
+            query = {key_index:data.key_index}
+            await collection.updateOne(query,{$set:updateData[0]})
             result.ok = true;
-            result.msg = 'insert Data'            
+            result.msg = '수정되었습니다.';
           } finally {
             await client.close();
           }

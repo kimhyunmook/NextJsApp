@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import { ResultMsg } from "../../route";
+import { dbinfo } from "../../env";
 
 
 export async function POST(request:Request){
@@ -23,7 +24,7 @@ export async function POST(request:Request){
             case 'db':
               const adminDb = client.db('admin');
               const dbList = await adminDb.admin().listDatabases();
-              const noList = ['local','sample_mflix']
+              const noList = ['local','sample_mflix','admin']
               
               result.msg = dbList.databases.sort().filter((db,i)=> 
                 !noList.some(noDb => noDb === db.name)
@@ -31,7 +32,7 @@ export async function POST(request:Request){
               break;
             case 'collection':
               const colletionList = await (await db.listCollections().toArray())
-                .filter((x,i)=> !x.name.includes('DB_Info'))
+                .filter((x,i)=> !x.name.includes(dbinfo))
               result.msg = colletionList;
               break;
             case 'collection_target':

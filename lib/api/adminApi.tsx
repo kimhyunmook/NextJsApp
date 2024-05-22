@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export async function init() {
+    const res = await axios.post('/api/db/home/setting').then(res=>res.data);
+    return res;
+}
+
 export async function mongoConnect (body:any) {
     const res = await axios.post('/api',body).then(res=>res.data);
     return res;
@@ -17,12 +22,17 @@ export async function adminListApi(body:any) {
 
 // data
 export async function adminDataDeleteApi(body:any) {
+    console.log('123',body)
     const res = await axios.post('/api/db/collection/list/delete',body);
     return res;
 }
 
-export async  function adminDatainertApi(body:any) {
+export async  function adminDataInertApi(body:any) {
     const res = await axios.post('/api/db/collection/list/insert',body).then(res=>res.data);
+    return res;
+}
+export async function adminDataEditApi(body:any) {
+    const res = await axios.post('/api/db/collection/list/edit',body).then(res=>res.data);
     return res;
 }
 

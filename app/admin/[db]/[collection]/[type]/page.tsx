@@ -2,7 +2,7 @@
 import FormDefault from "@/app/form/page";
 import util from "@/app/util/utils";
 import { useEffect, useState } from "react";
-import { adminDatainertApi, adminListApi } from "@/lib/api/adminApi";
+import { adminDataInertApi, adminDataEditApi } from "@/lib/api/adminApi";
 import Loading from "@/app/loadingg";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -10,16 +10,21 @@ type Props = {
     params:{
         db:string;
         collection: string | any;
+        type:string;
     },
-    context:string;
+    searchParams:{
+        index:number|string;
+    };
 }
-export default function Insert (props:Props) {
+export default function CollectionType (props:Props) {
     const params = props.params;
     const [keys,setKeys] = useState<any>([])
     const [labels,setLabels] = useState<any>([])
     const uitls = util();
     const datas = useSelector((state:any)=>state.admin.datas);
     const [obj ,setObj] = useState<any>(null);
+    const [values,setValues] = useState<any>(null);
+    const [addBtn,setAddBtn] = useState(false);
     const router = useRouter();
 
     useEffect(()=>{
@@ -42,18 +47,28 @@ export default function Insert (props:Props) {
             });
             setKeys(_keys);
             setLabels(_values);
+
+            switch(params.type) {
+                case 'insert': 
+                    setAddBtn(true);
+                    break;
+                case 'edit' :
+                    setValues(datas.list.filter((x:any)=>x.key_index.toString() === props.searchParams.index)[0]);
+                    break;
+            }
         }
     },[obj])
-
     return(
         <Loading loading={null} default={500}>
-            <></>
             {
                 !! obj ?
                 <FormDefault 
-                    title={uitls.firstUppercase(params.collection)} 
-                    data={{collectionName:params.collection,dbName:params.db,keys,labels}} 
-                    submit={adminDatainertApi}>
+                    title={uitls.firstUppercase(params.collection)+`:${uitls.firstUppercase(params.type)}`} 
+                    data={{collectionName:params.collection,dbName:params.db,keys,labels}}
+                    addBtn={addBtn}
+                    submit={params.type ==='insert'? adminDataInertApi : adminDataEditApi}
+                    valueData={!!values ? values : null}
+                >
                 </FormDefault> :
                 null
             }

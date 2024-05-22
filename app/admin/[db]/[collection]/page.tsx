@@ -71,7 +71,8 @@ export default function AdminDataTable (props:Props) {
         let body;
         switch(t.className) {
             case 'edit' :
-                console.log();
+                if (li && Array.from(li.children))
+                    router.push(`/admin/${params.db}/${params.collection}/edit?index=${Array.from(li.children).filter(x=>x.className.includes('index'))[0].textContent}`)
                 break;
             case 'delete' :
                 if (window.confirm('삭제하시겠습니까?')) {
@@ -140,10 +141,11 @@ export default function AdminDataTable (props:Props) {
                                             let text:any = val[i2];
                                             if(v2 === 'l_token' && val[i2]) text = convert(v2).text;
                                             if(v2 ==='_id' && val[i2]) text =convert(v2,text).text;
- 
                                             return (
                                                 <div 
-                                                    key={`${v2}_${i2}_`} className={`${convert(v2).className+' flex items-center justify-center'}`}>
+                                                    key={`${v2}_${i2}_`} 
+                                                    className={`${v2} ${convert(v2).className+' flex items-center justify-center'}`}
+                                                    >
                                                     { text }
                                                 </div>
                                             )

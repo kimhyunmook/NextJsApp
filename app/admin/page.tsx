@@ -2,7 +2,7 @@
 import Loading from "../loadingg"
 import style, { flex_center, title } from "../util/style"
 import { useEffect, useRef, useState } from "react";
-import { adminHomeApi } from "@/lib/api/adminApi";
+import { adminHomeApi, init } from "@/lib/api/adminApi";
 import util from "../util/utils";
 import Link from "next/link";
 import { homeUser } from "../api/db/home/route";
@@ -53,6 +53,7 @@ export default function homeAdmin(props:Props) {
             setNewdb(newDB)
             setNewcollection(newCollection)
             setNewuser(newUser)
+            init();
         });
     },[])
     return(
@@ -64,7 +65,7 @@ export default function homeAdmin(props:Props) {
                 <div className="contentbox flex flex-wrap justify-between">
                     <Box title={'최근 생성된 DB'} label={dblabel} list={newdb}></Box>
                     <Box title={'최근 생성된 Collection'} label={colllabel} list={newcollection}></Box>
-                    <Box title={'최근 가입한 USER'} label={userlabel} list={newuser} full={true}></Box>
+                    <Box title={'최근 가입한 USER'} label={userlabel} list={newuser} full={true} link={false}></Box>
                 </div>
             </div>
         </Loading>
@@ -72,7 +73,7 @@ export default function homeAdmin(props:Props) {
 }
 
 
-function Box ({children,title,className,label,list,full}:{children?:any,title:string,className?:string,label?:{},list:any[],full?:boolean}) {
+function Box ({children,title,className,label,list,full,link=true}:{children?:any,title:string,className?:string,label?:{},list:any[],full?:boolean,link?:boolean}) {
     label = !!label ? label : {}; 
     full = !!full ? full : false;
     const labelValues = Object.values(label);
@@ -99,7 +100,7 @@ function Box ({children,title,className,label,list,full}:{children?:any,title:st
                 list && list.length > 0 ?
                     list.map((v,i)=>{
                         const name = v.database_name ? v.database_name : v.collection_name;
-                        const href = `/admin${!!v.parent? "/"+v.parent:''}${'/'+name}`
+                        const href = link ? `/admin${!!v.parent? "/"+v.parent:''}${'/'+name}`:'#'
                         delete v.type;
                         let value = Object.values(v);
                         let key = Object.keys(v);
