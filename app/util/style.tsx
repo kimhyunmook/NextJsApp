@@ -12,6 +12,20 @@ const style = {
     title_sm:'text-3xl font-bold mb-5 w-full',
     formDefault: `pt-4 m-auto max-w-[600px]`,
     disable_color:'bg-zinc-400 text-gray-600 border-3 border-gray-500',
-    absolute_center:absolute_center,
+    absolute_center:(t?:number)=>{
+        if(!!t) {
+            let init = `absolute top-1/2 left-1/2 translate-x-[-50%] `;
+            switch(t) {
+                case 1: return init+'translate-y-[-60%]'; 
+                case 2: return init+'translate-y-[-70%]';
+                case 3: return init+'translate-y-[-80%]';
+                case 4: return init+'translate-y-[-150%]';
+                case 5: return init+'translate-y-[-250%]';
+                default: return absolute_center;
+            }
+        }
+        else
+        return absolute_center;
+    },
 }
 export default style

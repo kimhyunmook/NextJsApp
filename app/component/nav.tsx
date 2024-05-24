@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import TYPE from "@/lib/type";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette } from '@fortawesome/free-solid-svg-icons';
-import { FontawesomeObject, IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 export default function Nav() {
     const [dbList,setDbList] = useState<any>([]);

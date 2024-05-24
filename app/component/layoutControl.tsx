@@ -21,7 +21,7 @@ export default function Layout(props:layout) {
                     props.nav || props.all ?
                     <Nav /> :null
                 }
-                <div className="contentView">
+                <div className="contentView relative">
                     { props.children }
                 </div>
             </Container>

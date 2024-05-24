@@ -5,10 +5,7 @@ import Logo from "./logo";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import TYPE from "@/lib/type";
-import style, { flex_center } from "../util/style";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+
 
 interface User {
     user:object
@@ -84,12 +81,7 @@ export default function Header () {
                     <button className="navBtn flex w-[30px] mr-2 text-3xl" onClick={navEvent}> ☰ </button>
                     <Logo className={"text-white"} />
                 </div>
-                <div className={`search w-[60%] absolute ${style.absolute_center} ${flex_center} rounded-2xl overflow-hidden`}>
-                    <input type="text" className="h-full" />
-                    <button className={`w-full max-w-[40px] h-full bg-zinc-400 p-2 pr-3 pl-3`}>
-                        <FontAwesomeIcon icon={faSearch} />
-                    </button>
-                </div>
+            
                 <div className="user flex justify-end items-center min-w-[225px]">
                     { Login.map((v,i)=> <Link key={`login_bar_${i}`} className={rightBarStyle + v.className} href={v.href} onClick={v.onClick} >{v.children}</Link>) }
                 </div>
