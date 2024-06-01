@@ -89,7 +89,7 @@ function Box ({children,title,className,label,list,full,link=true}:{children?:an
                 {
                     labelValues.map((v:any,i)=>{
                         return(
-                            <div className="font-black p-2 pt-1 pb-1 w-full" key={`${v}`}>
+                            <div className="font-black p-2 pt-1 pb-1 w-full" key={`${v}_${i}`}>
                                 { v }
                             </div>
                         )

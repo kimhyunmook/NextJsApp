@@ -22,19 +22,46 @@ function Input (props:inputDefault):React.ReactElement {
     const type =!!props.type ? props.type : "text";
     const required = !!props.required ? true :false
 
+    const [textarea,setTextarea] = useState(false);
+    function boxChange (e:React.ChangeEvent<HTMLInputElement>) {
+        if (e.currentTarget.checked) {
+            setTextarea(true);
+        } else {
+            setTextarea(false);
+        }
+    }
+    const [inputValue,setInputValue] = useState(props.value);
+    function changeHandle (e:React.ChangeEvent<HTMLInputElement>) {
+        setInputValue(e.currentTarget.value)
+
+    }
     return(
-        <li className={`w-full mt-2 mb-2 ${listClassName}`}>
-            <input 
-            id={props.id}
-            name={props.id} 
-            className={`w-full ${inputStyle} ${inputClassName}`} 
-            type={type}
-            defaultValue={props.value}
-            onChange={props.onChange}
-            placeholder={props.placeholder}
-            required={required} />
+        <li className={`w-full mt-2 mb-2 ${listClassName}`}> 
+            <div className="w-full flex items-center justify-end">
+                <label htmlFor="textarea" className="text-sm text-zinc-900 mr-1 mb-1">
+                    textarea
+                </label>
+                <input type="checkbox" className="chk border-none" name="textarea" onChange={boxChange} id="textarea" />
+            </div>
+             {
+                !textarea ?
+                <input 
+                id={props.id}
+                name={props.id} 
+                className={`w-full ${inputStyle} ${inputClassName}`} 
+                type={type}
+                defaultValue={inputValue}
+                onChange={changeHandle}
+                placeholder={props.placeholder}
+                required={required} />
+                :
+                <textarea className="p-2 h-[150px] text-xl rounded-md w-full" id={props.id} placeholder={props.placeholder}>
+                    { inputValue }
+                </textarea>
+             }
         </li>
     )
+
 }
 type FormSubmitFunction = (data: any) => Promise<any>;
 export type formDefault = {
@@ -65,7 +92,7 @@ export default function FormDefault(props:formDefault) {
         kit.map((v:Element,i:number)=>{
             const data:Record<string,string>= {}
             Array.from(v.children).map((v2,i2)=>{
-                const input = v2.children[0] as HTMLInputElement
+                const input = v2.children[1] as HTMLInputElement
                 data[input.id] =input.value;
             })
             body.data.push(data)
@@ -110,7 +137,7 @@ export default function FormDefault(props:formDefault) {
     }
 
     const btnStyle = `max-w-[50px] mr-2`;
-
+ 
     return(
         <form className={`mr-auto ml-auto mt-16 mb-20 w-full max-w-[400px]`} >
             <h2 className={title}>{props.title}</h2>
@@ -130,12 +157,19 @@ export default function FormDefault(props:formDefault) {
                 </div> : null
             }
             <ul className={`datakit ${kitStyle}`}>
+                
                 {
                     data.keys.map((v:any,i:number)=>{
                         const val = !!props.valueData? props.valueData[v] :null
                         return(
-                            <Input key={`${v}_${i}`} id={v} placeholder={data.labels[i]} value={val} />
+                            <Input 
+                                key={`${v}_${i}`} 
+                                id={v} 
+                                placeholder={data.labels[i]} 
+                                value={val} 
+                                />
                         )
+                    
                     })
                 }
             </ul>

@@ -47,6 +47,7 @@ export default function AdminDataTable (props:Props) {
     },[])
     useEffect(()=>{
         if (!!datas) {
+            delete datas.label.userPw;
             const keys = datas.label;
             setKey(Object.keys(keys));
             setLabel(Object.values(keys));
@@ -98,10 +99,9 @@ export default function AdminDataTable (props:Props) {
         }
     }
 
-    console.log(list);
     return(
         <Loading loading={storeLoading} >
-            <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden`}>
+            <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden pb-[100px]`}>
                 <li>
                     <h2 className={`${title}`}>
                         { params.collection ? utils.firstUppercase(params.collection) : null}
@@ -110,9 +110,9 @@ export default function AdminDataTable (props:Props) {
                 <li className={_li+' bg-gray-500 text-white tagName'}>
                     {
                         key.map((v:any,i:number)=>{
-                            return(
+                            return (
                                 <div key={`keys_${v}`} className={`${convert(v).className}`}>
-                                    {convert(v,label[i]).tag}
+                                    { convert(v,label[i]).tag }
                                 </div>
                             )
                         })
@@ -139,10 +139,10 @@ export default function AdminDataTable (props:Props) {
                                         Object.keys(v).map((v2:any,i2:number)=>{
                                             // 로그인 일 경우
                                             let text:any = val[i2];
-                                            if(v2 === 'l_token' && val[i2]) text = convert(v2).text;
-                                            if(v2 ==='_id' && val[i2]) text =convert(v2,text).text;
+                                            if (v2 === 'l_token' && val[i2]) text = convert(v2).text;
+                                            if (v2 ==='_id' && val[i2]) text =convert(v2,text).text;
                                             return (
-                                                <div 
+                                                <div
                                                     key={`${v2}_${i2}_`} 
                                                     className={`${v2} ${convert(v2).className+' flex items-center justify-center'}`}
                                                     >

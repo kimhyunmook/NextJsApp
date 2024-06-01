@@ -8,7 +8,8 @@ body {
 img {
   width: 100%;
 }
-input {
+input,
+textarea {
   background-color: hsl(0, 1%, 20%);
 }
 .noInput {
@@ -31,13 +32,12 @@ body {
 
 /* scroll bar */
 *::-webkit-scrollbar {
-  background-color:#717171;
-  padding:1px;
-  width:5px;
+  background-color: #717171;
+  padding: 1px;
+  width: 5px;
   /* border-radius: 10px; */
 }
 *:hover::-webkit-scrollbar {
-
 }
 *::-webkit-scrollbar-thumb {
   background-color: #2f3542;
@@ -51,11 +51,11 @@ body {
   box-shadow: inset 0px 0px 5px white;
 }
 *:has(.noscroll)::-webkit-scrollbar {
-  display:none;
+  display: none;
 }
 .contentView:has(.noscroll) {
-  overflow-y:none;
-  max-height:100vh;
+  overflow-y: none;
+  max-height: 100vh;
 }
 .contentView {
   overflow-y: scroll;
