@@ -6,6 +6,15 @@ export default function util() {
             const t =  target 
             return t.charAt(0).toUpperCase()+t.slice(1)
         },
+        only:(target:string,type?:string)=>{
+            let reg:RegExp = /^[a-zA-Z0-9\s]*$/;
+            switch(type) {
+                case 'english' :
+                    reg = /^[a-zA-Z\s]*$/;
+                    break;
+            }
+            return reg.test(target)
+        },
         phoneNumber: (e:ChangeEvent<HTMLInputElement>) => {
             const value = e.currentTarget.value;
             const phoneNumber = value.replace(/[^0-9]/g, ''); 

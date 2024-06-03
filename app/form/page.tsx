@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Btn from "../component/button";
 import { title } from "../util/style";
 import { useRouter } from "next/navigation";
@@ -21,6 +21,7 @@ function Input (props:inputDefault):React.ReactElement {
     const inputClassName = !!props.className ? props.className:"";
     const type =!!props.type ? props.type : "text";
     const required = !!props.required ? true :false
+    const input = useRef(null);
 
     const [textarea,setTextarea] = useState(false);
     function boxChange (e:React.ChangeEvent<HTMLInputElement>) {
@@ -33,7 +34,6 @@ function Input (props:inputDefault):React.ReactElement {
     const [inputValue,setInputValue] = useState(props.value);
     function changeHandle (e:React.ChangeEvent<HTMLInputElement>) {
         setInputValue(e.currentTarget.value)
-
     }
     return(
         <li className={`w-full mt-2 mb-2 ${listClassName}`}> 
@@ -45,17 +45,22 @@ function Input (props:inputDefault):React.ReactElement {
             </div>
              {
                 !textarea ?
-                <input 
-                id={props.id}
-                name={props.id} 
-                className={`w-full ${inputStyle} ${inputClassName}`} 
-                type={type}
-                defaultValue={inputValue}
-                onChange={changeHandle}
-                placeholder={props.placeholder}
-                required={required} />
+                <input
+                    ref={input}
+                    id={props.id}
+                    name={props.id} 
+                    className={`w-full ${inputStyle} ${inputClassName}`} 
+                    type={type}
+                    defaultValue={inputValue}
+                    onChange={changeHandle}
+                    placeholder={props.placeholder}
+                    required={required} />
                 :
-                <textarea className="p-2 h-[150px] text-xl rounded-md w-full" id={props.id} placeholder={props.placeholder}>
+                <textarea 
+                    className="p-2 h-[150px] text-xl rounded-md w-full" 
+                    id={props.id} 
+                    placeholder={props.placeholder}
+                >
                     { inputValue }
                 </textarea>
              }
@@ -93,6 +98,11 @@ export default function FormDefault(props:formDefault) {
             const data:Record<string,string>= {}
             Array.from(v.children).map((v2,i2)=>{
                 const input = v2.children[1] as HTMLInputElement
+                console.log(input.value)
+                if (!!!input.value) {
+                    input.focus();
+                    throw alert('내용을 입력해주세요.');
+                }
                 data[input.id] =input.value;
             })
             body.data.push(data)
@@ -102,6 +112,7 @@ export default function FormDefault(props:formDefault) {
                 ...body,
                 key_index:props.valueData.key_index
             }
+            console.log(body);
         props.submit(body).then(res=>{
             if (res.ok) {
                 alert(res.msg);
@@ -109,7 +120,6 @@ export default function FormDefault(props:formDefault) {
             } 
             else alert('입력이 불가능합니다.')
         })
-        
     }
 
    
@@ -157,7 +167,6 @@ export default function FormDefault(props:formDefault) {
                 </div> : null
             }
             <ul className={`datakit ${kitStyle}`}>
-                
                 {
                     data.keys.map((v:any,i:number)=>{
                         const val = !!props.valueData? props.valueData[v] :null

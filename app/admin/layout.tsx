@@ -28,9 +28,7 @@ export default function AdminLayout ({children}:{
                         <h2 className="w-full font-black">
                             어드민 로그인 필요 
                         </h2>
-                        <Link href={'#'} onClick={()=>{
-                            router.back();
-                        }} className="w-full text-blue-300 text-xl">
+                        <Link href={'/login'} className="w-full text-blue-300 text-xl">
                             뒤로가기
                         </Link>
                     </div>

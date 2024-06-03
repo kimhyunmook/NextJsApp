@@ -8,7 +8,7 @@ import TYPE from "@/lib/type";
 import Logo from "../component/logo";
 import { useRouter } from "next/navigation";
 
-type liType = {
+export type liType = {
     name:string;
     className?:string;
     label:string;
@@ -19,12 +19,13 @@ type liType = {
     maxLength?:number;
     autoComplete?:string
     overflow?:boolean;
+    error?:boolean;
 }
 export function Li(props:liType):React.ReactElement{
     let round = `rounded-sm`;
-    let overflow = !! props.overflow ? '' : 'overflow-hidden';
+    let overflow = !!! props.overflow ? '' : 'overflow-hidden';
     if(!!props.children) round +=` rounded-r-none `
-    const liStlye = ` w-full flex justify-between mb-3 mt-3 border border-blue-300 ${overflow} ${round} ${props.className} `;
+    const liStlye = ` w-full relative flex justify-between mb-3 mt-3 border border-blue-300 ${overflow} ${round} ${props.className} `;
     let att = {
         type:!!props.type ? props.type :"text",
         id:props.name, 
@@ -38,7 +39,7 @@ export function Li(props:liType):React.ReactElement{
 
    return(
      <li className={liStlye}>
-        <input className={`w-full h-10 p-3 ${round} `} 
+        <input className={`${props.name} w-full h-10 p-3 ${round} `} 
         {...att}
         />
         {props.children}

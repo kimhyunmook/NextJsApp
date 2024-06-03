@@ -2,12 +2,13 @@
 import Loading from "@/app/loadingg"
 import { flex_center, title } from "@/app/util/style"
 import TYPE from "@/lib/type"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { adminDataDeleteApi } from "@/lib/api/adminApi"
+import { adminDataDeleteApi, collectionReName, adminCollectionRename } from "@/lib/api/adminApi"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import util from "@/app/util/utils"
+import { ErrorMsg } from "../../mongodb/collection/[type]/page"
 
 type Props = {
     params:{
@@ -33,9 +34,12 @@ export default function AdminDataTable (props:Props) {
     const storeLoading = useSelector<any>((state)=>state.admin.loading) && list.length > 0
     const [key,setKey] =  useState<any>([]);
     const [label,setLabel] =  useState<any>([]);
+    const  [rename,setRename] = useState(false);
+    const  [renameValue,setRenameValue] = useState<any>(null);
+    const renameInput = useRef(null);
     const router = useRouter();
     const utils = util();
-    
+    const [errorMsg,setErrorMsg] = useState(true);    
 
     useEffect(()=>{
         let body = {
@@ -54,6 +58,11 @@ export default function AdminDataTable (props:Props) {
             setList(datas.list)
         }
     },[datas])
+    useEffect(()=>{
+        setList([])
+        if(params.collection)
+            setRenameValue(utils.firstUppercase(params.collection));
+    },[params])
     
 
     function etcHandle (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -99,13 +108,60 @@ export default function AdminDataTable (props:Props) {
         }
     }
 
+    function reName (e:React.MouseEvent) {
+        e.preventDefault();
+        if (rename) {
+            setRename(false)
+            if (!!!renameValue) throw alert('빈칸은 입력할 수 없습니다.');
+            if (params.db && params.collection) {
+                let body:collectionReName =  {
+                    dbName:params.db,
+                    collectionName:params.collection,
+                    newCollectionName:renameValue,
+                }
+                adminCollectionRename(body).then(res=>{
+                    console.log(res);
+                    if(res.ok) {
+                        router.push(`/admin/${params.db}/${renameValue}`)
+                    }
+                });
+
+            }
+
+        }
+        else setRename(true);
+    }
+    function reNameValue (e:React.ChangeEvent<HTMLInputElement>) {
+        e.preventDefault();
+        const input = e.currentTarget;
+        if (input) {
+            if (!utils.only(input.value)) {
+                setErrorMsg(false);
+                e.currentTarget.value = input.value.slice(0,-1) 
+            } else {
+                setRenameValue(e.currentTarget.value.toLocaleLowerCase());
+                setErrorMsg(true);
+            }
+        }
+    }
+
     return(
-        <Loading loading={storeLoading} >
+        <>
             <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden pb-[100px]`}>
-                <li>
-                    <h2 className={`${title}`}>
-                        { params.collection ? utils.firstUppercase(params.collection) : null}
-                    </h2>
+                <li className={`flex items-end ${title} relative`}>
+                    {
+                        rename ?
+                        <input type="text" ref={renameInput} className="max-w-[200px] pl-2 rounded-md" value={renameValue} onChange={reNameValue}/>:
+                        <h2 className={``}>
+                            { params.collection ? utils.firstUppercase(params.collection) : null}
+                        </h2>
+                    }
+                    <button className="text-xl ml-2" onClick={reName}>
+                        rename
+                    </button>
+                    {
+                        errorMsg ? null :<ErrorMsg text="영어만 입력해주세요" />
+                    }
                 </li>
                 <li className={_li+' bg-gray-500 text-white tagName'}>
                     {
@@ -124,9 +180,11 @@ export default function AdminDataTable (props:Props) {
                 {
                     list.length <= 0 ? 
                     <li className="border-b border-gray-500">
-                        <h2 className={`text-center p-3 text-2xl`}>
-                            없음
-                        </h2>
+                        <Loading loading={list.length <=0}>
+                            <h2 className={`text-center p-3 text-2xl`}>
+                                없음
+                            </h2>
+                        </Loading>
                     </li> :
                     list.map((v:Record<string,string>,i:number)=>{
                         delete v.userPw;
@@ -140,7 +198,7 @@ export default function AdminDataTable (props:Props) {
                                             // 로그인 일 경우
                                             let text:any = val[i2];
                                             if (v2 === 'l_token' && val[i2]) text = convert(v2).text;
-                                            if (v2 ==='_id' && val[i2]) text =convert(v2,text).text;
+                                            if (v2 ==='_id' || v2 ==='role' && val[i2]) text =convert(v2,text).text;
                                             return (
                                                 <div
                                                     key={`${v2}_${i2}_`} 
@@ -181,7 +239,7 @@ export default function AdminDataTable (props:Props) {
                     </Link> : null
                 }
             </div>
-        </Loading>
+        </>
     )
 }
 
@@ -257,6 +315,12 @@ function convert (target:string,text?:string|undefined) {
                 ...init,
                 tag:'생성 날짜',
                 className: midle+" order-5",
+            }
+        case inc('role') :
+            return {
+                ...init,
+                tag:'등급',
+                text: text === '0' ? '관리자' : '일반회원'
             }
         default: 
             return {

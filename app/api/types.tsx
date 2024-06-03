@@ -9,7 +9,7 @@ export type UserType = {
     role:number;
 }
 
-export type DBinfo = {
+export type DatabaseType = {
     database_name:string;
     db_description:string;
     create_date:Date;

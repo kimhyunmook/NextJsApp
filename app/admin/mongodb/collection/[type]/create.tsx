@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import TYPE from "@/lib/type";
 import { useParams, useRouter } from "next/navigation";
+import util from "@/app/util/utils";
 // import {useRouter} from 'next/router';
 
 type Props = {
@@ -22,6 +23,7 @@ export default function CreateLayout(props:Props) {
         const boxStyle =`w-[49%] min-h-[40px] border border-bule-500`
         const labelStyle =`hidden`
         const inputStyle = `w-full h-full pl-2`
+      
         const newInput = (
             <li key={`inputs_${html.length}`} className={`schema flex pt-2 pb-2 mb-2 justify-between`}>
                 <div className={`${boxStyle}`}>

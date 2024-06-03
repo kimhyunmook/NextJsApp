@@ -21,6 +21,7 @@ export async function POST(request:Request){
       ok:false,
       type:'setting/home'
   }
+  const limitLength = 5;
     async function run() {
         try {
         //   const db = client.db(data.dbName)
@@ -38,9 +39,11 @@ export async function POST(request:Request){
           }
           
           // database
-          const dbList2 = await dbList.databases.sort().filter((db,i)=> 
+          const dbList2 = await dbList.databases.filter((db,i)=> 
             !noList.some(noDb => noDb === db.name)
           );
+
+          console.log(dbList2);
           const InfoPromises = await dbList2.map(async (c,i:number)=>{
             const client2 = new MongoClient(uri);
             await client2.connect();
@@ -67,8 +70,7 @@ export async function POST(request:Request){
             })
             await client2.close();
             
-            let collPromise = await (await Promise.all(collInfo)).filter((x:any) => !!x)
-
+            let collPromise = await (await Promise.all(collInfo)).filter((x:any) => !!x);
             if (!!data) return {
                 data,
                 collection:collPromise,
@@ -102,10 +104,10 @@ export async function POST(request:Request){
             }
           })
 
-          newDB = newDB.sort((a:any , b:any) => b.create_date - a.create_date);
-          newCollection = newCollection.flat().sort((a:any , b:any) => b.create_date - a.create_date);
+          newDB = newDB.sort((a:any , b:any) => b.create_date - a.create_date).slice(0,limitLength);
+          newCollection = newCollection.flat().sort((a:any , b:any) => b.create_date - a.create_date).slice(0,limitLength);
           newUser = newUser.filter(x=>x.userId !== 'admin');
-
+          
           result.ok = true;
           result.msg = {
             newDB,
