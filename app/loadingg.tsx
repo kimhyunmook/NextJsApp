@@ -25,13 +25,12 @@ export default function Loading(props:Props) {
         <div className="loading h-full">
             {
                 !!loading ?
-                    <div className="loading-page">
+                    <div className="loading-page min-h-[200px]">
                         <div className="spinner"></div>
                         <div className="loading-text">Loading...</div>
                     </div>
                     :  props.children
             }
-            {/* {props.children} */}
         </div>
     )
 }

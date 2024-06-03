@@ -55,13 +55,21 @@ export async function adminHomeApi (body?:any) {
     return res;
 }
 
-export type collectionDelete = {
+export type collectionInit = {
     collectionName:string;
     dbName:string;
 }
-export async function adminCollectionDelete (body:collectionDelete) {
+export async function adminCollectionDelete (body:collectionInit) {
     const res = await axios.post(`/api/db/collection/delete`,body)
         .then(res=>res.data);
     return res;
 
+}
+export type collectionReName = collectionInit & {
+    newCollectionName:string;
+} 
+export async function adminCollectionRename (body:collectionInit) {
+    const res = await axios.post(`/api/db/collection/rename`,body)
+        .then(res=>res.data);
+    return res;
 }

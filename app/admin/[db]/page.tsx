@@ -1,6 +1,6 @@
 "use client"
 import style, { flex_center, mobile_box } from "@/app/util/style";
-import { adminDBInfoApi, collectionDelete, mongoConnect } from "@/lib/api/adminApi";
+import { adminDBInfoApi, collectionInit, mongoConnect } from "@/lib/api/adminApi";
 import { useEffect, useState } from "react";
 import { title } from "@/app/util/style";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +43,10 @@ export default function DBPage (props:Props) {
         } 
     },[collection])
 
+    useEffect(()=>{
+        setCollList([]);
+    },[params])
+
     // loading
     useEffect(()=>{
         setLoad(loading);
@@ -84,95 +88,103 @@ export default function DBPage (props:Props) {
         setDeltriger(true)
     }
     function collectionDleteTarget (cn:any) {
-        let body:collectionDelete ={
+        let body:collectionInit ={
             dbName:params.db,
             collectionName: cn
         }
-        console.log(body);
         CollectionDelete(body,()=>{
             let body2 = {
                 bodyType:"collection",
                 dbName:params.db
             }
             dispatch({type:TYPE('admin_nav').REQUEST,...body2});
-            // router.refresh();
         })
     }
     let condi = params.db !=='dev' && params.db !=='admin' && params.db !=='users';
     let link_collection = 'mr-2'
     return (
-        <Loading loading={ load }>
-            <ul className={`${mobile_box} pt-4`}>
-                <li>
-                    <h2 className={title}>
-                        DB Information
-                    </h2>
-                </li>
-                <li className={`flex items-end justify-end`}>
-                    {
-                        condi ?
-                        controlBtn.map((v,i)=>{
-                            return(
-                                <Link key={`${v}_${i}`} href={v} className={`m-2`} onClick={controlBtnHandle}>
-                                    { utils.firstUppercase(v) }
-                                </Link>
-                            )
-                        }): <p className="text-sm text-red-400 mb-4">수정할 수 없는 DATABASE</p>
-                    }
-                </li>
-                <DBInfoList dbName={params.db} ></DBInfoList>
-                <li className={liStyle+' w-full pt-4 flex-wrap'}>
-                    <h3 className={style.title_sm}>
-                        Collections
-                    </h3>
-                    <ul className={'flex flex-wrap pb-2 pt-2 w-full'}>
-                        <li className="w-full flex justify-end mb-4">
-                            <Link className={link_collection} href={`/admin/mongodb/collection/create?target=${params.db}`}>
-                                Create
+        <ul className={`${mobile_box} pt-4`}>
+            <li>
+                <h2 className={title}>
+                    DB Information
+                </h2>
+            </li>
+            <li className={`flex items-end justify-end`}>
+                {
+                    condi ?
+                    controlBtn.map((v,i)=>{
+                        return(
+                            <Link key={`${v}_${i}`} href={v} className={`m-2`} onClick={controlBtnHandle}>
+                                { utils.firstUppercase(v) }
                             </Link>
-                            <Link className={link_collection} href={'#'} onClick={collectionDelete}>
-                                {
-                                    deltriger ? 'Close' : 'Delete'
-                                }
-                            </Link>
-                        </li>
+                        )
+                    }): <p className="text-sm text-red-400 mb-4">수정할 수 없는 DATABASE</p>
+                }
+            </li>
+            <DBInfoList dbName={params.db} ></DBInfoList>
+            <li className={liStyle+' w-full pt-4 flex-wrap'}>
+                <h3 className={style.title_sm}>
+                    Collections
+                </h3>
+                <ul className={'flex flex-wrap pb-2 pt-2 w-full'}>
+                    <li className="w-full flex justify-end mb-4">
                         {
-                            collList.length > 0?
-                                collList.map((v:any,i)=>{
-                                    return (
-                                        <li key={v.name} className="min-w-[20%] text-center p-2 pr-4 pl-4 rounded-2xl m-2 mt-1 mb-1 text-lg bg-green-500">
-                                            {
-                                                deltriger ?
-                                                <div className={flex_center}>
-                                                    <Link className="block" href={`/admin/${params.db}/${v.name}`}>
-                                                        { utils.firstUppercase(v.name) }
-                                                    </Link> 
-                                                    <button 
-                                                        onClick={(e)=>{
-                                                            e.preventDefault();
-                                                            const t = e.currentTarget.previousSibling?.textContent?.toLocaleLowerCase()
-                                                            collectionDleteTarget(t)
-                                                        }}
-                                                        className="text-base font-black ml-3 pr-1 pl-1 bg-black text-red-500 hover:bg-white hover:text-blue-700"
-                                                    >
-                                                        X
-                                                    </button>
-                                                </div>
-                                                :<Link className="block" href={`/admin/${params.db}/${v.name}`}>
-                                                    { utils.firstUppercase(v.name) }
-                                                </Link>
-                                            }
-                                        </li>
-                                    )
-                                }) :
-                                <li>
-                                    <h3 className="text-xl pl-2">없음</h3>
-                                </li>
+                            condi ?
+                            <>
+                                <Link className={link_collection} href={`/admin/mongodb/collection/create?target=${params.db}`}>
+                                    Create
+                                </Link>
+                                <Link className={link_collection} href={'#'} onClick={collectionDelete}>
+                                    {
+                                        deltriger ? 'Close' : 'Delete'
+                                    }
+                                </Link>
+                            </>:
+                            <p className="text-sm text-red-400 mb-2">수정할 수 없는 DATABASE</p>
                         }
-                    </ul>
-                </li>
-            </ul>
-        </Loading>
+                    </li>
+                    {
+                        //// <li>
+                        collList.length > 0?
+                            collList.map((v:any,i)=>{
+                                return (
+                                    <li key={v.name} className="min-w-[20%] text-center p-2 pr-4 pl-4 rounded-2xl m-2 mt-1 mb-1 text-lg bg-green-500">
+                                        {
+                                            deltriger ?
+                                            <div className={flex_center}>
+                                                <Link className="block" href={`/admin/${params.db}/${v.name}`}>
+                                                    { utils.firstUppercase(v.name) }
+                                                </Link> 
+                                                <button 
+                                                    onClick={(e)=>{
+                                                        e.preventDefault();
+                                                        const t = e.currentTarget.previousSibling?.textContent?.toLocaleLowerCase()
+                                                        collectionDleteTarget(t)
+                                                    }}
+                                                    className="text-base font-black ml-3 pr-1 pl-1 bg-black text-red-500 hover:bg-white hover:text-blue-700"
+                                                >
+                                                    X
+                                                </button>
+                                            </div>
+                                            :
+                                            <Link className="block" href={`/admin/${params.db}/${v.name}`}>
+                                                { utils.firstUppercase(v.name) }
+                                            </Link>
+                                            
+                                        }
+                                    </li>
+                                )
+                            }) :
+                        <li className="w-full">
+                            <Loading loading={collList.length <=0}>
+                                <h3 className="text-xl pl-2">없음</h3>
+                            </Loading>
+                        </li>
+
+                    }
+                </ul>
+            </li>
+        </ul>
     )
 }
 
@@ -196,7 +208,10 @@ export function DBInfoList ({dbName,type}:
                     setDbInfo(keys);
                 }
             })
-    },[])
+            
+        },[])
+        
+
     return (
         <>
             {
@@ -239,16 +254,18 @@ export function DBInfoList ({dbName,type}:
                         </li>
                     )
                 }):
-                <li className={liStyle + ' pb-2'}>
-                    <h3 className="text-xl pl-2">없음</h3>
-                </li>
+                <Loading loading={data.key.length <= 0}>
+                    <li className={liStyle + ' pb-2'}>
+                        <h3 className="text-xl pl-2">없음</h3>
+                    </li>
+                </Loading>
             }
         </>
     )
     
 }
 
-export function convert (t:string) {
+function convert (t:string) {
     switch(t) {
         case '_id' : 
             return 'Mongo_ID';
