@@ -1,6 +1,6 @@
 'use client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette, faPen, faWrench } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from 'react';
 type myIcons = {
@@ -27,10 +27,12 @@ export default function MyIcons (props:myIcons) {
                 break;
             case 'pen' : setFont(faPen)
                 break;
+            case 'wrench' :setFont(faWrench);
+                break;
         }
     },[])
 
     return (
-        <FontAwesomeIcon icon={fontawsomeProps} />
+        <FontAwesomeIcon className={`${props.className}`} icon={fontawsomeProps} />
     )
 }

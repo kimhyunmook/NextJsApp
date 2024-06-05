@@ -129,7 +129,7 @@ export default function DBPage (props:Props) {
                 <ul className={'flex flex-wrap pb-2 pt-2 w-full'}>
                     <li className="w-full flex justify-end mb-4">
                         {
-                            condi ?
+                            params.db !=='users' ?
                             <>
                                 <Link className={link_collection} href={`/admin/mongodb/collection/create?target=${params.db}`}>
                                     Create

@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import util from "@/app/util/utils"
 import { ErrorMsg } from "../../mongodb/collection/[type]/page"
+import MyIcons from "@/lib/fontawsome"
 
 type Props = {
     params:{
@@ -148,7 +149,7 @@ export default function AdminDataTable (props:Props) {
     return(
         <>
             <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden pb-[100px]`}>
-                <li className={`flex items-end ${title} relative`}>
+                <li className={`flex items-end text-4xl font-black mb-4 relative`}>
                     {
                         rename ?
                         <input type="text" ref={renameInput} className="max-w-[200px] pl-2 rounded-md" value={renameValue} onChange={reNameValue}/>:
@@ -156,12 +157,20 @@ export default function AdminDataTable (props:Props) {
                             { params.collection ? utils.firstUppercase(params.collection) : null}
                         </h2>
                     }
-                    <button className="text-xl ml-2" onClick={reName}>
-                        rename
+                    <button className="text-base ml-2 text-green-300 " onClick={reName}>
+                        <MyIcons className="" icon={'wrench'}/>
                     </button>
                     {
                         errorMsg ? null :<ErrorMsg text="영어만 입력해주세요" />
                     }
+                    <div className="absolute right-0">
+                    {
+                        params.collection !== 'users' ?
+                        <Link href={`/admin/${params.db}/${params.collection}/insert`} className="p-2 pr-3 pl-3 rounded-md text-xl">
+                            <MyIcons icon={'pen'}/>
+                        </Link> : null
+                    }
+                    </div>
                 </li>
                 <li className={_li+' bg-gray-500 text-white tagName'}>
                     {
@@ -231,14 +240,7 @@ export default function AdminDataTable (props:Props) {
                     })
                 }
             </ul>
-            <div className="fixed bottom-4 right-8">
-                {
-                    params.collection !== 'users' ?
-                    <Link href={`/admin/${params.db}/${params.collection}/insert`} className="bg-blue-500 p-2 pr-3 pl-3 rounded-md text-xl">
-                        입력
-                    </Link> : null
-                }
-            </div>
+     
         </>
     )
 }
