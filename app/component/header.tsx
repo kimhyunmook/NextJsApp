@@ -5,6 +5,7 @@ import Logo from "./logo";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import TYPE from "@/lib/type";
+import MyIcons from "@/lib/fontawsome";
 
 
 interface User {
@@ -17,7 +18,7 @@ interface LoginBar {
     onClick?:(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }
 export default function Header () {
-    const rightBarStyle =`font-base text-white text-base m-1 tracking-tighter w-full max-w-[60px] break-keep `;
+    const rightBarStyle =`font-base text-white text-lg m-1 tracking-tighter w-full max-w-[45px] text-center break-keep `;
     const dispatch =useDispatch();
     const loginToken:any = getCookie('l_token');
     let logininit:LoginBar = {
@@ -44,12 +45,13 @@ export default function Header () {
                 {
                     className:"mr-2",
                     href:"/logout",
-                    children:"로그아웃",
+                    children:<MyIcons icon={'logout'} tooltip={'로그아웃'}/>,
                     onClick:logout
                 },
                 {
                     href:`/user/${user.user?.userId}`,
-                    children:'회원정보'
+                    children:<MyIcons icon={'user'} tooltip={'회원정보'}/>,
+
                 }   
             ])
         else 
@@ -57,12 +59,13 @@ export default function Header () {
                 {
                     className:"",
                     href:'/login',
-                    children:"로그인"
+                    children:<MyIcons icon={'login'} tooltip={'로그인'}/>
                 },
                 {
                     className:"",
                     href:"/signup",
-                    children:"회원가입"
+                    children:<MyIcons icon={'user-plus'} tooltip={'회원가입'}/>
+
                 }
             ])
     },[user.login])
@@ -82,7 +85,7 @@ export default function Header () {
                     <Logo className={"text-white"} />
                 </div>
             
-                <div className="user flex justify-end items-center min-w-[225px]">
+                <div className="user flex justify-end items-center min-w-[225px] mr-[55px]">
                     { Login.map((v,i)=> <Link key={`login_bar_${i}`} className={rightBarStyle + v.className} href={v.href} onClick={v.onClick} >{v.children}</Link>) }
                 </div>
             </div>
