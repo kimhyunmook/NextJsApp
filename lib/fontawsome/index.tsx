@@ -1,11 +1,13 @@
 'use client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette, faPen, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette, faPen, faWrench, faUserPlus, faRightToBracket, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from 'react';
+import Tooltip from '../tooltip';
 type myIcons = {
     className?:string;
     icon: string|IconProp;
+    tooltip?:string|any;
 }
 export default function MyIcons (props:myIcons) {
     const icon = props.icon;
@@ -29,10 +31,25 @@ export default function MyIcons (props:myIcons) {
                 break;
             case 'wrench' :setFont(faWrench);
                 break;
+            case 'user-plus' :setFont(faUserPlus);
+                break;
+            case 'login' :setFont(faRightToBracket);
+                break;
+            case 'logout': setFont(faRightFromBracket);
+                break;
+            case 'user' :setFont(faUser);
+                break;
         }
     },[])
 
     return (
-        <FontAwesomeIcon className={`${props.className}`} icon={fontawsomeProps} />
+        <b className={`myIcon`}>
+            <FontAwesomeIcon className={`${props.className}`} icon={fontawsomeProps} />
+            {
+                !!props.tooltip ?
+                    <Tooltip text={props.tooltip}></Tooltip>
+                    :null
+            }
+        </b>
     )
 }

@@ -6,6 +6,7 @@ import TYPE from "@/lib/type";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { useParams } from "next/navigation";
 
 export default function Nav() {
     const [dbList,setDbList] = useState<any>([]);
@@ -14,6 +15,8 @@ export default function Nav() {
     const dispatch = useDispatch();
     const db = useSelector<any>((state)=>state.admin.navDB)
     const collection = useSelector<any>((state)=>state.admin.navCollection)
+    const params = useParams();
+
     useEffect(()=>{
         let body = {
             bodyType:"db"
@@ -34,7 +37,6 @@ export default function Nav() {
             name:!!!process.env.NEXT_PUBLIC_MONGO ? '연결' :'해제',
             href:!!!process.env.NEXT_PUBLIC_MONGO ? "/connect": '/disconnect'
         },
-     
     ]
     const second:dbListItem[] = [
         {
@@ -68,7 +70,8 @@ export default function Nav() {
         setDbName(e.currentTarget.textContent);
         dispatch({...body})
     }
-    const state = `w-[15px] h-[15px] mr-2 rounded-full`
+    const state = `w-[15px] h-[15px] mr-2 rounded-full`;
+    const select = `transition font-bold bg-green-500 mt-1 mb-1 block max-w-[70%] pl-2 rounded-xl`;
     return(
         <nav className="navLeftContent overflow-y-scroll p-2 pr-3 pl-3 w-[225px]">
             <div className="connectState mb-4 bg-zinc-600 p-1 pl-2 max-w-[100px] rounded-md">
@@ -96,7 +99,7 @@ export default function Nav() {
                                     <FontAwesomeIcon icon={v.icon} />
                                     : null
                                 }
-                                <Link href={`/admin/${v.name}`} className={`text-lg`} onClick={dbListHandle}>
+                                <Link href={`/admin/${v.name}`} className={`text-lg ${params.db===v.name ? select:null}`} onClick={dbListHandle}>
                                     {v.name}
                                 </Link>
                             </li>
@@ -110,7 +113,7 @@ export default function Nav() {
                     collectionList.map((v:any,i:number)=>{
                         return (
                             <li key={`li_${i}`} className={liStyle}>
-                                <Link href={`/admin/${dbName}/${v.name}`} className={`text-lg`}>
+                                <Link href={`/admin/${dbName}/${v.name}`} className={`text-lg ${params.collection=== v.name ? select:null}`}>
                                     {v.name}
                                 </Link>
                             </li>
@@ -139,6 +142,11 @@ type navBox = {
     icon?: IconDefinition;
 }
 function NavBox(props:navBox) {
+    const path = window.location.pathname.split('/').reduce((a:string[],c:string,i)=>{
+        if (!!c && c!=='admin' && c!=='mongodb') a.push(c);
+        return a
+    },[]);
+ 
     return(
         <div className="navBox w-full mb-2 border-b pb-2">
             <h2 className={'text-xl font-black mb-2 text-white'}>
@@ -155,12 +163,7 @@ function NavBox(props:navBox) {
                     props.list.map((v,i) => {
                         return(
                             <li key={ v.name+`_`+i } className={ `pl-4 mb-1 mt-1 w-full text-base` }>
-                                {/* {
-                                    !!v.icon ?
-                                    <FontAwesomeIcon icon={v.icon} className="mr-2 text-sm"/>
-                                    :null
-                                } */}
-                                <Link href={ '/admin/mongodb/'+v.href }>
+                                <Link href={ '/admin/mongodb/'+v.href } className={`${'1'}`}>
                                     { v.name }
                                 </Link>
                             </li>

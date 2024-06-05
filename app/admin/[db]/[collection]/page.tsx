@@ -149,28 +149,31 @@ export default function AdminDataTable (props:Props) {
     return(
         <>
             <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden pb-[100px]`}>
-                <li className={`flex items-end text-4xl font-black mb-4 relative`}>
+                <li className={`flex items-end ${title} relative`}>
                     {
                         rename ?
-                        <input type="text" ref={renameInput} className="max-w-[200px] pl-2 rounded-md" value={renameValue} onChange={reNameValue}/>:
+                        <input type="text" ref={renameInput} className="border transition max-w-[200px] pl-2 rounded-md" value={renameValue} onChange={reNameValue}/>:
                         <h2 className={``}>
                             { params.collection ? utils.firstUppercase(params.collection) : null}
                         </h2>
                     }
-                    <button className="text-base ml-2 text-green-300 " onClick={reName}>
-                        <MyIcons className="" icon={'wrench'}/>
-                    </button>
                     {
-                        errorMsg ? null :<ErrorMsg text="영어만 입력해주세요" />
+                        errorMsg ? null :<ErrorMsg text="영어와 숫자만 입력해주세요" />
                     }
-                    <div className="absolute right-0">
                     {
-                        params.collection !== 'users' ?
-                        <Link href={`/admin/${params.db}/${params.collection}/insert`} className="p-2 pr-3 pl-3 rounded-md text-xl">
-                            <MyIcons icon={'pen'}/>
-                        </Link> : null
+                        params.db !== 'users' ?
+                        <>
+                            <button className="text-base ml-2 text-green-300" onClick={reName}>
+                                <MyIcons className="" icon={'wrench'} tooltip={'Collection 이름 수정'}/>
+                            </button>
+                            <div className="absolute right-4">
+                                <Link href={`/admin/${params.db}/${params.collection}/insert`} className="rounded-md text-xl">
+                                    <MyIcons icon={'pen'} tooltip={'입력'}/>
+                                </Link> 
+                            </div>
+                        </>
+                        :null
                     }
-                    </div>
                 </li>
                 <li className={_li+' bg-gray-500 text-white tagName'}>
                     {
