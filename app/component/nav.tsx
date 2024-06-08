@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 export default function Nav() {
     const [dbList,setDbList] = useState<any>([]);
     const [collectionList,setCollectionList] = useState<any>([]);
-    const [dbName,setDbName] =useState<string|null>('');
+    const [dbName,setDbName] = useState<string|null>('');
     const dispatch = useDispatch();
     const db = useSelector<any>((state)=>state.admin.navDB)
     const collection = useSelector<any>((state)=>state.admin.navCollection)
@@ -87,8 +87,8 @@ export default function Nav() {
                     </div>
                 }
             </div>
-            <NavBox title={ 'MongoDB' } list={ first } icon={faHome}></NavBox>
-            <NavBox title={ 'Control' } list={ second } icon={faPalette}></NavBox>
+            <NavBox title={ 'MongoDB' } list={ first } icon={ faHome }></NavBox>
+            <NavBox title={ 'Control' } list={ second } icon={ faPalette }></NavBox>
             <NavBox title={ 'DB 목록' } icon={ faDatabase }>
                 {
                     dbList.map((v:dbListItem,i:number)=>{

@@ -145,6 +145,19 @@ export default function AdminDataTable (props:Props) {
             }
         }
     }
+    type btns = {
+        href:string;
+        icon:string;
+        tooltip?:string
+    }
+    function BtnEl ({href,icon,tooltip}:btns) {
+        return (
+            <Link href={href} className="rounded-md text-xl min-w-[50px] block">
+                <MyIcons icon={icon} tooltip={tooltip}/>
+            </Link> 
+        )
+
+    }
 
     return(
         <>
@@ -161,15 +174,15 @@ export default function AdminDataTable (props:Props) {
                         errorMsg ? null :<ErrorMsg text="영어와 숫자만 입력해주세요" />
                     }
                     {
+                        // buttons
                         params.db !== 'users' ?
                         <>
                             <button className="text-base ml-2 text-green-300" onClick={reName}>
                                 <MyIcons className="" icon={'wrench'} tooltip={'Collection 이름 수정'}/>
                             </button>
-                            <div className="absolute right-4">
-                                <Link href={`/admin/${params.db}/${params.collection}/insert`} className="rounded-md text-xl">
-                                    <MyIcons icon={'pen'} tooltip={'입력'}/>
-                                </Link> 
+                            <div className="absolute right-4 flex justify-center text-center">
+                                <BtnEl href={`/admin/${params.db}/${params.collection}/insert`} icon={'pen'} tooltip="Data 입력" />
+                                <BtnEl href={`/admin/${params.db}/${params.collection}/collectionEdit`} icon={'fix'} tooltip="Collection 수정" />
                             </div>
                         </>
                         :null

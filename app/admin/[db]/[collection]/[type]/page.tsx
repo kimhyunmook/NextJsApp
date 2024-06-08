@@ -1,11 +1,12 @@
 "use client"
 import FormDefault from "@/app/form/page";
 import util from "@/app/util/utils";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { adminDataInertApi, adminDataEditApi } from "@/lib/api/adminApi";
 import Loading from "@/app/loadingg";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import CollectionEdit from "./collectionEdit";
 type Props = {
     params:{
         db:string;
@@ -25,6 +26,7 @@ export default function CollectionType (props:Props) {
     const [obj ,setObj] = useState<any>(null);
     const [values,setValues] = useState<any>(null);
     const [addBtn,setAddBtn] = useState(false);
+    const [html,setHtml] = useState<ReactElement>(<></>);
     const router = useRouter();
 
     useEffect(()=>{
@@ -51,10 +53,34 @@ export default function CollectionType (props:Props) {
             switch(params.type) {
                 case 'insert': 
                     setAddBtn(true);
+                    setHtml(
+                        <FormDefault 
+                        title={uitls.firstUppercase(params.collection)+`:${uitls.firstUppercase(params.type)}`} 
+                        data={{collectionName:params.collection,dbName:params.db,keys,labels}}
+                        addBtn={addBtn}
+                        submit={adminDataInertApi}
+                        valueData={!!values ? values : null}
+                        >
+                        </FormDefault>
+                    )
                     break;
                 case 'edit' :
                     setValues(datas.list.filter((x:any)=>x.key_index.toString() === props.searchParams.index)[0]);
+                    setHtml(
+                        <FormDefault 
+                        title={uitls.firstUppercase(params.collection)+`:${uitls.firstUppercase(params.type)}`} 
+                        data={{collectionName:params.collection,dbName:params.db,keys,labels}}
+                        addBtn={addBtn}
+                        submit={adminDataEditApi}
+                        valueData={!!values ? values : null}
+                        >
+                        </FormDefault>
+                    )
                     break;
+                case 'collectionEdit' :
+                    setHtml(<CollectionEdit params={params} obj={obj} />)
+                    break;
+                    
             }
         }
     },[obj])
@@ -62,15 +88,16 @@ export default function CollectionType (props:Props) {
         <Loading loading={null} default={500}>
             {
                 !! obj ?
-                <FormDefault 
-                    title={uitls.firstUppercase(params.collection)+`:${uitls.firstUppercase(params.type)}`} 
-                    data={{collectionName:params.collection,dbName:params.db,keys,labels}}
-                    addBtn={addBtn}
-                    submit={params.type ==='insert'? adminDataInertApi : adminDataEditApi}
-                    valueData={!!values ? values : null}
-                >
-                </FormDefault> :
-                null
+                html
+                // <FormDefault 
+                //     title={uitls.firstUppercase(params.collection)+`:${uitls.firstUppercase(params.type)}`} 
+                //     data={{collectionName:params.collection,dbName:params.db,keys,labels}}
+                //     addBtn={addBtn}
+                //     submit={params.type ==='insert'? adminDataInertApi : adminDataEditApi}
+                //     valueData={!!values ? values : null}
+                // >
+                // </FormDefault> 
+                : null
             }
         </Loading>
     )

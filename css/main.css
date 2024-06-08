@@ -17,6 +17,9 @@ textarea {
   width: 100%;
   height: 100%;
 }
+.full-h {
+  height: calc(100vh - 60px);
+}
 input:focus {
   border: 0;
   outline: none;

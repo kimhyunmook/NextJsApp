@@ -31,8 +31,17 @@ export async function POST(request:Request){
               );
               break;
             case 'collection':
-              const colletionList = await (await db.listCollections().toArray())
-                .filter((x,i)=> !x.name.includes(dbinfo))
+                let colletionList = await (await db.listCollections().toArray())
+                .filter((x,i)=> !x.name.includes(dbinfo)).sort((a, b) => {
+                  if (a.name < b.name) {
+                    return -1;
+                  }
+                  if (a.name > b.name) {
+                    return 1;
+                  }
+                  return 0;
+                });
+                console.log(colletionList);
               result.msg = colletionList;
               break;
             case 'collection_target':
