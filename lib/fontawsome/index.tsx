@@ -1,6 +1,7 @@
 'use client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette, faPen, faWrench, faUserPlus, faRightToBracket, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette, faPen, faWrench, 
+    faUserPlus, faRightToBracket, faRightFromBracket, faUser, faHammer } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from 'react';
 import Tooltip from '../tooltip';
@@ -38,6 +39,8 @@ export default function MyIcons (props:myIcons) {
             case 'logout': setFont(faRightFromBracket);
                 break;
             case 'user' :setFont(faUser);
+                break;
+            case 'fix' : setFont(faHammer);
                 break;
         }
     },[])

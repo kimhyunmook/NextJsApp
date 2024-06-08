@@ -11,7 +11,9 @@ import util from "@/app/util/utils";
 // import {useRouter} from 'next/router';
 
 type Props = {
-    btnStyle:string;
+    btnStyle?:string;
+    title?:string;
+    data?:any
 }
 export default function CreateLayout(props:Props) {
     const[html,setHtml] = useState<any>([]);
@@ -104,9 +106,13 @@ export default function CreateLayout(props:Props) {
     }
     return (
         <div className="createLayout">
-            <h2 className={title}>
-            Schema
-            </h2>
+                <h2 className={title}>
+                {
+                    !!props.title ? 
+                    props.title 
+                    :'Schema'
+                }
+                </h2>
             <ul>
                 <li className={`flex mb-2`}>
                     <Btn className={props.btnStyle} onClick={add}>
