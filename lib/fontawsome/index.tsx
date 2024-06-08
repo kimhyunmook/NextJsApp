@@ -1,7 +1,7 @@
 'use client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette, faPen, faWrench, 
-    faUserPlus, faRightToBracket, faRightFromBracket, faUser, faHammer } from '@fortawesome/free-solid-svg-icons';
+    faUserPlus, faRightToBracket, faRightFromBracket, faUser,faArrowRightToBracket, faArrowRightFromBracket , faHammer } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from 'react';
 import Tooltip from '../tooltip';
@@ -12,7 +12,7 @@ type myIcons = {
 }
 export default function MyIcons (props:myIcons) {
     const icon = props.icon;
-    const [fontawsomeProps,setFont] = useState<IconProp>(faHome);
+    const [fontawesomeProps,setFont] = useState<IconProp>(faHome);
     useEffect(()=>{
         if (typeof icon ==='string')    
         switch (icon) {
@@ -34,9 +34,9 @@ export default function MyIcons (props:myIcons) {
                 break;
             case 'user-plus' :setFont(faUserPlus);
                 break;
-            case 'login' :setFont(faRightToBracket);
+            case 'login' :setFont(faArrowRightToBracket);
                 break;
-            case 'logout': setFont(faRightFromBracket);
+            case 'logout': setFont(faArrowRightFromBracket);
                 break;
             case 'user' :setFont(faUser);
                 break;
@@ -47,7 +47,7 @@ export default function MyIcons (props:myIcons) {
 
     return (
         <b className={`myIcon`}>
-            <FontAwesomeIcon className={`${props.className}`} icon={fontawsomeProps} />
+            <FontAwesomeIcon className={`${props.className}`} icon={fontawesomeProps} />
             {
                 !!props.tooltip ?
                     <Tooltip text={props.tooltip}></Tooltip>

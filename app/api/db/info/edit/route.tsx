@@ -17,18 +17,19 @@ export async function POST(request:Request){
     async function run() {
         try {
           await client.connect();
-          const db = client.db(data.dbName)
+          const db = client.db(data.database_name)
           query = {
             ...data,
             create_date:new Date()
           }
+          delete query.dbName;
+          delete query._id;
           const _id = new ObjectId(data._id)
           const update = await db.collection('DB_Info').updateOne({_id:_id},{$set:query})
-          console.log(_id,query);
           result = {
             ...result,
             ok:true,
-            msg:`${update.matchedCount} 수정되었습니다.`
+            msg:`DB(${query.database_name}) 정보가 수정되었습니다.`
           }
         } finally {
           await client.close();

@@ -4,17 +4,18 @@ import Nav from "./nav";
 
 type layout= {
     children:React.ReactNode;
-    header?:boolean|null;
-    footer?:boolean|null;
-    nav?:boolean|null;
-    all?:boolean|null;
+    header?:boolean;
+    headerLogo?:string;
+    footer?:boolean;
+    nav?:boolean;
+    all?:boolean;
 }
 export default function Layout(props:layout) {
     return (
         <div className="layoutControl">
             {
                 props.header || props.all ?
-                <Header /> :null
+                <Header logo={ !!props.headerLogo ? props.headerLogo : null } /> :null
             }
             <Container >
                 {

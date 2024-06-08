@@ -17,7 +17,7 @@ interface LoginBar {
     children:React.ReactElement|string;
     onClick?:(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }
-export default function Header () {
+export default function Header ({logo}:{logo?:string|null}) {
     const rightBarStyle =`font-base text-white text-lg m-1 tracking-tighter w-full max-w-[45px] text-center break-keep `;
     const dispatch =useDispatch();
     const loginToken:any = getCookie('l_token');
@@ -82,7 +82,7 @@ export default function Header () {
             <div className="topContent flex justify-between w-screen z-20 min-h-[60px] pt-2 pb-2 pl-4 pr-4">
                 <div className="leftContent flex">
                     <button className="navBtn flex w-[30px] mr-2 text-3xl" onClick={navEvent}> ☰ </button>
-                    <Logo className={"text-white"} />
+                    <Logo text={ logo } className={"text-white"} />
                 </div>
             
                 <div className="user flex justify-end items-center min-w-[225px] mr-[55px]">

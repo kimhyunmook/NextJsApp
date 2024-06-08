@@ -27,7 +27,6 @@ export default function dbEdit ({params}:{params:{
         
         let body:any = {
             ...value,
-            dbName:params.db
         }
         adminDBInfoEditApi(body)
             .then(res=>{

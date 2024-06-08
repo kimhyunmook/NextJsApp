@@ -25,7 +25,7 @@ export default function Home() {
   },[])
 
   return (
-    <Layout all={true}>
+    <Layout header={true} headerLogo="일반페이지">
       <div className={`${style.absolute_center(5)} w-full`}>
         <SearchForm />
       </div>
