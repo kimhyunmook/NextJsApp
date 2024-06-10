@@ -2,12 +2,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MongoClient, ObjectId } from "mongodb";
 import { ResultMsg } from "@/app/api/route";
+import util from "@/app/util/utils";
 
 
 export async function POST(request:Request){
   const data = await request.json();
   const uri:any = process.env.NEXT_PUBLIC_MONGO;
   const client = new MongoClient(uri);
+  const utils = util();
 
   let query:any = ''
   let result:ResultMsg ={
@@ -18,9 +20,10 @@ export async function POST(request:Request){
         try {
           await client.connect();
           const db = client.db(data.database_name)
+          const todate = new Date();
           query = {
             ...data,
-            create_date:new Date()
+            fix_date:utils.getDate(todate)
           }
           delete query.dbName;
           delete query._id;

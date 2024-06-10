@@ -30,7 +30,7 @@ export default function util() {
             e.currentTarget.value = formattedPhoneNumber;
             return formattedPhoneNumber;
           },
-        getDate: (t:string, type?:string) => {
+        getDate: (t:string|Date, type?:string) => {
             type = type?.toUpperCase();
             const time = new Date(t);
             let year:string|number = time.getFullYear();
