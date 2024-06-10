@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import TYPE from "@/lib/type";
 import { useParams, useRouter } from "next/navigation";
 import util from "@/app/util/utils";
-// import {useRouter} from 'next/router';
+import text from "@/app/language/ko-kr/collection";
 
 type Props = {
     btnStyle?:string;
@@ -30,13 +30,13 @@ export default function CreateLayout(props:Props) {
             <li key={`inputs_${html.length}`} className={`schema flex pt-2 pb-2 mb-2 justify-between`}>
                 <div className={`${boxStyle}`}>
                     <label className={labelStyle} htmlFor="key">
-                        Key
+                        {text.create_2_1}
                     </label>
                     <input className={`${inputStyle} key`} type="text" name="key" id="key" placeholder="Key"/>
                 </div>
                 <div className={`${boxStyle}`}>
                     <label className={labelStyle} htmlFor="labelName">
-                        Label name
+                        {text.create_2_2}
                     </label>
                     <input className={`${inputStyle} labelName`} type="text" name="labelName" id="labelName" placeholder="Label Name"/>
                 </div>

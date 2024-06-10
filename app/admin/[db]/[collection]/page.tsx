@@ -40,7 +40,8 @@ export default function AdminDataTable (props:Props) {
     const renameInput = useRef(null);
     const router = useRouter();
     const utils = util();
-    const [errorMsg,setErrorMsg] = useState(true);    
+    const [errorMsg,setErrorMsg] = useState(true);
+    const [des, setDes] = useState('');
 
     useEffect(()=>{
         let body = {
@@ -53,6 +54,8 @@ export default function AdminDataTable (props:Props) {
     useEffect(()=>{
         if (!!datas) {
             delete datas.label.userPw;
+            setDes(datas.label.description);
+            delete datas.label.description;
             const keys = datas.label;
             setKey(Object.keys(keys));
             setLabel(Object.values(keys));
@@ -162,7 +165,7 @@ export default function AdminDataTable (props:Props) {
     return(
         <>
             <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden pb-[100px]`}>
-                <li className={`flex items-end ${title} relative`}>
+                <li className={`flex items-end text-5xl font-black mb-3 relative`}>
                     {
                         rename ?
                         <input type="text" ref={renameInput} className="border transition max-w-[200px] pl-2 rounded-md" value={renameValue} onChange={reNameValue}/>:
@@ -174,13 +177,24 @@ export default function AdminDataTable (props:Props) {
                         errorMsg ? null :<ErrorMsg text="영어와 숫자만 입력해주세요" />
                     }
                     {
+                        params.db !== 'users' ?
+                        <button className="text-base ml-2 text-green-300" onClick={reName}>
+                                <MyIcons className="" icon={'wrench'} tooltip={'Collection 이름 수정'}/>
+                        </button> 
+                        :null
+                    }
+                  
+                </li>
+                <li className={`mb-4 flex items-center text-enter pl-3 relative`}>
+                    <MyIcons icon={'exclamation'} />
+                    <p className="ml-2 text-xl">
+                        { des }
+                    </p>
+                    {
                         // buttons
                         params.db !== 'users' ?
                         <>
-                            <button className="text-base ml-2 text-green-300" onClick={reName}>
-                                <MyIcons className="" icon={'wrench'} tooltip={'Collection 이름 수정'}/>
-                            </button>
-                            <div className="absolute right-4 flex justify-center text-center">
+                            <div className="absolute right-2 flex justify-center text-center">
                                 <BtnEl href={`/admin/${params.db}/${params.collection}/insert`} icon={'pen'} tooltip="Data 입력" />
                                 <BtnEl href={`/admin/${params.db}/${params.collection}/collectionEdit`} icon={'fix'} tooltip="Collection 수정" />
                             </div>

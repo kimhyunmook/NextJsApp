@@ -648,6 +648,10 @@ video {
   top: 35%;
 }
 
+.right-2 {
+  right: 0.5rem;
+}
+
 .z-10 {
   z-index: 10;
 }

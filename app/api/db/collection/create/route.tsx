@@ -41,6 +41,7 @@ export async function POST(request:Request){
             }
             let schema:Schema = {
               key_index:0,
+              description:data.collectionDescription,
               create_date:date
             }
             await db.createCollection(data.collectionName)

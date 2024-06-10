@@ -9,6 +9,7 @@ import DeleteLayout from "./delete";
 import FormLayout from "@/app/component/form";
 import { useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
+import text from "@/app/language/ko-kr/collection";
 
 type Props = {
     params:{
@@ -64,15 +65,16 @@ export default function CollectionLayout (props:Props) {
                 overflow={false} 
                 className="relative selectBox" 
                 value={!! target ? target: ''}
-                label="Select the DB you want to create a collection on">
+                label={text.create_1_1}>
                 </Li>
 
-                <Li name="collectionName" label="Collection name" overflow={false} onChange={onlyEnglish}>
+                <Li name="collectionName" label={text.create_1_2} overflow={false} onChange={onlyEnglish}>
                     {
                         errorMsg ? null:
                         <ErrorMsg text="영어만 입력해주세요" />
                     }
                 </Li>
+                <Li name="collectionDescription" label={text.create_1_3} overflow={false}></Li>
             </ul>
             { html }
         </FormLayout>

@@ -1,7 +1,9 @@
 'use client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette, faPen, faWrench, 
-    faUserPlus, faRightToBracket, faRightFromBracket, faUser,faArrowRightToBracket, faArrowRightFromBracket , faHammer } from '@fortawesome/free-solid-svg-icons';
+    faUserPlus, faRightToBracket, faRightFromBracket, faUser,faArrowRightToBracket, faArrowRightFromBracket , faHammer, 
+    faExclamation,
+    faExclamationCircle} from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from 'react';
 import Tooltip from '../tooltip';
@@ -42,11 +44,13 @@ export default function MyIcons (props:myIcons) {
                 break;
             case 'fix' : setFont(faHammer);
                 break;
+            case 'exclamation' :setFont(faExclamationCircle);
+                break;
         }
     },[])
 
     return (
-        <b className={`myIcon`}>
+        <b className={!!props.tooltip ?`myIcon`:''}>
             <FontAwesomeIcon className={`${props.className}`} icon={fontawesomeProps} />
             {
                 !!props.tooltip ?

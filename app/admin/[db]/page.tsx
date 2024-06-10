@@ -200,7 +200,9 @@ export function DBInfoList ({dbName,type}:
         adminDBInfoApi(body)
             .then((res:any)=>{
                 if (res.ok) {
-                    res.msg.create_date = utils.getDate(res.msg.create_date)
+                    res.msg.create_date = utils.getDate(res.msg.create_date);
+                    if (type ==='edit')
+                    delete res.msg.fix_date;
                     const keys:any = {
                         key: Object.keys(res.msg),
                         value: Object.values(res.msg)
@@ -275,6 +277,8 @@ function convert (t:string) {
             return 'DB 설명';
         case 'create_date':
             return '생성 날짜';
+        case 'fix_date': 
+            return '수정 날짜';
         default : 
             return t;
     }
