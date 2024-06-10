@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import { ResultMsg } from "../../route";
-import { usercollection, userdb } from "../../env";
+import { usercollection, userdb,noList } from "../../env";
 
 export type homeUser = {
   userId:string;
@@ -27,7 +27,7 @@ export async function POST(request:Request){
         //   const db = client.db(data.dbName)
           const adminDb = client.db('admin');
           const dbList = await adminDb.admin().listDatabases();
-          const noList = ['local','sample_mflix','admin','users']
+          // const noList = ['local','sample_mflix','admin','users']
           let { newDB, newCollection,newUser}:{
             newDB:any;
             newCollection:any;
@@ -43,12 +43,13 @@ export async function POST(request:Request){
             !noList.some(noDb => noDb === db.name)
           );
 
-          console.log(dbList2);
           const InfoPromises = await dbList2.map(async (c,i:number)=>{
             const client2 = new MongoClient(uri);
             await client2.connect();
-            const db2 = client2.db(c.name);
+            const db2 = await client2.db(c.name);
             const data = await db2.collection('DB_Info').findOne({database_name:c.name});
+            // database delete
+            delete data?.fix_date;
 
             //collection
             let collection = await db2.listCollections().toArray();
@@ -58,7 +59,7 @@ export async function POST(request:Request){
 
                 const client3 = new MongoClient(uri);
                 await client2.connect();
-                const db3 = client3.db(c.name)
+                const db3 = await client3.db(c.name)
                 const find = await db3.collection(name).findOne({key_index:0});
                 await client3.close();
                 return {
@@ -82,6 +83,7 @@ export async function POST(request:Request){
           const userColl = await usersDB.collection(usercollection);
           let userArr = await userColl.find().sort({key_index:-1}).limit(5).toArray();
           newUser = userArr.map((v:any,i)=> {
+            // delete userInfo
             delete v.key_index;
             delete v._id;
             delete v.userPw;
@@ -114,6 +116,7 @@ export async function POST(request:Request){
             newCollection,
             newUser
           };
+          // console.log(result.msg)
         } 
         catch(error:any) {
             if (error.message.includes('not authorized on admin to execute command')) {

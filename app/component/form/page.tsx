@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
-import Btn from "../component/button";
-import { title } from "../util/style";
+import Btn from "../button";
+import { title } from "../../util/style";
 import { useRouter } from "next/navigation";
 import { useParams } from "react-router-dom";
 

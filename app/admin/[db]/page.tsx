@@ -229,7 +229,7 @@ export function DBInfoList ({dbName,type}:
                             {
                                 type !== 'edit' ? 
                                 <>
-                                    <p className={`w-[30%] break-keep bg-zinc-700 p-4`}> 
+                                    <p className={`w-[30%] min-w-[120px] break-keep bg-zinc-700 p-4`}> 
                                         { convert(v) } 
                                     </p>
                                     <p className="p-4">

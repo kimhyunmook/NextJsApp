@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import util from "@/app/util/utils"
 import { ErrorMsg } from "../../mongodb/collection/[type]/page"
 import MyIcons from "@/lib/fontawsome"
+import text from "@/app/language/ko-kr/collection"
 
 type Props = {
     params:{
@@ -35,8 +36,8 @@ export default function AdminDataTable (props:Props) {
     const storeLoading = useSelector<any>((state)=>state.admin.loading) && list.length > 0
     const [key,setKey] =  useState<any>([]);
     const [label,setLabel] =  useState<any>([]);
-    const  [rename,setRename] = useState(false);
-    const  [renameValue,setRenameValue] = useState<any>(null);
+    const [rename,setRename] = useState(false);
+    const [renameValue,setRenameValue] = useState<any>(null);
     const renameInput = useRef(null);
     const router = useRouter();
     const utils = util();
@@ -54,7 +55,9 @@ export default function AdminDataTable (props:Props) {
     useEffect(()=>{
         if (!!datas) {
             delete datas.label.userPw;
-            setDes(datas.label.description);
+            if (!!datas.label.description)
+                setDes(datas.label.description);
+            else setDes(text.description_null_1);
             delete datas.label.description;
             const keys = datas.label;
             setKey(Object.keys(keys));
@@ -124,7 +127,6 @@ export default function AdminDataTable (props:Props) {
                     newCollectionName:renameValue,
                 }
                 adminCollectionRename(body).then(res=>{
-                    console.log(res);
                     if(res.ok) {
                         router.push(`/admin/${params.db}/${renameValue}`)
                     }
@@ -185,11 +187,13 @@ export default function AdminDataTable (props:Props) {
                     }
                   
                 </li>
-                <li className={`mb-4 flex items-center text-enter pl-3 relative`}>
-                    <MyIcons icon={'exclamation'} />
-                    <p className="ml-2 text-xl">
-                        { des }
-                    </p>
+                <li className={`mb-4 flex text-enter pl-3 relative`}>
+                    <div className="flex items-center bg-gray-700 pr-2 pl-2 rounded-md">
+                        <MyIcons icon={'exclamation'} />
+                        <p className="ml-2 text-xl">
+                            { des }
+                        </p>
+                    </div>
                     {
                         // buttons
                         params.db !== 'users' ?

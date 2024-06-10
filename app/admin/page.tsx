@@ -10,7 +10,7 @@ import { homeUser } from "../api/db/home/route";
 type Props = {
 
 }
-const [dblabel,colllabel,userlabel]:[any,any,homeUser] = [
+const [dblabel,colllabel,userlabel]:[{},{},homeUser] = [
     {
         database_name:'DB 이름',
         create_date:'생성날짜',
@@ -129,10 +129,11 @@ function Box ({children,title,className,label,list,full,link=true}:{children?:an
                                         }
                                         else {
                                             return(
-                                                <div {...att}>
+                                                <div {...att} 
+                                                    key={`${v2}_${i2}`}
+                                                >
                                                     <Link
                                                         href={href}
-                                                        key={`${v2}_${i2}`}
                                                     >
                                                         { v2 }
                                                     </Link>

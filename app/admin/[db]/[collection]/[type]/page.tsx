@@ -1,5 +1,5 @@
 "use client"
-import FormDefault from "@/app/form/page";
+import FormDefault from "@/app/component/form/page";
 import util from "@/app/util/utils";
 import { ReactElement, useEffect, useState } from "react";
 import { adminDataInertApi, adminDataEditApi } from "@/lib/api/adminApi";
