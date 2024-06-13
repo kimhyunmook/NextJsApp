@@ -16,7 +16,7 @@ export default function Loading(props:Props) {
         else {
             setLoading(props.loading); 
         }
-        // 최대 로딩 4초;
+        // 최대 로딩 4초
         setTimeout(()=>{
             setLoading(false);
         },4000)

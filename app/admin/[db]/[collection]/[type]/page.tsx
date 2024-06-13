@@ -6,7 +6,7 @@ import { adminDataInertApi, adminDataEditApi } from "@/lib/api/adminApi";
 import Loading from "@/app/loadingg";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import CollectionEdit from "./collectionEdit";
+import CollectionEdit from "./infoedit";
 type Props = {
     params:{
         db:string;
@@ -77,7 +77,7 @@ export default function CollectionType (props:Props) {
                         </FormDefault>
                     )
                     break;
-                case 'collectionEdit' :
+                case 'infoedit' :
                     setHtml(<CollectionEdit params={params} obj={obj} />)
                     break;
                     

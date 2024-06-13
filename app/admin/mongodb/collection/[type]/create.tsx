@@ -9,40 +9,34 @@ import TYPE from "@/lib/type";
 import { useParams, useRouter } from "next/navigation";
 import util from "@/app/util/utils";
 import text from "@/app/language/ko-kr/collection";
+import ErrorMsg from "@/app/component/errorMsg";
 
 type Props = {
     btnStyle?:string;
     title?:string;
-    data?:any
+    data?:{};
+    submit? :any;
 }
 export default function CreateLayout(props:Props) {
     const[html,setHtml] = useState<any>([]);
+
     const dispatch = useDispatch();
     const router = useRouter();
+  
+    useEffect(()=>{
+        if (!!props.data) {
+            const [key, value] = [Object.keys(props.data),Object.values(props.data)]
+            const t = key.reduce((a:any,c,i)=>{
+                a.push(<NewInput k={c} v={value[i]} key={`${c}_${i}`} />)
+                return a;
+            },[])
+            setHtml(t)
+        }
+    },[props.data]);
 
     function add(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
-        const boxStyle =`w-[49%] min-h-[40px] border border-bule-500`
-        const labelStyle =`hidden`
-        const inputStyle = `w-full h-full pl-2`
-      
-        const newInput = (
-            <li key={`inputs_${html.length}`} className={`schema flex pt-2 pb-2 mb-2 justify-between`}>
-                <div className={`${boxStyle}`}>
-                    <label className={labelStyle} htmlFor="key">
-                        {text.create_2_1}
-                    </label>
-                    <input className={`${inputStyle} key`} type="text" name="key" id="key" placeholder="Key"/>
-                </div>
-                <div className={`${boxStyle}`}>
-                    <label className={labelStyle} htmlFor="labelName">
-                        {text.create_2_2}
-                    </label>
-                    <input className={`${inputStyle} labelName`} type="text" name="labelName" id="labelName" placeholder="Label Name"/>
-                </div>
-            </li>
-        )
-        setHtml((prev:any) => [...prev,newInput])
+        setHtml((prev:any) => [...prev,<NewInput  key={`inputs_${html?.length}`}/>])
     }
     function remove(index:number) {
         setHtml((prev:any)=> prev.filter((_:any, i:number) => i !== index));
@@ -89,7 +83,7 @@ export default function CreateLayout(props:Props) {
         }
         await axios.post('/api/db/collection/create',body)
             .then(res=>{
-                if(res.data.ok) {
+                if (res.data.ok) {
                     alert('Collection이 생성 되었습니다.')
                     let body = {
                         bodyType:"collection",
@@ -104,6 +98,8 @@ export default function CreateLayout(props:Props) {
                 }
             })
     }
+
+
     return (
         <div className="createLayout">
                 <h2 className={title}>
@@ -125,11 +121,11 @@ export default function CreateLayout(props:Props) {
                         -
                     </Btn>
                 </li>
-                {html}
+                { html } 
                 {
                     html.length > 0 ?
                     <li>
-                        <Btn onClick={submit}>
+                        <Btn onClick={!!props.submit ? props.submit : submit}>
                             submit
                         </Btn>
                     </li> : null
@@ -137,4 +133,48 @@ export default function CreateLayout(props:Props) {
             </ul>
         </div>
     )
+}
+
+function NewInput ({ k, v }:{k?:any, v?:any}) {
+    const [errorMsg,setErrorMsg] = useState(true);
+    const utils = util();
+    const labelStyle =`hidden`;
+    const inputStyle = `w-full h-full pl-2`;
+    const boxStyle =`w-[49%] min-h-[40px] border border-bule-500 relative ${errorMsg ? '' : 'mb-4'}`;
+
+    function onlyEnglish (e:React.ChangeEvent<HTMLInputElement>) {
+        e.preventDefault();
+
+        const input = e.currentTarget;
+        if (input) {
+            if (!utils.only(input.value)) {
+                setErrorMsg(false);
+                e.currentTarget.value = input.value.slice(0,-1) 
+            } else {
+                setErrorMsg(true);
+            }
+        }
+    }
+
+    return (
+        <li className={`schema flex pt-2 pb-2 mb-2 justify-between`}>
+            <div className={`${boxStyle} `}>
+                <label className={labelStyle} htmlFor="key">
+                    {text.create_2_1}
+                </label>
+                <input className={`key ${inputStyle}`} type="text" defaultValue={!!k ? k : ''} name="key" id="key" placeholder={`${text.create_2_1}`} onChange={onlyEnglish}/>
+                {
+                    errorMsg ? null : 
+                    <ErrorMsg text='영어와 숫자만 입력해주세요'/>
+                }
+            </div>
+            <div className={`${boxStyle}`}>
+                <label className={labelStyle} htmlFor="labelName">
+                    {text.create_2_2}
+                </label>
+                <input className={`labelName ${inputStyle}`} type="text" defaultValue={!!v ? v : ''} name="labelName" id="labelName" placeholder={`${text.create_2_2}`} />
+            </div>
+        </li>
+    )
+
 }

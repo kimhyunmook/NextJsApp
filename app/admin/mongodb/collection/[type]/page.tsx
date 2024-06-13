@@ -10,6 +10,7 @@ import FormLayout from "@/app/component/form";
 import { useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
 import text from "@/app/language/ko-kr/collection";
+import ErrorMsg from "@/app/component/errorMsg";
 
 type Props = {
     params:{
@@ -68,10 +69,12 @@ export default function CollectionLayout (props:Props) {
                 label={text.create_1_1}>
                 </Li>
 
-                <Li name="collectionName" label={text.create_1_2} overflow={false} onChange={onlyEnglish}>
+                <Li name="collectionName" className={ errorMsg ? '' : 'flex-wrap mb-[30px] transition'} label={text.create_1_2} overflow={false} onChange={onlyEnglish}>
                     {
                         errorMsg ? null:
-                        <ErrorMsg text="영어만 입력해주세요" />
+                        <div>
+                            <ErrorMsg text="영어만 입력해주세요" />
+                        </div>
                     }
                 </Li>
                 <Li name="collectionDescription" label={text.create_1_3} overflow={false}></Li>
@@ -81,10 +84,10 @@ export default function CollectionLayout (props:Props) {
     )
 }
 
-export function ErrorMsg ({text}:{text:string}) {
-    return (
-        <h3 className="absolute top-full left-0 mt-1 text-sm text-red-400">
-            {text} 
-        </h3>
-    )
-}
+// export function ErrorMsg ({text}:{text:string}) {
+//     return (
+//         <h3 className="absolute top-full left-0 mt-1 text-sm text-red-400">
+//             { text } 
+//         </h3>
+//     )
+// }

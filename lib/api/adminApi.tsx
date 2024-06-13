@@ -73,3 +73,18 @@ export async function adminCollectionRename (body:collectionInit) {
         .then(res=>res.data);
     return res;
 }
+export type collectionInfoEdit = {
+    dbName:string,
+    collectionName:string,
+    description:string,
+    key:string[],
+    labelName:string[],
+}
+/** 
+ * /api/db/collection/infoeidt
+*/
+export async function adminCollectionInfoEdit (body:collectionInfoEdit) {
+    const res = await axios.put(`/api/db/collection/infoedit`,body)
+        .then(res=>res.data)
+    return res;
+}

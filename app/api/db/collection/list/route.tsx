@@ -23,9 +23,7 @@ export async function POST(request:Request){
             }
             await client.connect();
             const db = client.db(data.dbName);
-            console.log(data);
             const collection = await db.collection(data.collectionName);
-            console.log(data)
             query = { key_index: 0 };
             const label:any =  await collection.findOne(query);
             let list: any = await collection.find().sort({key_index: -1}).limit(50).toArray();

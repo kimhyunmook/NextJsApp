@@ -8,7 +8,7 @@ import { adminDataDeleteApi, collectionReName, adminCollectionRename } from "@/l
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import util from "@/app/util/utils"
-import { ErrorMsg } from "../../mongodb/collection/[type]/page"
+import ErrorMsg from "@/app/component/errorMsg"
 import MyIcons from "@/lib/fontawsome"
 import text from "@/app/language/ko-kr/collection"
 
@@ -200,7 +200,7 @@ export default function AdminDataTable (props:Props) {
                         <>
                             <div className="absolute right-2 flex justify-center text-center">
                                 <BtnEl href={`/admin/${params.db}/${params.collection}/insert`} icon={'pen'} tooltip="Data 입력" />
-                                <BtnEl href={`/admin/${params.db}/${params.collection}/collectionEdit`} icon={'fix'} tooltip="Collection 수정" />
+                                <BtnEl href={`/admin/${params.db}/${params.collection}/infoedit`} icon={'fix'} tooltip="Collection 수정" />
                             </div>
                         </>
                         :null

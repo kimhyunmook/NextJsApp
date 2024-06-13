@@ -704,6 +704,10 @@ video {
   margin-bottom: 1.75rem;
 }
 
+.mb-\[40px\] {
+  margin-bottom: 40px;
+}
+
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -754,6 +758,14 @@ video {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mb-\[35px\] {
+  margin-bottom: 35px;
+}
+
+.mb-\[30px\] {
+  margin-bottom: 30px;
 }
 
 .block {
@@ -892,6 +904,10 @@ video {
   width: 100vw;
 }
 
+.min-w-\[120px\] {
+  min-width: 120px;
+}
+
 .min-w-\[20\%\] {
   min-width: 20%;
 }
@@ -914,14 +930,6 @@ video {
 
 .min-w-\[55px\] {
   min-width: 55px;
-}
-
-.min-w-\[120px\] {
-  min-width: 120px;
-}
-
-.min-w-\[120\] {
-  min-width: 120;
 }
 
 .max-w-\[100px\] {
@@ -1079,10 +1087,6 @@ video {
   border-radius: 0.125rem;
 }
 
-.rounded-xl {
-  border-radius: 0.75rem;
-}
-
 .rounded-r-none {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -1166,14 +1170,14 @@ video {
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
-.bg-gray-400 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
-}
-
 .bg-gray-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+}
+
+.bg-gray-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }
 
 .bg-green-400 {
@@ -1224,36 +1228,6 @@ video {
 .bg-zinc-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(24 24 27 / var(--tw-bg-opacity));
-}
-
-.bg-gray-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-}
-
-.bg-gray-900 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-}
-
-.bg-gray-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-}
-
-.bg-gray-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
-}
-
-.bg-green-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(21 128 61 / var(--tw-bg-opacity));
-}
-
-.bg-green-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 101 52 / var(--tw-bg-opacity));
 }
 
 .bg-\[url\(\'\/img\/loginbg\.jpg\'\)\] {
@@ -1549,5 +1523,17 @@ video {
 @media (min-width: 768px) {
   .md\:max-w-\[1200px\] {
     max-width: 1200px;
+  }
+
+  .md\:max-w-\[1000px\] {
+    max-width: 1000px;
+  }
+
+  .md\:max-w-\[800px\] {
+    max-width: 800px;
+  }
+
+  .md\:max-w-\[600px\] {
+    max-width: 600px;
   }
 }
