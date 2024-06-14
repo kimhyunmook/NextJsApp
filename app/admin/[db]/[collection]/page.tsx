@@ -163,7 +163,7 @@ export default function AdminDataTable (props:Props) {
         )
 
     }
-
+    const renameCondition = errorMsg || !rename;
     return(
         <>
             <ul className={`dataTable m-auto w-[90%] mt-4 overflow-hidden pb-[100px]`}>
@@ -176,7 +176,7 @@ export default function AdminDataTable (props:Props) {
                         </h2>
                     }
                     {
-                        errorMsg ? null :<ErrorMsg className="" text="영어와 숫자만 입력해주세요" />
+                        renameCondition ? null :<ErrorMsg className="" text="영어와 숫자만 입력해주세요" />
                     }
                     {
                         params.db !== 'users' ?
@@ -187,7 +187,7 @@ export default function AdminDataTable (props:Props) {
                     }
                   
                 </li>
-                <li className={`mb-4 flex text-enter pl-3 relative ${errorMsg ? '': 'mt-8'}`}>
+                <li className={`mb-4 flex text-enter pl-3 relative ${renameCondition ? '': 'mt-8'}`}>
                     <div className="flex items-center bg-gray-700 pr-2 pl-2 rounded-md">
                         <MyIcons icon={'exclamation'} />
                         <p className="ml-2 text-xl">

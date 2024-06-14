@@ -79,3 +79,9 @@ https://github.com/kimhyunmook/NextJsApp/assets/71058188/eab63403-fd2c-4430-9f42
 - data 입력, 수정, 삭제
 <br />
 <br />
+
+### Collection 이름 변경
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/d11e6f62-c292-404b-83c5-cb610344d054
+- 한글, 특수문자, 빈칸 입력 방지
+<br />
+<br />
