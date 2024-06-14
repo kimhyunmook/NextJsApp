@@ -14,24 +14,37 @@ export async function PUT(request:Request){
     }
       async function run() {
           try {
-            console.log(data);
             const db = await client.db(data.dbName);
-
           
-            const result = data.key.reduce((obj:any, key, index) => {
-              obj[key] = data.labelName[index];
+            const resultContent = data.labelName.reduce((obj:any, key, index) => {
+              obj[`content_${index+1}`] = data.labelName[index];
               return obj;
             }, {});
             const update = {
-              ...result,
+              ...resultContent,
               description:data.description,
             }
-            console.log(update);
-            const col = await db.collection(data.collectionName).updateOne({key_index:0},{$set:update,$unset:{
-              db5:""
-            }})
-            const colInfo = await db.collection(data.collectionName).findOne({key_index:0});
-            console.log(colInfo)
+            
+          
+            const colInfo:any = await db.collection(data.collectionName).findOne({key_index:0});
+            delete colInfo?._id;
+            delete colInfo?.key_index;
+            delete colInfo?.description;
+            delete colInfo?.create_date;
+            delete colInfo?.fix_date;
+
+            const unset = await Object.keys(colInfo).reduce((obj:any, key, index)=>{
+              const some = Object.keys(resultContent).some(x=> x===key)
+              if (!some)
+              obj[`content_${index+1}`] = ''
+              return obj ;
+            },{})
+
+            const col = await db.collection(data.collectionName).updateOne({key_index:0},{$set:update,$unset:unset})
+            delete update.description;
+            delete update.fix_date;
+            const allData = await  db.collection(data.collectionName).updateMany({},{$set:update,$unset:unset})
+
             result.ok = true;
             result.msg = 'Update 되었습니다.'
           } finally {

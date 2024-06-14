@@ -41,7 +41,7 @@ export async function POST(request:Request){
                   }
                   return 0;
                 });
-                console.log(colletionList);
+                // console.log(colletionList);
               result.msg = colletionList;
               break;
             case 'collection_target':

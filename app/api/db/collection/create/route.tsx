@@ -45,8 +45,8 @@ export async function POST(request:Request){
               create_date:date
             }
             await db.createCollection(data.collectionName)
-            data.schema.forEach((item:any)=>{
-              schema[item.keyName] = item.keyLabel ;
+            data.schema.forEach((item:any,index:number)=>{
+              schema[`content_${index+1}`] = item.keyLabel ;
             });
             const collection = await db.collection(data.collectionName);
             await collection.insertOne(schema);

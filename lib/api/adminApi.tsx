@@ -1,5 +1,6 @@
 import axios from "axios";
 
+/** /api/db/home/setting */
 export async function init() {
     const res = await axios.post('/api/db/home/setting').then(res=>res.data);
     return res;
@@ -77,7 +78,7 @@ export type collectionInfoEdit = {
     dbName:string,
     collectionName:string,
     description:string,
-    key:string[],
+    // key:string[],
     labelName:string[],
 }
 /** 

@@ -16,18 +16,27 @@ type Props = {
     title?:string;
     data?:{};
     submit? :any;
+    delete?: boolean;
 }
 export default function CreateLayout(props:Props) {
     const[html,setHtml] = useState<any>([]);
-
     const dispatch = useDispatch();
     const router = useRouter();
-  
+    let delMode = !! props.delete ? {
+        status:props.delete,
+        fnc:deleteSchema
+    } : null;
+    function deleteSchema (e:React.MouseEvent) {
+        e.preventDefault();
+        const target = e.currentTarget.parentNode?.parentNode;
+        if (target instanceof HTMLElement)
+            target.remove();
+    }
     useEffect(()=>{
         if (!!props.data) {
             const [key, value] = [Object.keys(props.data),Object.values(props.data)]
-            const t = key.reduce((a:any,c,i)=>{
-                a.push(<NewInput k={c} v={value[i]} key={`${c}_${i}`} />)
+            const t = key.reduce((a:React.ReactElement[], c, i)=>{
+                a.push(<NewInput k={c} v={value[i]} key={`${c}_${i}`} delMode={delMode} />)
                 return a;
             },[])
             setHtml(t)
@@ -36,7 +45,7 @@ export default function CreateLayout(props:Props) {
 
     function add(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
-        setHtml((prev:any) => [...prev,<NewInput  key={`inputs_${html?.length}`}/>])
+        setHtml((prev:any) => [...prev,<NewInput  key={`inputs_${html?.length}`} delMode={delMode} />])
     }
     function remove(index:number) {
         setHtml((prev:any)=> prev.filter((_:any, i:number) => i !== index));
@@ -44,36 +53,39 @@ export default function CreateLayout(props:Props) {
     async function submit(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
         const arr = (target:string) => Array.from(document.querySelectorAll(target));
-        const keys = arr('.schema .key');
+        // const keys = arr('.schema .key');
         const labelNames = arr('.schema .labelName');
-        type values= {
+        type Values= {
             collectionName:string;
             dbName:string;
         }
-        const values:values = arr('.bodyInfo input').reduce((a,c:any,i)=>{
-            a = {
-                ...a,
-                [c.id]:c.value
-            }
+        const values:Values = arr('.bodyInfo input').reduce((a,c,i)=>{
+            if (c instanceof HTMLInputElement)
+                a = {
+                    ...a,
+                    [c.id]:c.value
+                }
             return a;
         },{
             dbName:'',
             collectionName:''
         });
         
-        const schema= keys.reduce((a:any,c:any,i:number)=>{
-            const labelName = labelNames[i] as HTMLInputElement;
-            if (!!!c.value) {
-                alert('key를 입력해주세요');
-                c.focus();
-                return
+        const schema= labelNames.reduce((a:any,c,i:number)=>{
+            // const labelName = labelNames[i] as HTMLInputElement;
+            if(c instanceof HTMLInputElement) {
+                if (!!!c.value) {
+                    alert('key를 입력해주세요');
+                    c.focus();
+                    return
+                }
+                a.push({keyLabel:c.value})
             }
-            if (!!!labelName.value) {
-                alert('Label Name을 정해주세요');
-                labelName.focus();
-                return;
-            }
-            a.push({keyName:c.value, keyLabel:labelName.value})
+            // if (!!!labelName.value) {
+            //     alert('Label Name을 정해주세요');
+            //     labelName.focus();
+            //     return;
+            // }
             return a;
         },[]);
 
@@ -126,7 +138,7 @@ export default function CreateLayout(props:Props) {
                     html.length > 0 ?
                     <li>
                         <Btn onClick={!!props.submit ? props.submit : submit}>
-                            submit
+                            { text.create_submit }
                         </Btn>
                     </li> : null
                 }
@@ -135,30 +147,16 @@ export default function CreateLayout(props:Props) {
     )
 }
 
-function NewInput ({ k, v }:{k?:any, v?:any}) {
+function NewInput ({ k, v, delMode }:{k?:any, v?:any, delMode?:{status:boolean,fnc:any}|null}) {
     const [errorMsg,setErrorMsg] = useState(true);
     const utils = util();
     const labelStyle =`hidden`;
     const inputStyle = `w-full h-full pl-2`;
-    const boxStyle =`w-[49%] min-h-[40px] border border-bule-500 relative ${errorMsg ? '' : 'mb-4'}`;
-
-    function onlyEnglish (e:React.ChangeEvent<HTMLInputElement>) {
-        e.preventDefault();
-
-        const input = e.currentTarget;
-        if (input) {
-            if (!utils.only(input.value)) {
-                setErrorMsg(false);
-                e.currentTarget.value = input.value.slice(0,-1) 
-            } else {
-                setErrorMsg(true);
-            }
-        }
-    }
+    const boxStyle =`flex w-full min-h-[40px] border border-bule-500 relative ${errorMsg ? '' : 'mb-4'}`;
 
     return (
         <li className={`schema flex pt-2 pb-2 mb-2 justify-between`}>
-            <div className={`${boxStyle} `}>
+            {/* <div className={`${boxStyle} `}>
                 <label className={labelStyle} htmlFor="key">
                     {text.create_2_1}
                 </label>
@@ -167,14 +165,18 @@ function NewInput ({ k, v }:{k?:any, v?:any}) {
                     errorMsg ? null : 
                     <ErrorMsg text='영어와 숫자만 입력해주세요'/>
                 }
-            </div>
+            </div> */}
             <div className={`${boxStyle}`}>
                 <label className={labelStyle} htmlFor="labelName">
-                    {text.create_2_2}
+                    { text.create_2_2 }
                 </label>
                 <input className={`labelName ${inputStyle}`} type="text" defaultValue={!!v ? v : ''} name="labelName" id="labelName" placeholder={`${text.create_2_2}`} />
+                {
+                    delMode?.status ?  
+                    <button className="text-lg w-[7%] bg-blue-400 hover:bg-red-400" onClick={delMode.fnc}> - </button>
+                    :null
+                }
             </div>
         </li>
     )
-
 }

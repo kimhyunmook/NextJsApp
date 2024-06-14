@@ -6,7 +6,8 @@ type CollectionTextKeys =
     | 'create_2_1'
     | 'create_2_2'
     | 'description_null_1'
-    | 'create_des';
+    | 'create_des'
+    | 'create_submit'
 type Collectiontext = Record<CollectionTextKeys,string>;
 const text:Collectiontext = {
     create_title:'Collection 만들기',
@@ -16,6 +17,8 @@ const text:Collectiontext = {
     create_1_3:'Collection 설명',
     create_2_1:'DB Label 이름',
     create_2_2:'Label 이름',
-    description_null_1:'없음'
+    description_null_1:'없음',
+    create_submit:'확인'
+
 }
 export default text;
