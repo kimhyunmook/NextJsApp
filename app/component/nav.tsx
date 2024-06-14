@@ -71,7 +71,7 @@ export default function Nav() {
         dispatch({...body})
     }
     const state = `w-[15px] h-[15px] mr-2 rounded-full`;
-    const select = `transition font-bold bg-green-500 mt-1 mb-1 block max-w-[70%] pl-2 rounded-md`;
+    const select = `transition font-bold bg-green-500 mt-1 mb-1 block max-w-[95%] pl-2 rounded-md`;
     return(
         <nav className="navLeftContent overflow-y-scroll p-2 pr-3 pl-3 w-[225px]">
             <div className="connectState mb-4 bg-zinc-600 p-1 pl-2 max-w-[100px] rounded-md">
@@ -126,7 +126,6 @@ export default function Nav() {
                     </li>
                 }
             </NavBox>
-         
         </nav>
     )
 }
@@ -151,11 +150,11 @@ function NavBox(props:navBox) {
         <div className="navBox w-full mb-2 border-b pb-2">
             <h2 className={'text-xl font-black mb-2 text-white'}>
                 {
-                    !!props.icon ?
+                    !! props.icon ?
                     <FontAwesomeIcon icon={props.icon} className="mr-3 text-base"/>
                     :null
                 }
-                {props.title}
+                { props.title }
             </h2>
             <ul>
                 {
@@ -169,8 +168,7 @@ function NavBox(props:navBox) {
                             </li>
                         )
                     })
-                   :
-                   props.children
+                   : props.children
                 }
             </ul>
         </div>

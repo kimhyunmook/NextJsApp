@@ -100,7 +100,7 @@ function InputLi(props:InputProps) {
 
     async function fixInput (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
-        if(!fix){
+        if (!fix){
             setFix(true)
         }
         else {

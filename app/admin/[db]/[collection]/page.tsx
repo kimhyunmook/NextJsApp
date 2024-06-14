@@ -256,7 +256,7 @@ export default function AdminDataTable (props:Props) {
                                         <button onClick={etcHandle}>
                                             ☰
                                         </button>
-                                        <div className={`buttonDom`}>
+                                        <div className={`buttonDom max-h-[35px]`}>
                                             <button className="edit" onClick={btnHandle}>
                                                 ✍🏻
                                             </button>
