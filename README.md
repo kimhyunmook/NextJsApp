@@ -14,7 +14,7 @@ NextJs(typescript) tailwindCSS Redux mongodb
 ![스크린샷 2024-06-14 175517](https://github.com/kimhyunmook/NextJsApp/assets/71058188/982e0b1b-7c00-4831-bc60-5758a63dd820) <br />
 - 회원가입, 로그인 버튼의 모습
 
-https://github.com/kimhyunmook/NextJsApp/assets/71058188/dd6a3cec-2835-4ad6-9150-dce21875fdc5 <br/>
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/1b0ab9b9-ee6a-4fa3-92df-ba66e84a9e47
 - 회원가입
 
 https://github.com/kimhyunmook/NextJsApp/assets/71058188/6b24a0af-0ee2-49a2-8fc3-e60fd6827556
