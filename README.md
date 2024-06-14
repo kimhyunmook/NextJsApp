@@ -11,12 +11,14 @@ NextJs(typescript) tailwindCSS Redux mongodb
 실제 사용 모습
 
 ## 회원 가입 
+![스크린샷 2024-06-14 175517](https://github.com/kimhyunmook/NextJsApp/assets/71058188/982e0b1b-7c00-4831-bc60-5758a63dd820) <br />
 - 회원가입, 로그인 버튼의 모습
-![스크린샷 2024-06-14 175517](https://github.com/kimhyunmook/NextJsApp/assets/71058188/982e0b1b-7c00-4831-bc60-5758a63dd820);
-https://github.com/kimhyunmook/NextJsApp/assets/71058188/5acc679d-be68-4ca0-b569-063fc28811bd
 
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/dd6a3cec-2835-4ad6-9150-dce21875fdc5 <br/>
+- 회원가입
 
-https://github.com/kimhyunmook/NextJsApp/assets/71058188/ac34d234-a3ae-4cdb-bb8e-f898352f7b44
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/6b24a0af-0ee2-49a2-8fc3-e60fd6827556
+- 중복 아이디 체크
 
-
-https://github.com/kimhyunmook/NextJsApp/assets/71058188/e73f29cd-e95c-45bf-a147-7d8f4bc0e2e0
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/e97fc138-6e62-4f63-9802-d1911d98fefa
+- 비밀번호 확인
