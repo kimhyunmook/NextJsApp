@@ -74,7 +74,8 @@ https://github.com/kimhyunmook/NextJsApp/assets/71058188/83e23340-c713-48fc-a95b
 - Collection 생성 및 수정
 <br />
 <br />
-https://github.com/kimhyunmook/NextJsApp/assets/71058188/05c5010c-8e99-4b9b-bc8d-76266b44477d
+
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/eab63403-fd2c-4430-9f42-790a403b2ae9
 - data 입력, 수정, 삭제
 <br />
 <br />
