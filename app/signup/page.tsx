@@ -8,6 +8,8 @@ import axios from "axios"
 import { getDate } from "../util/cookie"
 import util from "../util/utils"
 import { set } from "mongoose"
+import { useSelector } from "react-redux"
+import { useRouter } from "next/navigation"
 
 export type userSchema = {
     userId:string;
@@ -30,6 +32,13 @@ function register () {
     const [allChk,setAllChk]= useState(false);
     const [pwConfirm,setPwConfirm] =useState<any>(null)
     const utils = util();
+    const { user, login ,loading, error } = useSelector((state:any) => state.user);
+    const router = useRouter()
+
+    useEffect(()=>{
+        if(login)
+            router.push('/')
+    },[login])
 
     useEffect(()=>{
         if(!!userPw && !!userPw2) {

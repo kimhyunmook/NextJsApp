@@ -54,6 +54,7 @@ export default function login ():React.ReactElement {
     const dispatch = useDispatch()
     const { user, login ,loading, error } = useSelector((state:any) => state.user);
     const router = useRouter()
+
     useEffect(()=>{
         if(login)
             router.push('/')
