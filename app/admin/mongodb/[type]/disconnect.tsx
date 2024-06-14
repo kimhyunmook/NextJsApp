@@ -28,12 +28,10 @@ export default function DisconnectLayout (props:Props) {
         else router.push('/admin')
 
     }
-    // useEffect(()=>{
-    // },[])
    
     return(
         <div className="container relative full-h">
-            <div className={`${absolute_x_center} top-[30%] w-full max-w-[600px]`}>
+            <div className={`${absolute_x_center} top-[30%] w-full max-w-[900px]`}>
                 <h2 className={title+' text-center'}>
                     MongoDB 연결을 해제하시겠습니까?
                 </h2>
@@ -44,7 +42,6 @@ export default function DisconnectLayout (props:Props) {
                     Yes
                 </button>
             </div>
-
         </div>
     )
 }

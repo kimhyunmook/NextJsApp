@@ -54,3 +54,27 @@ https://github.com/kimhyunmook/NextJsApp/assets/71058188/85cd1378-b2ee-4108-b9d1
 
 ### 관리자로 ADMIN 페이지 진입
 https://github.com/kimhyunmook/NextJsApp/assets/71058188/345cb81e-4088-4bb4-9443-d84f959c9f62
+<br />
+<br />
+
+### MAIN 
+![어드민 페이지](https://github.com/kimhyunmook/NextJsApp/assets/71058188/4faff4e3-5d18-44f2-960b-b0e8496b7a34)
+- 새로 생성된 DB, Collection, User을 보여줌
+<br />
+<br />
+
+## DB 
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/2d1134e5-9032-4ff6-ac62-52a855523a12
+- db 생성 및 수정
+<br />
+<br />
+
+## Collection
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/83e23340-c713-48fc-a95b-3418723c17e6
+- Collection 생성 및 수정
+<br />
+<br />
+https://github.com/kimhyunmook/NextJsApp/assets/71058188/05c5010c-8e99-4b9b-bc8d-76266b44477d
+- data 입력, 수정, 삭제
+<br />
+<br />

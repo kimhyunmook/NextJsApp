@@ -13,7 +13,7 @@ export default function ConnectLayout (props:Props) {
     const router = useRouter();
     useEffect(()=>{
         if (!!process.env.NEXT_PUBLIC_MONGO) 
-            router.push('/');
+            router.push('/admin');
     },[process.env.NEXT_PUBLIC_MONGO])
     async function submit (e:React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
@@ -25,7 +25,10 @@ export default function ConnectLayout (props:Props) {
         }
         await mongoConnect({...body})
             .then(async res=>{
-                if (res.ok) alert(res.msg)
+                if (res.ok) {
+                    alert(res.msg)
+                    router.push('/admin');
+                }
         }) 
     }
     if (!!! process.env.NEXT_PUBLIC_MONGO)
