@@ -66,9 +66,11 @@ export default function CollectionLayout (props:Props) {
                 overflow={false} 
                 className="relative selectBox" 
                 value={!! target ? target: ''}
-                label={text.create_1_1}>
+                label={text.create_1_1}
+                type="select"
+                selectOption={db}
+                >
                 </Li>
-
                 <Li name="collectionName" className={ errorMsg ? '' : 'flex-wrap mb-[30px] transition'} label={text.create_1_2} overflow={false} onChange={onlyEnglish}>
                     {
                         errorMsg ? null:
@@ -77,7 +79,11 @@ export default function CollectionLayout (props:Props) {
                         </div>
                     }
                 </Li>
-                <Li name="collectionDescription" label={text.create_1_3} overflow={false}></Li>
+                {
+                    type ==='delete' ? 
+                    null
+                    :<Li name="collectionDescription" label={text.create_1_3} overflow={false}></Li>
+                }
             </ul>
             { html }
         </FormLayout>

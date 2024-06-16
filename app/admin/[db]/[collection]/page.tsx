@@ -170,7 +170,7 @@ export default function AdminDataTable (props:Props) {
                 <li className={`flex items-end text-5xl font-black mb-3 relative`}>
                     {
                         rename ?
-                        <input type="text" ref={renameInput} className="border transition max-w-[200px] pl-2 rounded-md" value={renameValue} onChange={reNameValue}/>:
+                        <input type="text" ref={renameInput} className="border transition max-w-[300px] pl-2 rounded-md" value={renameValue} onChange={reNameValue}/>:
                         <h2 className={``}>
                             { params.collection ? utils.firstUppercase(params.collection) : null}
                         </h2>

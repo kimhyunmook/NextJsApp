@@ -1,5 +1,5 @@
 import TYPE from "@/lib/type";
-interface State {
+export interface AdminReducer {
   navDB?: navData | null;
   navCollection?: navData | null;
   datas?:adminListDatas | null | any;
@@ -15,7 +15,7 @@ export interface adminListDatas {
   label: {}
 }
 
-const initialState:State = {
+const initialState:AdminReducer = {
   navDB: null,
   navCollection:null,
   datas:null,
@@ -23,7 +23,7 @@ const initialState:State = {
   error: null,
 };
 
-const adminReducer = (state = initialState, action: any): State => {
+const adminReducer = (state = initialState, action: any): AdminReducer => {
   const nav = TYPE('admin_nav')
   const nav_collection = TYPE('admin_nav_collection')
   const data = TYPE('admin_collection_target');

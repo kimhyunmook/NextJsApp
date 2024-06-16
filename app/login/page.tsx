@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import Btn from "../component/button";
-import { absolute_center, absolute_y_center, flex_center, mobile_box, onepage, title } from "../util/style";
+import style, { absolute_center, absolute_y_center, flex_center, mobile_box, onepage, title } from "../util/style";
 import { useDispatch,useSelector } from "react-redux";
 import TYPE from "@/lib/type";
 import Logo from "../component/logo";
@@ -15,17 +15,18 @@ export type liType = {
     children?:any;
     type?:string;
     value?:string;
-    onChange?:React.ChangeEventHandler<HTMLInputElement>
+    onChange?:React.ChangeEventHandler<HTMLElement>
     maxLength?:number;
     autoComplete?:string
     overflow?:boolean;
     error?:boolean;
+    selectOption?:any[];
 }
 export function Li(props:liType):React.ReactElement{
     let round = `rounded-sm`;
     let overflow = !!! props.overflow ? '' : 'overflow-hidden';
     if(!!props.children) round +=` rounded-r-none `
-    const liStlye = ` w-full relative flex justify-between mb-3 mt-3 border border-blue-300 ${overflow} ${round} ${props.className} `;
+    const liStlye = ` w-full relative flex justify-between mb-3 mt-3 border-2 ${style.green_border} ${overflow} ${round} ${props.className} `;
     let att = {
         type:!!props.type ? props.type :"text",
         id:props.name, 
@@ -39,9 +40,28 @@ export function Li(props:liType):React.ReactElement{
 
    return(
      <li className={liStlye}>
-        <input className={`${props.name} w-full h-10 p-3 ${round} `} 
-        {...att}
-        />
+        {
+            props.type ==='select' ? 
+            <select className={`${props.name} w-full h-10 pl-3 ${round}`}
+            id={props.name}
+            name={props.name}
+            onChange={props.onChange}
+            defaultValue={props.value}
+            >
+                {
+                    props.selectOption?.map((v)=>{
+                        return(
+                            <option defaultValue={v.name} key={v.name} className="block text-xl">
+                                {v.name}
+                            </option>
+                        )
+                    })
+                }
+            </select>:
+            <input className={`${props.name} w-full h-10 p-3 ${round} `} 
+            {...att}
+            />
+        }
         {props.children}
      </li>
    ) 

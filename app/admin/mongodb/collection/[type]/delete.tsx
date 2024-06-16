@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import TYPE from "@/lib/type";
 import Btn from "@/app/component/button";
 import { useRouter } from "next/navigation";
-import { adminCollectionDelete, collectionDelete } from "@/lib/api/adminApi";
+import { adminCollectionDelete, collectionInit } from "@/lib/api/adminApi";
 
-export function CollectionDelete (data:collectionDelete, callback?:()=>void) {
+export function CollectionDelete (data:collectionInit, callback?:()=>void) {
     if (window.confirm('삭제하시겠습니까?')) {
         adminCollectionDelete(data)
             .then(res => {
@@ -27,7 +27,7 @@ export default function DeleteLayout() {
         e.preventDefault();
         const arr = (target:string) => Array.from(document.querySelectorAll(target));
   
-        const values:collectionDelete = arr('.bodyInfo input').reduce((a,c:any,i)=>{
+        const values:collectionInit = arr('.bodyInfo input').reduce((a,c:any,i)=>{
             a = {
                 ...a,
                 [c.id]:c.value

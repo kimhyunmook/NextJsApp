@@ -1,8 +1,9 @@
 import style, { title } from "../util/style"
 import Btn from "./button"
+import Title from "./title";
 type Props = {
     children:React.ReactNode;
-    title:string|null;
+    title:string;
     onClick:React.MouseEventHandler<HTMLButtonElement> | null
     id:string;
 }
@@ -10,9 +11,7 @@ export default function FormLayout(props:Props) {
 
     return(
         <form className={style.formDefault} id={props.id}>
-            <h2 className={title}>
-                { props.title }
-            </h2>
+            <Title text={props.title}/>
             { props.children } 
             {
                 !!props.onClick ?

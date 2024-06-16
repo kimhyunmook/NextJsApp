@@ -11,7 +11,6 @@ NextJs(typescript) tailwindCSS Redux mongodb
 실제 사용 모습
 
 ## 회원 가입 
-<br/>
 
 ### 회원가입, 로그인 버튼
 ![스크린샷 2024-06-14 175517](https://github.com/kimhyunmook/NextJsApp/assets/71058188/982e0b1b-7c00-4831-bc60-5758a63dd820) <br />

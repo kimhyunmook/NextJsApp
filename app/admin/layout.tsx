@@ -25,12 +25,26 @@ export default function AdminLayout ({children}:{
                 children : 
                 <div className={`noscroll w-full h-full text-center flex-wrap ${flex_center} text-3xl`} >
                     <div>
-                        <h2 className="w-full font-black text-4xl mb-1">
-                            어드민 로그인 필요 
-                        </h2>
-                        <Link href={'/login'} className="w-full text-blue-300 text-2xl hover:border-b-2 hover:text-blue-500 border-blue-500 pb-[1px]">
-                            To Login
-                        </Link>
+                        {
+                            !! user ?
+                            <>
+                                <h2 className="w-full font-black text-4xl mb-1">
+                                    어드민 권한 필요 (권한 없음)
+                                </h2>
+                                <Link href={'/'} className="w-full text-blue-300 text-2xl hover:border-b-2 hover:text-blue-500 border-blue-500 pb-[1px]">
+                                    To Home
+                                </Link>
+                            </>
+                            :
+                            <>
+                                <h2 className="w-full font-black text-4xl mb-1">
+                                    어드민 로그인 필요 
+                                </h2>
+                                <Link href={'/login'} className="w-full text-blue-300 text-2xl hover:border-b-2 hover:text-blue-500 border-blue-500 pb-[1px]">
+                                    To Login
+                                </Link>
+                            </>
+                        }
                     </div>
                 </div> 
             }

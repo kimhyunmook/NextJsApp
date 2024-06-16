@@ -57,35 +57,35 @@ export default function homeAdmin(props:Props) {
         });
     },[])
     return(
-        <Loading loading={null}>
-            <div className="p-4 m-auto md:max-w-[1200px]">
-                <h2 className={title}>
+        <div className="p-4 m-auto md:max-w-[1200px]">
+            <div className="title flex flex-wrap">
+                <h2 className={`${title}`}>
                     ADMIN PAGE
                 </h2>
-                <div className="contentbox flex flex-wrap justify-between">
-                    <Box title={'New Database'} label={dblabel} list={newdb}></Box>
-                    <Box title={'New Collection'} label={colllabel} list={newcollection}></Box>
-                    <Box title={'New USER'} label={userlabel} list={newuser} full={true} link={false}></Box>
-                </div>
             </div>
-        </Loading>
+            <div className="contentbox flex flex-wrap justify-between">
+                <Box title={'New Database'} label={dblabel} list={newdb}></Box>
+                <Box title={'New Collection'} label={colllabel} list={newcollection}></Box>
+                <Box title={'New USER'} label={userlabel} list={newuser} full={true} link={false}></Box>
+            </div>
+        </div>
     )
 }
 
 
-function Box ({children,title,className,label,list,full,link=true}:{children?:any,title:string,className?:string,label?:{},list:any[],full?:boolean,link?:boolean}) {
+function Box ({children,title,className,label,list,full,link=true}:{children?:any,title:string|React.ReactElement,className?:string,label?:{},list:any[],full?:boolean,link?:boolean}) {
     label = !!label ? label : {}; 
     full = !!full ? full : false;
     const labelValues = Object.values(label);
     const utils = util();
     return (
-        <ul className={`box max-w-full  ${full ? `w-full`:`w-[46%]`} m-[2%] ${className}`}>
+        <ul className={`box max-w-full  ${full ? `w-full`:`w-[48%]`} p-[1%] m-[1%] rounded-xl ${className} bg-white`}>
             <li>
-                <h2 className={`text-xl font-black mb-2`}>
+                <h2 className={`text-2xl font-black mb-2 text-black`}>
                     { title }
                 </h2>
             </li>
-            <li className={`${flex_center} w-full text-center bg-zinc-700`}>
+            <li className={`label ${flex_center} w-full text-center ${style.green_bg}`}>
                 {
                     labelValues.map((v:any,i)=>{
                         return(
@@ -105,14 +105,14 @@ function Box ({children,title,className,label,list,full,link=true}:{children?:an
                         let value = Object.values(v);
                         let key = Object.keys(v);
                         return (
-                            <li  className="flex" key={`${v}_${i}`}>
+                            <li  className="flex border-b border-black text-black font-blod mb-2 mt-2" key={`${v}_${i}`}>
                                 {
                                     value.map((v2:any,i2)=> {
                                         let style = {
                                             width:`${100/value.length}%`,
                                         }
                                         let att = {
-                                            className:"text-center pt-1 pb-1 p-2 border-b" ,
+                                            className:"text-center pt-1 pb-1 p-2 " ,
                                             style:style
                                         }
                                      

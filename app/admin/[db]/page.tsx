@@ -101,7 +101,7 @@ export default function DBPage (props:Props) {
         })
     }
     let condi = params.db !=='dev' && params.db !=='admin' && params.db !=='users';
-    let link_collection = 'mr-2'
+    let link_btn =`mb-2 mr-1 rounded-xl transition-all p-3 pt-1 pb-1 hover:bg-zinc-800 hover:text-blue-400 hover:font-black hover:border`;
     return (
         <ul className={`${mobile_box} pt-4`}>
             <li>
@@ -114,7 +114,12 @@ export default function DBPage (props:Props) {
                     condi ?
                     controlBtn.map((v,i)=>{
                         return(
-                            <Link key={`${v}_${i}`} href={v} className={`m-2`} onClick={controlBtnHandle}>
+                            <Link 
+                                key={`${v}_${i}`} 
+                                href={v} 
+                                className={link_btn} 
+                                onClick={controlBtnHandle}
+                            >
                                 { utils.firstUppercase(v) }
                             </Link>
                         )
@@ -131,12 +136,14 @@ export default function DBPage (props:Props) {
                         {
                             params.db !=='users' ?
                             <>
-                                <Link className={link_collection} href={`/admin/mongodb/collection/create?target=${params.db}`}>
+                                <Link className={link_btn} href={`/admin/mongodb/collection/create?target=${params.db}`}>
                                     Create
                                 </Link>
-                                <Link className={link_collection} href={'#'} onClick={collectionDelete}>
+                                <Link className={deltriger ?`mb-2 mr-1 rounded-xl transition-all p-3 pt-1 pb-1 bg-zinc-800 text-blue-400 font-black border` :link_btn} href={'#'} onClick={collectionDelete}>
                                     {
-                                        deltriger ? 'Close' : 'Delete'
+                                        deltriger ? 
+                                        'Close' 
+                                        : 'Delete'
                                     }
                                 </Link>
                             </>:
@@ -148,7 +155,7 @@ export default function DBPage (props:Props) {
                         collList.length > 0?
                             collList.map((v:any,i)=>{
                                 return (
-                                    <li key={v.name} className="min-w-[20%] text-center p-2 pr-4 pl-4 rounded-2xl m-2 mt-1 mb-1 text-lg bg-green-500">
+                                    <li key={v.name} className={`min-w-[20%] text-center p-2 pr-4 pl-4 rounded-2xl m-2 mt-1 mb-1 text-lg bg-green-500 ${style.green_bg}`}>
                                         {
                                             deltriger ?
                                             <div className={flex_center}>

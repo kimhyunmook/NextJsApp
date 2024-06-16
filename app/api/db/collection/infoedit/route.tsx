@@ -32,19 +32,34 @@ export async function PUT(request:Request){
             delete colInfo?.description;
             delete colInfo?.create_date;
             delete colInfo?.fix_date;
-
+            console.log(data);
+            console.log(colInfo)
+            const dataUpdate:any = {}
+            const arrCol = Object.keys(colInfo); 
+            if(arrCol.length < data.labelName.length) {
+              for(let i = arrCol.length ; i < data.labelName.length; i++) {
+                dataUpdate[`content_${i+1}`] = 'null'
+              }
+            }
             const unset = await Object.keys(colInfo).reduce((obj:any, key, index)=>{
               const some = Object.keys(resultContent).some(x=> x===key)
-              if (!some)
-              obj[`content_${index+1}`] = ''
+              const value = Object.values(colInfo)
+
+              if (!some) {
+                obj[`content_${index+1}`] = ''
+                // dataUpdate[`content_${index+1}`] = 'null'
+              }
               return obj ;
             },{})
 
             const col = await db.collection(data.collectionName).updateOne({key_index:0},{$set:update,$unset:unset})
             delete update.description;
             delete update.fix_date;
-            const allData = await  db.collection(data.collectionName).updateMany({},{$set:update,$unset:unset})
-
+            console.log(unset,dataUpdate)
+            // update
+            await db.collection(data.collectionName).updateMany({key_index:{$ne:0}},{$set:dataUpdate})
+            // remove
+            await db.collection(data.collectionName).updateMany({key_index:{$ne:0}},{$unset:unset})
             result.ok = true;
             result.msg = 'Update 되었습니다.'
           } finally {

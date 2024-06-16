@@ -28,6 +28,12 @@ export default function Home() {
     <Layout header={true} headerLogo="일반페이지">
       <div className={`${style.absolute_center(5)} w-full`}>
         <SearchForm />
+        <div className="tree">
+          <div className="tree-theme">
+            <h1>Welcome to the Tree Themed Page</h1>
+            <p>This is an example of how to style a page with tree colors using CSS.</p>
+          </div>
+        </div>
       </div>
     </Layout>
   );

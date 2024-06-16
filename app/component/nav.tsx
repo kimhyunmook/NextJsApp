@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import TYPE from "@/lib/type";
@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useParams } from "next/navigation";
+import style from "../util/style";
 
 export default function Nav() {
     const [dbList,setDbList] = useState<any>([]);
@@ -71,14 +72,14 @@ export default function Nav() {
         dispatch({...body})
     }
     const state = `w-[15px] h-[15px] mr-2 rounded-full`;
-    const select = `transition font-bold bg-green-500 mt-1 mb-1 block max-w-[95%] pl-2 rounded-md`;
+    const select = `transition font-bold ${style.green_bg} mt-1 mb-1 block max-w-[95%] pl-2 rounded-md`;
     return(
         <nav className="navLeftContent overflow-y-scroll p-2 pr-3 pl-3 w-[225px]">
             <div className="connectState mb-4 bg-zinc-600 p-1 pl-2 max-w-[100px] rounded-md">
                 {
                     !! process.env.NEXT_PUBLIC_MONGO ?
                     <div className={`w-full flex items-center`}>
-                        <div className={state+" bg-green-500"}></div>
+                        <div className={`${state} ${style.green_bg}`}></div>
                         연결 중
                     </div> :
                     <div className={`w-full flex items-center`}>
@@ -87,7 +88,15 @@ export default function Nav() {
                     </div>
                 }
             </div>
-            <NavBox title={ 'MongoDB' } list={ first } icon={ faHome }></NavBox>
+
+            <NavBox title={ 'MongoDB' } list={ first } icon={ faCube }></NavBox>
+            <NavBox title={ '홈페이지 설정' } icon={ faHome }>
+                <li className={liStyle}>
+                    <Link href={'/admin/homepage'}>
+                        세팅
+                    </Link>
+                </li>
+            </NavBox>
             <NavBox title={ 'Control' } list={ second } icon={ faPalette }></NavBox>
             <NavBox title={ 'DB 목록' } icon={ faDatabase }>
                 {

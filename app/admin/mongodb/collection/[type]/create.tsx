@@ -70,7 +70,6 @@ export default function CreateLayout(props:Props) {
             dbName:'',
             collectionName:''
         });
-        
         const schema= labelNames.reduce((a:any,c,i:number)=>{
             // const labelName = labelNames[i] as HTMLInputElement;
             if(c instanceof HTMLInputElement) {
@@ -88,22 +87,25 @@ export default function CreateLayout(props:Props) {
             // }
             return a;
         },[]);
-
+        
+        // select로 변경하면서 생긴 사항
+        const dbNameSelect = document.querySelector('.bodyInfo select');
         let body = {
             ...values,
             schema,
         }
+        if (dbNameSelect instanceof HTMLSelectElement) body.dbName = dbNameSelect.value;
         await axios.post('/api/db/collection/create',body)
             .then(res=>{
                 if (res.data.ok) {
                     alert('Collection이 생성 되었습니다.')
-                    let body = {
+                    let body2 = {
                         bodyType:"collection",
-                        dbName:values.dbName
+                        dbName:body.dbName
                     }
-                    dispatch({type:TYPE('admin_nav_collection').REQUEST,...body})
+                    dispatch({type:TYPE('admin_nav_collection').REQUEST,...body2})
                     setTimeout(()=>{
-                        router.push(`/admin/${values.dbName}/${values.collectionName}`)
+                        router.push(`/admin/${body.dbName}/${body.collectionName}`)
                     },500)
                 } else {
                     alert(res.data.msg);
