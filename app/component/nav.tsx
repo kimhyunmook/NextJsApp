@@ -8,6 +8,7 @@ import { faDatabase, faServer, faTrash ,faCube, faHome, faPalette } from '@forta
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useParams } from "next/navigation";
 import style from "../util/style";
+import text from "../language/ko-kr/nav";
 
 export default function Nav() {
     const [dbList,setDbList] = useState<any>([]);
@@ -33,36 +34,39 @@ export default function Nav() {
     },[db,collection])
 
     const liStyle = `pl-4 w-full text-lg`;
-    const first:dbListItem[] =[
+
+    //setting list array
+    const settingObj:dbListItem[] =[
         {
-            name:!!!process.env.NEXT_PUBLIC_MONGO ? '연결' :'해제',
-            href:!!!process.env.NEXT_PUBLIC_MONGO ? "/connect": '/disconnect'
+            name:!!!process.env.NEXT_PUBLIC_MONGO ? text.connect : text.disconnect,
+            href:!!!process.env.NEXT_PUBLIC_MONGO ? "/connect": '/disconnect',
+            className:`border-l-4 ${style.green_border} pl-2 block `
         },
-    ]
-    const second:dbListItem[] = [
         {
-            name:'DB 만들기',
+            name:text.homepage_setting,
+            href:"/homepage",
+
+        },
+        {
+            name:text.db_create,
             href:'/create',
-            icon: faDatabase
         },
         {
-            name:'DB 삭제',
+            name:text.db_delete,
             href:'/delete',
-            icon:faTrash
         },
         {
-            name:'Collection 만들기',
+            name:text.collection_create,
             href:'/collection/create',
-            icon:faServer
         },
         {
-            name:'Collection 삭제',
+            name:text.collection_delete,
             href:'/collection/delete',
-            icon:faTrash
         }
     ]
+    
+    // db바꿀 때마다 collection dispatch
     function dbListHandle (e:React.MouseEvent<HTMLAnchorElement>) {
-        // e.preventDefault();
         let body ={
             type:TYPE('admin_nav_collection').REQUEST,
             bodyType:'collection',
@@ -89,15 +93,7 @@ export default function Nav() {
                 }
             </div>
 
-            <NavBox title={ 'MongoDB' } list={ first } icon={ faCube }></NavBox>
-            <NavBox title={ '홈페이지 설정' } icon={ faHome }>
-                <li className={liStyle}>
-                    <Link href={'/admin/homepage'}>
-                        세팅
-                    </Link>
-                </li>
-            </NavBox>
-            <NavBox title={ 'Control' } list={ second } icon={ faPalette }></NavBox>
+            <NavBox title={ 'Setting' } list={ settingObj } icon={ faCube }></NavBox>
             <NavBox title={ 'DB 목록' } icon={ faDatabase }>
                 {
                     dbList.map((v:dbListItem,i:number)=>{
@@ -141,6 +137,7 @@ export default function Nav() {
 interface dbListItem {
     name:string;
     href:string;
+    className?:string;
     icon?: IconDefinition;
 }
 type navBox = {
@@ -171,7 +168,7 @@ function NavBox(props:navBox) {
                     props.list.map((v,i) => {
                         return(
                             <li key={ v.name+`_`+i } className={ `pl-4 mb-1 mt-1 w-full text-base` }>
-                                <Link href={ '/admin/mongodb/'+v.href } className={`${'1'}`}>
+                                <Link href={ '/admin/mongodb/'+v.href } className={`${v.className}`}>
                                     { v.name }
                                 </Link>
                             </li>

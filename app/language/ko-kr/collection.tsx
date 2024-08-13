@@ -19,6 +19,5 @@ const text:Collectiontext = {
     create_2_2:'Label 이름',
     description_null_1:'없음',
     create_submit:'확인'
-
 }
 export default text;

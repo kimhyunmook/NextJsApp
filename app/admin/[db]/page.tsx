@@ -16,14 +16,14 @@ type Props = {
         db:string
     }
 }
-const liStyle = `flex border-b border-r-0 border-l-0`;
+const liStyle = `flex border-b-2 border-r-0 ${style.green_border} border-l-0`;
 export default function DBPage (props:Props) {
     const params = props.params;
     const collection = useSelector((state:any)=>state.admin.navCollection);
     const loading = useSelector((state:any)=>state.admin.loading) 
-    const [load,setLoad] = useState(false);
+    const [load, setLoad] = useState(false);
     const dispatch = useDispatch();
-    const [collList,setCollList] = useState([])
+    const [collList, setCollList] = useState([])
     const utils = util();
     const router = useRouter();
     let body ={};
@@ -229,14 +229,14 @@ export function DBInfoList ({dbName,type}:
                     const condi =  v ==="create_date" || v ==='_id';
                     return(
                         <li key={`${v}`} 
-                        className={`${liStyle} ${ i===0 ? 'border-t':''} 
+                        className={`${liStyle} ${ i===0 ? `border-t-2 ${style.green_border}`:''} 
                         ${type ==='edit' ?
                             condi ?  
                                   ' hidden border-black' :' border-black' : ''} `}>
                             {
                                 type !== 'edit' ? 
                                 <>
-                                    <p className={`w-[30%] min-w-[120px] break-keep bg-zinc-700 p-4`}> 
+                                    <p className={`w-[30%] min-w-[120px] break-keep bg-zinc-800 p-4`}> 
                                         { convert(v) } 
                                     </p>
                                     <p className="p-4">
